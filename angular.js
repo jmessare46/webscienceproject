@@ -6,5 +6,5 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
 
     // Lets setup some variables for our expressions
     $scope.navbar = "navigation.html";
-
+    $scope.sidebar = "sidebar.html";
 }]);
