@@ -1,0 +1,33 @@
+.t-field::-webkit-outer-spin-button, .t-field[type="number"]::-webkit-inner-spin-button
+{ /*Gets rid of the nasty arrow controls on input fields*/
+  -webkit-appearance:none;
+   -moz-appearance:none;
+        appearance:none;
+}
+
+input:focus
+{
+  border:1px dotted darkslateblue;
+}
+.gap
+{
+  display:none;
+}
+
+.prod-img
+{
+  width:50px;
+  height:auto;
+}
+
+@media only screen and (min-width:600px)
+{
+  #controls
+  {
+    display:none;
+  }
+  .gap
+  {
+    display:block;
+  }
+}
