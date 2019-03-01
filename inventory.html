@@ -42,6 +42,78 @@
             </div>
             <div class="container" ng-controller="itemController">
               <div class="row">
+                <div class="col-6 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Item Search</h4>
+                      <form class="form-sample">
+                        <div class="form-group">
+                          <select id="option" class="form-control col-sm-5 d-inline">
+                            <option>By Name:</option>
+                            <option>By Product Code:</option>
+                          </select>
+                          <input id="search" type="text" class="form-control col-sm-6 d-inline">
+                        </div>
+                        <button type="submit" class="btn btn-gradient-success mr-2">Search</button>
+                      </form>
+                      <div id="items" class="row mt-3">
+                        <ul ng-show="items" class="list-unstyled col">
+                          <li ng-repeat="item in items" class="border border-dark">
+                            <img ng-src="{{item.img}}" alt="{{item.name}}"" class="prod-img">
+                            {{item.name}} <p class="d-inline float-right pt-2 pr-1">Price: {{item.price | currency}}</p>
+                            <p>Description: {{item.desc}}
+                              <br/>
+                              Product Code: {{item.code}}
+                            </p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Add Item</h4>
+                      <form class="forms-sample">
+                        <div class="form-group row">
+                          <label for="iName" class="col-md-4 col-form-label">Item Name:</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="iName">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="price" class="col-sm-4 col-form-label">Price:</label>
+                          <div clas="col-sm-4">
+                            <input type="number" class="form-control t-field" id="price">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="pcode" class="col-sm-4 col-form-label">Product Code:</label>
+                          <div clas="col-sm-4">
+                            <input type="number" class="form-control t-field" id="pcode">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="input-group col-xs-9">
+                            <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
+                            <span class="input-group-append">
+                              <button class="file-upload-browse btn btn-gradient-info" type="button">Upload an Image</button>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="desc">Description</label>
+                          <textarea class="form-control" id="desc" rows="4" cols="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-gradient-info mr-2">Add</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+<!--                 
                 <form id="search" class="col border border-primary bg-light">
                   <legend>Item Search</legend>
                   <select>
@@ -87,7 +159,7 @@
                 <div class="col gap"></div>
               </div>
             </div>
-
+ -->
 
           </div>
         </div>

@@ -5,6 +5,16 @@
         appearance:none;
 }
 
+#option
+{
+  max-width:170px;
+}
+
+#search
+{
+  max-width:282px;
+}
+
 input:focus
 {
   border:1px dotted darkslateblue;
