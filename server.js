@@ -3,9 +3,15 @@ const express = require('express');
 const app = express();
 
 app.use('/', express.static(__dirname + '/')); // Might want to limit the folders instead of having it at root
+
 app.get('/inventory', (req, res)=>
 {
   res.sendFile(__dirname + '/inventory.html');
+});
+
+app.get('/login', (req, res)=>
+{
+  res.sendFile(__dirname + '/login.html');
 });
 
 app.listen(3000, ()=>
