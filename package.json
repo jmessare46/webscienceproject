@@ -2,7 +2,7 @@
   "name": "purple_admin",
   "version": "2.0.0",
   "description": "<h1>PurpleAdmin-Free-Admin-Template</h1> Purple Admin is a free responsive admin template built with Bootstrap 4. The template has colorful, attractive yet simple and elegant design. The template is well crafted, with all the components neatly and carefully designed and arranged within the template. <br>",
-  "main": "index.html",
+  "main": "server.js",
   "dependencies": {
     "bootstrap": "4.1.1",
     "chart.js": "^2.7.3",
