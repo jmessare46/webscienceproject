@@ -4,7 +4,8 @@
   "description": "A web application allowing users to track their flex/rad, swipes, and purchasing history, and vendors to populate the site with the items they have to offer.",
   "main": "server.js",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "mongodb": "^3.1.13"
   },
   "devDependencies": {},
   "scripts": {
