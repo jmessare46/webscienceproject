@@ -68,7 +68,7 @@ c1.connect((err)=>
                   bsonType:["object"],
                   description:"must be an array of past purchasing history"
                 }
-                profile_iamge:
+                profile_image:
                 {
                   bsonType:"string",
                   description:"must be a string as a file path to an iamge, and is not required"
