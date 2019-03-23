@@ -30,7 +30,7 @@ c1.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["email", "password", "salt", "favorites", "filter", "store_owner"],
+              required:["email", "password", "salt", "favorites", "filter", "store_owner", "history"],
               properties:
               {
                 email:
@@ -62,6 +62,16 @@ c1.connect((err)=>
                 {
                   bsonType:"bool",
                   description:"must be a boolean telling whether a user is a store owner and is required"
+                },
+                history:
+                {
+                  bsonType:["object"],
+                  description:"must be an array of past purchasing history"
+                }
+                profile_iamge:
+                {
+                  bsonType:"string",
+                  description:"must be a string as a file path to an iamge, and is not required"
                 }
               }
             }
