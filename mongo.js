@@ -30,7 +30,7 @@ c1.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["email", "password", "salt", "favorites", "filter", "store_owner", "history"],
+              required:["email", "password", "salt", "favorites", "filter", "store_owner", "history", "flex", "swipe"],
               properties:
               {
                 email:
@@ -72,6 +72,16 @@ c1.connect((err)=>
                 {
                   bsonType:"string",
                   description:"must be a string as a file path to an iamge, and is not required"
+                },
+                flex:
+                {
+                  bsonType:"double",
+                  description:"must be a double and is required"
+                }
+                swipe:
+                {
+                  bsonType:"int",
+                  description:"must be an integer and is required"
                 }
               }
             }
@@ -122,9 +132,14 @@ c2.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["owner", "location", "products", "description"],
+              required:["owner", "location", "products", "description", "name"],
               properties:
               {
+                name:
+                {
+                  bsonType:"string",
+                  description:"must be a string for the store name and is required"
+                },
                 owner:
                 {
                   bsonType: ["objectId"],
@@ -307,17 +322,62 @@ function addUser(userinfo)
   });
 }
 
+// User functions
+function productSearch(productname)
+{
+
+}
+
+// Make favorites function conditonal based on routing
+
+// Make user account settings bulk update
+function updateAccount(settings)
+{
+  // Grab the settings and use Object.assign on the two json objects
+}
+
+function viewHistory()
+{
+  // Make the items that have yet to expire editable -- can do with two strings
+}
+
+function updateHistory(item)
+{
+  // Double check that the time is still okay
+}
+
 function getAllShops()
 {
   userclient.connect((err)=>
   {
-    userclient.db(dbname).collection('shops').find({},{"projection":{"location":1, "description":1, "picture":1}}).toArray((err, shops)=>
+    userclient.db(dbname).collection('shops').find({},{"projection":{"name":1, "location":1, "description":1, "picture":1}}).toArray((err, shops)=>
     {
       console.log(shops);
+      userclient.close();
     });
-    userclient.close();
   });
 }
+
+// Vendor functions
+function addProduct(item)
+{
+
+}
+
+function updateProduct(item)
+{
+  // Use Object.assign again
+}
+
+// Make product remove a conditional thing
+
+function updateStore(data)
+{
+  // Make this a bulk update
+}
+
+
+
 
 // Query Products
 // Query Users for Login
@@ -408,8 +468,3 @@ Products -- used for quick searching
       }
     })
  */
-
- function createDependencies(db)
- {
-  return 0;
- }

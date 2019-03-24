@@ -30,7 +30,7 @@ c1.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["email", "password", "salt", "favorites", "filter", "store_owner", "history"],
+              required:["email", "password", "salt", "favorites", "filter", "store_owner", "history", "flex", "swipe"],
               properties:
               {
                 email:
@@ -72,6 +72,16 @@ c1.connect((err)=>
                 {
                   bsonType:"string",
                   description:"must be a string as a file path to an iamge, and is not required"
+                },
+                flex:
+                {
+                  bsonType:"double",
+                  description:"must be a double and is required"
+                }
+                swipe:
+                {
+                  bsonType:"int",
+                  description:"must be an integer and is required"
                 }
               }
             }
