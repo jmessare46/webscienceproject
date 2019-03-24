@@ -77,7 +77,7 @@ c1.connect((err)=>
                 {
                   bsonType:"double",
                   description:"must be a double and is required"
-                }
+                },
                 swipe:
                 {
                   bsonType:"int",
