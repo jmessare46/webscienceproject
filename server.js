@@ -122,9 +122,14 @@ c2.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["owner", "location", "products", "description"],
+              required:["owner", "location", "products", "description", "name"],
               properties:
               {
+                name:
+                {
+                  bsonType:"string",
+                  description:"must be a string for the store name and is required"
+                },
                 owner:
                 {
                   bsonType: ["objectId"],
