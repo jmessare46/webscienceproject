@@ -1,5 +1,6 @@
 const express = require('express');
 const Mclient = require("mongodb").MongoClient;
+var bodyParser = require("body-parser");
 
 const app = express();
 const user = "mongodb+srv://generalcustomer:customer@cluster0-yknsv.mongodb.net"; 
@@ -12,6 +13,12 @@ const vendorclient = new Mclient(vendor, {useNewUrlParser:true});
 var c1 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 var c2 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 var c3 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+// Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 c1.connect((err)=>
 {
   if (err)
@@ -30,9 +37,14 @@ c1.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["email", "password", "salt", "favorites", "filter", "store_owner", "history", "flex", "swipe"],
+              required:["username", "email", "password", "country"],
               properties:
               {
+                username:
+                {
+                  bsonType: "string",
+                  description:"must be a string and is required"
+                },
                 email:
                 {
                   bsonType: "string",
@@ -42,6 +54,11 @@ c1.connect((err)=>
                 {
                   bsonType:"string",
                   description:"must be a hashed string and is required"
+                },
+                country:
+                {
+                  bsonType: "string",
+                  description:"must be a string and is required"
                 },
                 salt:
                 {
@@ -56,7 +73,7 @@ c1.connect((err)=>
                 filter:
                 {
                   bsonType:["string"],
-                  description:"must be an array of filte strings and is required"
+                  description:"must be an array of filter strings and is required"
                 },
                 store_owner:
                 {
@@ -318,6 +335,34 @@ app.get('/navigation', (req, res)=>
 app.get('/sidebar', (req, res)=>
 {
   res.sendFile(__dirname + '/sidebar.html');
+});
+
+// Creates a user in the database when correct information is given
+app.post('/user/create', (req, res)=>
+{
+    c4.connect(err => {
+      const collection = c4.db("Project").collection("users");
+
+      // TODO: May want to validate some of the data before we store the user here
+      var user = {
+        email: req.body.email,
+        username: req.body.user,
+        country: req.body.country,
+        password: req.body.password
+      };
+
+      // Stores the user in the DB
+      collection.insertOne(user, function (err, docs) {
+        console.log(docs);
+        console.log(err);
+      });
+
+      console.log("User created...");
+      c4.close();
+
+      // Sends user back to the registration page
+      res.redirect('/register');
+    });
 });
 
 app.listen(3000, ()=>
