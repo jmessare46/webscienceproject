@@ -15,7 +15,6 @@ const vendorclient = new Mclient(vendor, {useNewUrlParser:true});
 var c1 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 var c2 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 var c3 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
-var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 
 // Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -342,6 +341,8 @@ app.get('/sidebar', (req, res)=>
 // Creates a user in the database when correct information is given
 app.post('/user/create', (req, res)=>
 {
+  var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
   // TODO: May want to validate some of the data before we store the user here
   c4.connect(err => {
       // Creates a password hash
@@ -361,13 +362,47 @@ app.post('/user/create', (req, res)=>
         collection.insertOne(user, function (err, docs) {
           console.log("User created...");
         });
-
-        c4.close();
       });
 
       // Sends user back to the registration page
       res.redirect('/register');
     });
+
+  c4.close();
+});
+
+// Authenticates a user at the login page
+app.post('/user/auth', (req, res)=>
+{
+  var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+  c4.connect(err => {
+
+    const collection = c4.db("Project").collection("users");
+
+    console.log(req.body);
+
+    c4.connect(err => {
+      // Stores the user in the DB
+      collection.findOne({email: req.body.email}, function (err, docs) {
+        console.log(docs);
+        // Load hash from your password DB.
+        bcrypt.compare(req.body.password, docs.password, function(err, bres) {
+          // res == true or false
+          if(bres)
+          {
+            res.redirect('/');
+          }
+          else
+          {
+            res.redirect('/login');
+          }
+        });
+      });
+    });
+  });
+
+  c4.close();
 });
 
 app.listen(3000, ()=>
