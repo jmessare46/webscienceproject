@@ -1,6 +1,8 @@
 const express = require('express');
 const Mclient = require("mongodb").MongoClient;
 var bodyParser = require("body-parser");
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const app = express();
 const user = "mongodb+srv://generalcustomer:customer@cluster0-yknsv.mongodb.net"; 
@@ -340,25 +342,28 @@ app.get('/sidebar', (req, res)=>
 // Creates a user in the database when correct information is given
 app.post('/user/create', (req, res)=>
 {
-    c4.connect(err => {
-      const collection = c4.db("Project").collection("users");
+  // TODO: May want to validate some of the data before we store the user here
+  c4.connect(err => {
+      // Creates a password hash
+      bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+        const collection = c4.db("Project").collection("users");
 
-      // TODO: May want to validate some of the data before we store the user here
-      var user = {
-        email: req.body.email,
-        username: req.body.user,
-        country: req.body.country,
-        password: req.body.password
-      };
+        var user = {
+          email: req.body.email,
+          username: req.body.user,
+          country: req.body.country,
+          password: hash
+        };
 
-      // Stores the user in the DB
-      collection.insertOne(user, function (err, docs) {
-        console.log(docs);
-        console.log(err);
+        console.log(user);
+
+        // Stores the user in the DB
+        collection.insertOne(user, function (err, docs) {
+          console.log("User created...");
+        });
+
+        c4.close();
       });
-
-      console.log("User created...");
-      c4.close();
 
       // Sends user back to the registration page
       res.redirect('/register');
