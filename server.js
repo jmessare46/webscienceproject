@@ -356,14 +356,7 @@ app.get('/login', (req, res)=>
 
 app.get('/register', (req, res)=>
 {
-  if(req.session.user)
-  {
-    res.sendFile(__dirname + '/register.html');
-  }
-  else
-  {
-    res.sendFile(__dirname + '/login.html');
-  }
+  res.sendFile(__dirname + '/register.html');
 });
 
 app.get('/request', (req, res)=>
