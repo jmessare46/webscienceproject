@@ -2,6 +2,8 @@ const express = require('express');
 const Mclient = require("mongodb").MongoClient;
 var bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
 const saltRounds = 10;
 
 const app = express();
@@ -19,6 +21,29 @@ var c3 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.n
 // Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// initialize cookie-parser to allow us access the cookies stored in the browser.
+app.use(cookieParser());
+
+// initialize express-session to allow us track the logged-in user across sessions.
+app.use(session({
+  key: 'web_science',
+  secret: 'shooping',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    expires: 600000
+  }
+}));
+
+// This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
+// This usually happens when you stop your express server after login, your cookie still remains saved in the browser.
+app.use((req, res, next) => {
+  if (req.cookies.web_science && !req.session.user) {
+    res.clearCookie('web_science');
+  }
+  next();
+});
 
 c1.connect((err)=>
 {
@@ -295,47 +320,110 @@ app.use('/fonts', express.static(__dirname + '/fonts'));
 
 app.get('/', (req, res)=>
 {
-  res.sendFile(__dirname + '/index.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/index.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/inventory', (req, res)=>
 {
-  res.sendFile(__dirname + '/inventory.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/inventory.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/login', (req, res)=>
 {
-  res.sendFile(__dirname + '/login.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/index.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/register', (req, res)=>
 {
-  res.sendFile(__dirname + '/register.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/register.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/request', (req, res)=>
 {
-  res.sendFile(__dirname + '/request.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/request.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/storeinfo', (req, res)=>
 {
-  res.sendFile(__dirname + '/storeinfo.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/storeinfo.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/price', (req, res)=>
 {
-  res.sendFile(__dirname + '/price.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/price.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/navigation', (req, res)=>
 {
-  res.sendFile(__dirname + '/navigation.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/navigation.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 app.get('/sidebar', (req, res)=>
 {
-  res.sendFile(__dirname + '/sidebar.html');
+  if(req.session.user)
+  {
+    res.sendFile(__dirname + '/sidebar.html');
+  }
+  else
+  {
+    res.sendFile(__dirname + '/login.html');
+  }
 });
 
 // Creates a user in the database when correct information is given
@@ -380,21 +468,21 @@ app.post('/user/auth', (req, res)=>
 
     const collection = c4.db("Project").collection("users");
 
-    console.log(req.body);
-
     c4.connect(err => {
       // Stores the user in the DB
       collection.findOne({email: req.body.email}, function (err, docs) {
-        console.log(docs);
         // Load hash from your password DB.
         bcrypt.compare(req.body.password, docs.password, function(err, bres) {
           // res == true or false
           if(bres)
           {
+            console.log('User authenticated...');
+            req.session.user = req.body;
             res.redirect('/');
           }
           else
           {
+            console.log('Password did not match...');
             res.redirect('/login');
           }
         });
