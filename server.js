@@ -469,13 +469,13 @@ app.post('/user/auth', (req, res)=>
           // res == true or false
           if(bres)
           {
-            console.log('User authenticated...');
+            console.log(req.body.email + ' authenticated...');
             req.session.user = req.body;
             res.redirect('/');
           }
           else
           {
-            console.log('Password did not match...');
+            console.log('Password did not match DB record...');
             res.redirect('/login');
           }
         });
@@ -484,6 +484,14 @@ app.post('/user/auth', (req, res)=>
   });
 
   c4.close();
+});
+
+// Logs a user out and removes their session data
+app.post('/signout', (req, res)=>
+{
+  console.log("Logging out " + req.session.user.email);
+  req.session.user = null;
+  res.redirect('/login');
 });
 
 app.listen(3000, ()=>

@@ -33,10 +33,12 @@
                         Activity Log
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
-                        <i class="mdi mdi-logout mr-2 text-primary"></i>
-                        Signout
-                    </a>
+                    <form method="post" action="/signout">
+                        <button class="dropdown-item" type="submit">
+                            <i class="mdi mdi-logout mr-2 text-primary"></i>
+                            Signout
+                        </button>
+                    </form>
                 </div>
             </li>
             <li class="nav-item dropdown">
