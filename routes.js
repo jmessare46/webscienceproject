@@ -118,12 +118,31 @@ router.get('/sidebar', (req, res)=>
 });
 
 // Creates a user in the database when correct information is given
-router.post('/user/updateprofile', (req, res)=>
+router.get('/user/info', (req, res)=>
 {
-
     if(!req.session.user)
     {
-        res.redirect('/register');
+        res.send({
+            data: {error: "You must be logged in to view this information!"}
+        });
+    }
+    else
+    {
+        res.send({
+            // TODO: Get all user information to populate settings information
+            data: {
+                email: req.session.user.email,
+            }
+        });
+    }
+});
+
+// Creates a user in the database when correct information is given
+router.post('/user/updateprofile', (req, res)=>
+{
+    if(!req.session.user)
+    {
+        res.redirect('/login');
     }
     else
     {
