@@ -10,20 +10,21 @@
     <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
     <!-- endinject -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="inventory.css">
+    <link rel="stylesheet" href="css/inventory.css">
     <link rel="shortcut icon" href="icon.ico" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular.js"></script>
   </head>
   <body ng-app="myApp">
     <div class="container-scroller">
-      <!-- partial:partials/_navbar.html -->
-      <div  ng-controller="mainController" ng-include="navbar"></div>
+
+      <div ng-include="'/navigation'"></div>
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
-        <div  ng-controller="mainController" ng-include="sidebar"></div>
+
+        <div ng-include="'/sidebar'"></div>
+
         <!-- Content -->
         <div class="main-panel">
           <div class="content-wrapper">

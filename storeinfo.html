@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-  <script type="text/javascript" src="angular.js"></script>
+  <script type="text/javascript" src="js/angular.js"></script>
 
   <!-- inject:css -->
   <link rel="stylesheet" href="css/style.css">
@@ -20,12 +20,12 @@
 </head>
 <body ng-controller="mainController">
   <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <div ng-include="'navigation.html'"></div>
+
+    <div ng-include="'/navigation'"></div>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-      <!-- partial:partials/_sidebar.html -->
-      <div ng-include="'sidebar.html'"></div>
+
+      <div ng-include="'/sidebar'"></div>
 
       <!-- partial -->
       <div class="main-panel">

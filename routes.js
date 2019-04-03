@@ -57,6 +57,18 @@ router.get('/request', (req, res)=>
     }
 });
 
+router.get('/settings', (req, res)=>
+{
+    if(req.session.user)
+    {
+        res.sendFile(__dirname + '/settings.html');
+    }
+    else
+    {
+        res.sendFile(__dirname + '/login.html');
+    }
+});
+
 router.get('/storeinfo', (req, res)=>
 {
     if(req.session.user)
@@ -105,10 +117,32 @@ router.get('/sidebar', (req, res)=>
     }
 });
 
+// Creates a user in the database when correct information is given
+router.post('/user/updateprofile', (req, res)=>
+{
+
+    if(!req.session.user)
+    {
+        res.redirect('/register');
+    }
+    else
+    {
+        var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+        c4.connect(err => {
+            // Creates a password hash
+            console.log(req.body);
+        });
+
+        c4.close();
+    }
+});
 
 // Creates a user in the database when correct information is given
 router.post('/user/create', (req, res)=>
 {
+
+
     var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 
     // TODO: May want to validate some of the data before we store the user here
