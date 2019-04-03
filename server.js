@@ -1,10 +1,8 @@
 const express = require('express');
 const Mclient = require("mongodb").MongoClient;
 var bodyParser = require("body-parser");
-const bcrypt = require('bcrypt');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
-const saltRounds = 10;
 
 const app = express();
 const user = "mongodb+srv://generalcustomer:customer@cluster0-yknsv.mongodb.net"; 

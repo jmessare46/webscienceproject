@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+const Mclient = require("mongodb").MongoClient;
+const saltRounds = 10;
+const bcrypt = require('bcrypt');
 
 router.get('/', (req, res)=>
 {
