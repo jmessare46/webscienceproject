@@ -118,22 +118,47 @@ router.get('/sidebar', (req, res)=>
 });
 
 // Creates a user in the database when correct information is given
-router.get('/user/info', (req, res)=>
+router.post('/user/info', (req, res)=>
 {
     if(!req.session.user)
     {
         res.send({
-            data: {error: "You must be logged in to view this information!"}
+            userdata: {
+                    error: "You must be logged in to view this information!"
+                }
         });
     }
     else
     {
-        res.send({
-            // TODO: Get all user information to populate settings information
-            data: {
-                email: req.session.user.email,
-            }
+        var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+        c4.connect(err => {
+
+            const collection = c4.db("Project").collection("users");
+
+            c4.connect(err => {
+                // Stores the user in the DB
+                collection.findOne({email: req.session.user.email}, function (err, docs) {
+                    // Load hash from your password DB.
+                    res.send({
+                        // TODO: Get all user information to populate settings information
+                        userdata: {
+                            email: docs.email,
+                            username: docs.username,
+                            country: docs.country,
+                            first_name: docs.first_name,
+                            last_name: docs.last_name,
+                        }
+                    });
+
+                    console.log(docs);
+                    console.log(err);
+                });
+            });
         });
+
+
+        c4.close();
     }
 });
 
@@ -160,8 +185,6 @@ router.post('/user/updateprofile', (req, res)=>
 // Creates a user in the database when correct information is given
 router.post('/user/create', (req, res)=>
 {
-
-
     var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 
     // TODO: May want to validate some of the data before we store the user here
@@ -172,6 +195,8 @@ router.post('/user/create', (req, res)=>
 
             var user = {
                 email: req.body.email,
+                first_name: req.body.firstname,
+                last_name: req.body.lastname,
                 username: req.body.user,
                 country: req.body.country,
                 password: hash
