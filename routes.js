@@ -40,21 +40,22 @@ router.get('/login', (req, res)=>
     }
 });
 
-router.get('/register', (req, res)=>
+// Shows the user registration page
+router.get('/user/register', (req, res)=>
 {
     res.sendFile(__dirname + '/register.html');
 });
 
-router.get('/request', (req, res)=>
+// Shows the store registration page
+router.get('/store/register', (req, res)=>
 {
-    if(req.session.user)
-    {
-        res.sendFile(__dirname + '/request.html');
-    }
-    else
-    {
-        res.sendFile(__dirname + '/login.html');
-    }
+    res.sendFile(__dirname + '/request.html');
+});
+
+// Creates a user in the database when correct information is given
+router.post('/store/request', (req, res)=>
+{
+    console.log(req.body);
 });
 
 router.get('/settings', (req, res)=>
@@ -174,8 +175,23 @@ router.post('/user/updateprofile', (req, res)=>
         var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 
         c4.connect(err => {
-            // Creates a password hash
+            const collection = c4.db("Project").collection("users");
+
             console.log(req.body);
+
+            //TODO: Make update work
+            collection.updateOne(
+                { _id: req.session.userid },
+                {  $set: {
+                        first_name: "steve",
+                    }
+                },
+                {},
+                function (res, err) {
+                    console.log(err);
+                    console.log(res);
+                }
+            );
         });
 
         c4.close();
@@ -211,7 +227,7 @@ router.post('/user/create', (req, res)=>
         });
 
         // Sends user back to the registration page
-        res.redirect('/register');
+        res.redirect('/user/register');
     });
 
     c4.close();
@@ -236,6 +252,7 @@ router.post('/user/auth', (req, res)=>
                     {
                         console.log(req.body.email + ' authenticated...');
                         req.session.user = req.body;
+                        req.session.userid = docs._id;
                         res.redirect('/');
                     }
                     else

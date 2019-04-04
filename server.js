@@ -134,7 +134,7 @@ c1.connect((err)=>
           {
             if (err2)
             {
-              console.log("Could not make 'users' collection")
+              console.log("Could not make 'users' collection");
               throw err2;
             }
             else

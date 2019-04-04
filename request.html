@@ -1,178 +1,175 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en">
 
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>SHOOPING</title>
+  <title>Create an Account</title>
   <!-- plugins:css -->
-  <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
-  <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-  <script type="text/javascript" src="js/angular.js"></script>
-
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
   <!-- inject:css -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="icon.ico" />
+  <link rel="shortcut icon" href="/images/favicon.png" />
 </head>
-<body ng-controller="mainController">
-  <div class="container-scroller">
 
-    <div ng-include="'/navigation'"></div>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-
-      <div ng-include="'/sidebar'"></div>
-
-      <!-- partial -->
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title">
-              Please fill in the following store information for your store.
-            </h3>
-            <nav aria-label="breadcrumb">
-            </nav>
-          </div>
-            <div class="col-12 grid-margin">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Store Information</h4>
-                  <form class="form-sample">
-                    <p class="card-description">
-                      General info
-                    </p>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Store Name</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" />
-                          </div>
+<body>
+<div class="container-scroller">
+  <div class="container-fluid page-body-wrapper full-page-wrapper">
+    <div class="content-wrapper d-flex align-items-center auth">
+      <div class="row w-100">
+        <div class="page-header">
+          <h3 class="page-title">
+            Please fill in the following store information for your store.
+          </h3>
+          <nav aria-label="breadcrumb">
+          </nav>
+        </div>
+        <div class="col-12 grid-margin">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Store Information</h4>
+              <form class="form-sample" method="post" action="/store/request">
+                <p class="card-description">
+                  General info
+                </p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Store Name</label>
+                      <div class="col-sm-9">
+                        <input type="text" name="storename" class="form-control" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">RPI student card?</label>
+                      <div class="col-sm-4">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="studentCard" id="studentCard1" value="supported" checked>
+                            Supported
+                          </label>
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">RPI student card?</label>
-                          <div class="col-sm-4">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="studentCard" id="studentCard1" value="" checked>
-                                Support
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-sm-5">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="studentCard" id="studentCard2" value="option2">
-                                Not support
-                              </label>
-                            </div>
-                          </div>
+                      <div class="col-sm-5">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="studentCard" id="studentCard2" value="not_supported">
+                            Not supported
+                          </label>
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Category</label>
-                          <div class="col-sm-9">
-                            <select class="form-control">
-                              <option>Category1</option>
-                              <option>Category2</option>
-                              <option>Category3</option>
-                              <option>Category4</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Store location</label>
-                          <div class="col-sm-4">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="location" id="location1" value="" checked>
-                                On campus
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-sm-5">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="location" id="location2" value="option2">
-                                Off campus
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <p class="card-description">
-                      Address
-                    </p>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Address 1</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Address 2</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                  <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
-                  <button class="btn btn-light">Cancel</button>
+                  </div>
                 </div>
-              </div>
+                <div class="row">
+                  <div class="col-md-6">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Category</label>
+                      <div class="col-sm-9">
+                        <select class="form-control" name="category" required>
+                          <option value="">Choose...</option>
+                          <option value="fast_food">Fast Food</option>
+                          <option value="fast_casual">Fast Casual</option>
+                          <option value="fine_dining">Fine Dining</option>
+                          <option value="casual_dining">Casual Dining</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Store location</label>
+                      <div class="col-sm-4">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="location" id="oncampus" value="on_campus" checked>
+                            On campus
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-sm-5">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="location" id="offcampus" value="off_campus">
+                            Off campus
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="card-description">
+                  Location
+                </p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Address 1</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" name="address" required/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Address 2</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" name="secondaddress"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
+              <button class="btn btn-light">Cancel</button>
+              </form>
             </div>
+            <div class="text-center mt-4 font-weight-light">
+              Already have an account? <a href="/login" class="text-primary">Login</a>
+            </div><br>
           </div>
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        <!-- <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2017 <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap Dash</a>. All rights reserved.</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
-          </div>
-        </footer> -->
-        <!-- partial -->
       </div>
-      <!-- main-panel ends -->
     </div>
-    <!-- page-body-wrapper ends -->
+    <!-- content-wrapper ends -->
+    <!-- partial:partials/_footer.html -->
+    <!-- <footer class="footer">
+      <div class="d-sm-flex justify-content-center justify-content-sm-between">
+        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2017 <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap Dash</a>. All rights reserved.</span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+      </div>
+    </footer> -->
+    <!-- partial -->
   </div>
-  <!-- container-scroller -->
-  <!-- plugins:js -->
-  <script src="vendors/js/vendor.bundle.base.js"></script>
-  <script src="vendors/js/vendor.bundle.addons.js"></script>
-  <!-- endinject -->
-  <!-- inject:js -->
-  <script src="js/off-canvas.js"></script>
-  <script src="js/misc.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="js/file-upload.js"></script>
-  <!-- End custom js for this page-->
+      </div>
+    </div>
+    <!-- content-wrapper ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+<script src="/vendors/js/vendor.bundle.base.js"></script>
+<script src="/vendors/js/vendor.bundle.addons.js"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script src="/js/off-canvas.js"></script>
+<script src="/js/misc.js"></script>
+<!-- endinject -->
 </body>
 
 </html>
+
