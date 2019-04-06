@@ -61,7 +61,7 @@ c1.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["username", "email", "password", "country"],
+              required:["username", "email", "password", "account_type", "first_name", "last_name", "favorite_store", "vegan", "peanut", "gluten", "vegetarian"],
               properties:
               {
                 username:
@@ -281,7 +281,7 @@ c3.connect((err)=>
           {
             if (err2)
             {
-              console.log("Could not make 'products' collection")
+              console.log("Could not make 'products' collection");
               throw err2;
             }
             else
