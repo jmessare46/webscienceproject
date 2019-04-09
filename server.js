@@ -345,10 +345,14 @@ app.use('/vendors', express.static(__dirname + '/vendors'));
 // Allows direct access to js files
 app.use('/fonts', express.static(__dirname + '/fonts'));
 
+app.post("/temp", (req, res)=>
+{
+  all_shops(res);
+});
+
 const server = app.listen(3000, ()=>
 {
   console.log("Server is up");
-  sleepTimeout(add_update_product("", {"name":"orange"}, "hi"), 3000);
 });
 
 // Server shutdown code
@@ -384,9 +388,19 @@ process.stdin.on("keypress", (str, key) =>
   }
 });
 
+NOTE: need to convert ObjectId strings to ObjectId before passing into functions
+
+/**
+* @param shop_id is an Object_id of the shop
+* @param shop_info is a JSON object matching the required fields for a shop document
+* @param res is the response handler object
+* @modifies res
+* @effects returns a response message through res.
+*/
 function update_shop(shop_id, shop_info, res)
 {
-  vendorclient.collection("shops", (err, shops_collection)=>
+  response.setHeader("Content-Type", "text/plain");
+  vendorclient.db(dbname).collection("shops", (err, shops_collection)=>
   {
     if (err)
     {
@@ -409,8 +423,18 @@ function update_shop(shop_id, shop_info, res)
   });
 }
 
+/**
+* @param shop_id is the ObjectId of the specific shop to add/update the product to
+* @param product_data is the product object that matches the document fields for all the products
+* @modifies products
+* @effects either adds the product_data as a new document if operation == "add" and the shop associated
+*          with the product_data exists and the product is not a duplicate for the same store.
+*          otherwise, if operation == "update" updates the product information in 'products' collection
+*          otherwise, sends a response of an invalid operation
+*/
 function add_update_product(shop_id, product_data, operation, res)
 {
+  response.setHeader("Content-Type", "text/plain");
   vendorclient.db(dbname).collection("products", (err, products_collection)=>
   {
     if (err)
@@ -422,7 +446,7 @@ function add_update_product(shop_id, product_data, operation, res)
       if (operation == "add")
       {
         // Check if product already exists
-        products_collection.find({"name":product_data["name"]}, {"projection":{"shop":1}}).toArray((err1, doc)=>
+        products_collection.find({"name":product_data["name"], "shop":shop_id}).toArray((err1, doc)=>
         {
           if (err1)
           {
@@ -430,7 +454,49 @@ function add_update_product(shop_id, product_data, operation, res)
           }
           else
           {
-            console.log(doc);
+            if (doc.length == 0)
+            {
+              /*// Check if the store object id exists!!!
+              userclient.db(dbname).collection("shops", (error, shops)=>
+              {
+                if (error)
+                {
+                  res.status(500).("Error validating shop existence.");
+                }
+                else
+                {
+                  shops.find({"_id":product_data["shop"]}).toArray((error1, list)=>
+                  {
+                    if (error1)
+                    {
+                      res.status(500).("Error validating shop existence.");
+                    }
+                    else
+                    {
+                      if (list.length == 0)
+                      {
+                        res.status(400).send("Shop does not exist!");
+                      }
+                    }
+                  });
+                }
+              });*/
+              products_collection.insertOne(product_data, (err2, result)=>
+              {
+                if (err2)
+                {
+                  res.status(500).send("Could not add item. Please try again.");
+                }
+                else
+                {
+                  res.status(200).send(product_data["name"] + " successfully added!");
+                }
+              });
+            }
+            else
+            {
+              res.status(400).send("Item already exists!");
+            }
           }
         });
       }
@@ -442,12 +508,68 @@ function add_update_product(shop_id, product_data, operation, res)
           {
             res.status(500).send("A server error occurred and we could not identify the shop.");
           }
+          else
+          {
+            product_collection.updateOne({"_id":ObjectId(product_data["_id"])}, product_data, (err3, result)=>
+            {
+              if (err3)
+              {
+                res.status(500).send("Error occurred. Could not update " + product_data["name"] + " information.");
+              }
+              else
+              {
+                // Success so don't interrupt the user.
+                res.status(200).send();
+              }
+            })
+          }
         });
       }
       else
       {
         res.status(501).send("The server does not support the " + operation + " operation!");
       }
+    }
+  });
+}
+
+/*function get_owned_shops(ownerid)
+{
+
+}*/
+
+/**
+* @param response is the response handler from the post request
+* @modifies response
+* @effect response sends back either an error message in plain text or
+*         a json of {"data":[...]} that contains an array of {"_id", "name"}
+*         json objects                            store _id and store name
+*/
+function all_shops(response)
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+  {
+    response.setHeader("Content-Type", "text/plain");
+    if (err)
+    {
+      throw err;
+      response.status(500).send("Error accessing to shop collections.");
+    }
+    else
+    {
+      shop_collection.find({}, {"projection":{"name":1}}).toArray((err1, list)=>
+      {
+        if (err1)
+        {
+          throw err1;
+          response.status(500).send("Error reading from shpo collections.");
+        }
+        else
+        {
+          response.setHeader("Content-Type", "appplication/json");
+          response.status(200).send("{\"data\":[" + list.toString() + "]}");
+        }
+      });
     }
   });
 }
