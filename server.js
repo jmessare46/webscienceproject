@@ -1,16 +1,37 @@
 const express = require('express');
 const Mclient = require("mongodb").MongoClient;
+const ObjectId = require("mongodb").ObjectId;
 var bodyParser = require("body-parser");
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
+var readline = require("readline");
+readline.emitKeypressEvents(process.stdin);
+process.stdin.setRawMode(true);
 
 const app = express();
-const user = "mongodb+srv://generalcustomer:customer@cluster0-yknsv.mongodb.net"; 
-const vendor = "mongodb+srv://generalvendor:thegeneralamazingvendor@cluster0-yknsv.mongodb.net"; 
+const user = "mongodb+srv://generalcustomer:customer@cluster0-yknsv.mongodb.net/"; 
+const vendor = "mongodb+srv://generalvendor:thegeneralamazingvendor@cluster0-yknsv.mongodb.net/"; 
 const dbname = "Project";
 
 const userclient = new Mclient(user, {useNewUrlParser:true});
 const vendorclient = new Mclient(vendor, {useNewUrlParser:true});
+userclient.connect((err)=>
+{
+  if (err)
+  {
+    console.log("Could not connect to Db using userclient!");
+    throw err;
+  }
+});
+vendorclient.connect((err)=>
+{
+  if (err)
+  {
+    console.log("Could not connect to Db using vendorclient!");
+    throw err;
+  }
+});
+
 
 var c1 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 var c2 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
@@ -173,7 +194,7 @@ c2.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["owner", "location", "products", "description", "name"],
+              required:["owner", "location", "description", "name"],
               properties:
               {
                 name:
@@ -183,18 +204,19 @@ c2.connect((err)=>
                 },
                 owner:
                 {
-                  bsonType: ["objectId"],
+                  bsonType: "objectId",
                   description:"must be an array of objectId refering to its owners and is required"
                 },
                 location:
                 {
-                  bsonType:["double"],
+                  bsonType:"array",
+                  items:
+                  {
+                    "type":"number",
+                    "minItems":2,
+                    "maxItems":2
+                  },
                   description:"must be an array of [lat, lon] coordinates and is required"
-                },
-                products:
-                {
-                  bsonType:["objectId"],
-                  description:"must be an array of product objectId's that exist in the entire database(checked on insertion) and is required"
                 },
                 description:
                 {
@@ -203,14 +225,15 @@ c2.connect((err)=>
                 },
                 picture:
                 {
-                  bsonType:"binData",
-                  description:"must be a binData to store the picture and is not requred"
+                  bsonType:"string",
+                  description:"must be a string to store the picture url and is not requred"
                 }
               }
             }
           }
         }, (err1, collection)=>
         {
+          if (err1) throw err1;
           console.log("'shops' collection created!");
           c2.close();
         });
@@ -243,7 +266,7 @@ c3.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["name", "price", "stores"],
+              required:["name", "price", "store"],
               properties:
               {
                 name:
@@ -256,10 +279,10 @@ c3.connect((err)=>
                   bsonType:"double",
                   description:"must be a double  and is required"
                 },
-                stores:
+                store:
                 {
-                  bsonType:["objectId"],
-                  description:"must be an array of store objectId's that exist in the entire database(checked on insertion) and is required"
+                  bsonType:"objectId",
+                  description:"must be a store's objectId that exist in the entire database(checked on insertion) and is required"
                 },
                 description:
                 {
@@ -268,8 +291,8 @@ c3.connect((err)=>
                 },
                 picture:
                 {
-                  bsonType:"binData",
-                  description:"must be a binData to store the picture and is not requred"
+                  bsonType:"string",
+                  description:"must be a string to store the path to the picture and is not requred"
                 }
               }
             }
@@ -277,7 +300,7 @@ c3.connect((err)=>
         }, (err1, collection)=>
         {
           console.log("'products' collection created!");
-          collection.createIndex({"name":1}, {unique:true}, (err2, result)=>
+          /*collection.createIndex({"name":1}, {unique:true}, (err2, result)=>
           {
             if (err2)
             {
@@ -289,7 +312,8 @@ c3.connect((err)=>
               console.log("Successfully made product names unique");
             }
             c3.close();
-          });
+          });*/
+          c3.close();
         });
       }
       else
@@ -302,7 +326,7 @@ c3.connect((err)=>
 });
 
 // Links the routes to the main js page
-var routes = require('./routes');
+var routes = require('./routes.js');
 
 app.use('/', routes);
 
@@ -321,7 +345,109 @@ app.use('/vendors', express.static(__dirname + '/vendors'));
 // Allows direct access to js files
 app.use('/fonts', express.static(__dirname + '/fonts'));
 
-app.listen(3000, ()=>
+const server = app.listen(3000, ()=>
 {
   console.log("Server is up");
+  sleepTimeout(add_update_product("", {"name":"orange"}, "hi"), 3000);
 });
+
+// Server shutdown code
+// Code to get the server to terminate in the console when pressing the Esc key
+process.stdin.on("keypress", (str, key) => 
+{
+  if (key.name == "c" && key.ctrl)
+  {
+    console.log("Closing DB connections.");
+    userclient.close((err, result)=>
+    {
+      if (err)
+      {
+        console.log("Error occurred in closing connection to userclient");
+        throw err;
+      }
+      console.log("Closed userclient");
+      vendorclient.close((err1, result1)=>
+      {
+        if (err)
+        {
+          console.log("Error occurred in closing connection to vendorclient");
+          throw err;
+        }
+        console.log("Closed vendorclient");
+        server.close(()=>
+        {
+          console.log("Terminating Server!");
+          process.exit(0);
+        });
+      });
+    });
+  }
+});
+
+function update_shop(shop_id, shop_info, res)
+{
+  vendorclient.collection("shops", (err, shops_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send("Could not connect to Database collection. Please try again later!");
+    }
+    else
+    {
+      shops_collection.updateOne({"_id":ObjectId(shop_id)}, shop_info, (err1, result)=>
+      {
+        if (err1)
+        {
+          res.status(500).send("Could not update store information. Please try again later!");
+        }
+        else
+        {
+          res.status(200).send("Store information successfully updated!");
+        }
+      });
+    }
+  });
+}
+
+function add_update_product(shop_id, product_data, operation, res)
+{
+  vendorclient.db(dbname).collection("products", (err, products_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send("Could not connect to Database collection. Please try again later!");
+    }
+    else
+    {
+      if (operation == "add")
+      {
+        // Check if product already exists
+        products_collection.find({"name":product_data["name"]}, {"projection":{"shop":1}}).toArray((err1, doc)=>
+        {
+          if (err1)
+          {
+            res.status(500).send("A server error occurred. Please try adding this item later.");
+          }
+          else
+          {
+            console.log(doc);
+          }
+        });
+      }
+      else if (operation == "update")
+      {
+        vendorclient.db(dbname).collection("shops", (err2, shop)=>
+        {
+          if (err2)
+          {
+            res.status(500).send("A server error occurred and we could not identify the shop.");
+          }
+        });
+      }
+      else
+      {
+        res.status(501).send("The server does not support the " + operation + " operation!");
+      }
+    }
+  });
+}
