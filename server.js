@@ -64,6 +64,19 @@ app.use((req, res, next) => {
   next();
 });
 
+/*
+Required Document Schema to follow
+{
+  purchases:
+  {
+    "time in millseconds":
+    {
+      "product_name":String
+      "price":Double
+    }
+  }
+}
+*/
 c1.connect((err)=>
 {
   if (err)
@@ -175,6 +188,17 @@ c1.connect((err)=>
   }
 });
 
+/*
+Required Document Schema to follow
+{
+  _id:ObjectId
+  owner:ObjectId
+  location: [ (Double)lat, (Double)lon]
+  name:"SHOP NAME"
+  description:"SHOP DESCRIPTION"
+  picture:"OPTIONAL SHOP PICTURE URL)
+}
+*/
 c2.connect((err)=>
 {
   if (err)
@@ -247,6 +271,15 @@ c2.connect((err)=>
   }
 });
 
+/*
+Required Document Schema
+{
+  _id:ObjectId
+  name:"PRODUCT NAME"
+  price:DOUBLE
+  store:ObjectId to a valid store
+}
+*/
 c3.connect((err)=>
 {
   if (err)
@@ -352,7 +385,11 @@ app.get("/temp", (req, res)=>
   //find_shop("hi", res);
   //specific_vendor_shops(ObjectId("5cac099386d1af000008fe16"), res);
   //product_search("orange", res);
-  shop_products(ObjectId("5cac14c3e52ab45423d33424"), res);
+  //shop_products(ObjectId("5cac14c3e52ab45423d33424"), res);
+  //get_purchase_history(ObjectId("5cac02c8a74b7e40e008a154"), res);
+  //list_all_products(res);
+  //add_update_remove_product(ObjectId("5cac14c3e52ab45423d33424"), {"name":"a", "_id":ObjectId("5cac096a1c9d44000072d6d1")}, "remove", res);
+  remove_from_history(ObjectId("5cab9e45ad7fb115d8c0f502"), 1555278283914, res);
 });
 
 const server = app.listen(3000, ()=>
@@ -396,32 +433,32 @@ process.stdin.on("keypress", (str, key) =>
 //NOTE: need to convert ObjectId strings to ObjectId before passing into functions
 
 /**
-* @param shop_id is an Object_id of the shop
+* @param shop_id is an ObjectId() of the shop
 * @param shop_info is a JSON object matching the required fields for a shop document
 * @param res is the response handler object
 * @modifies res
-* @effects returns a response message through res.
+* @effects returns a response message through res in the form {"message":INSERT MSG HERE}.
 */
 function update_shop_information(shop_id, shop_info, res)
 {
-  res.setHeader("Content-Type", "text/plain");
+  res.setHeader("Content-Type", "application/json");
   vendorclient.db(dbname).collection("shops", (err, shops_collection)=>
   {
     if (err)
     {
-      res.status(500).send("Could not connect to Database collection. Please try again later!");
+      res.status(500).send({"message":"Could not connect to Database collection. Please try again later!"});
     }
     else
     {
-      shops_collection.updateOne({"_id":shop_id}, shop_info, (err1, result)=>
+      shops_collection.replaceOne({"_id":shop_id}, shop_info, (err1, result)=>
       {
         if (err1)
         {
-          res.status(500).send("Could not update store information. Please try again later!");
+          res.status(500).send({"message":"Could not update store information. Please try again later!"});
         }
         else
         {
-          res.status(200).send("Store information successfully updated!");
+          res.status(200).send({"message":"Store information successfully updated!"});
         }
       });
     }
@@ -437,16 +474,18 @@ function update_shop_information(shop_id, shop_info, res)
 * @effects either adds the product_data as a new document if operation == "add" and the shop associated
 *          with the product_data exists and the product is not a duplicate for the same store.
 *          otherwise, if operation == "update" updates the product information in 'products' collection
+*          otherwise, if operation == "remove" removes the product from the 'products' collection
 *          otherwise, sends a response of an invalid operation
+*          includes "message":"" in the json object as the message of what happenedd
 */
-function add_update_product(shop_id, product_data, operation, res)
+function add_update_remove_product(shop_id, product_data, operation, res)
 {
-  res.setHeader("Content-Type", "text/plain");
+  res.setHeader("Content-Type", "application/json");
   vendorclient.db(dbname).collection("products", (err, products_collection)=>
   {
     if (err)
     {
-      res.status(500).send("Could not connect to Database collection. Please try again later!");
+      res.status(500).send({"message":"Could not connect to Database collection. Please try again later!"});
     }
     else
     {
@@ -457,7 +496,7 @@ function add_update_product(shop_id, product_data, operation, res)
         {
           if (err1)
           {
-            res.status(500).send("A server error occurred. Please try adding this item later.");
+            res.status(500).send({"message":"A server error occurred. Please try adding this item later."});
           }
           else
           {
@@ -467,64 +506,74 @@ function add_update_product(shop_id, product_data, operation, res)
               {
                 if (err2)
                 {
-                  res.status(500).send("Could not add item. Please try again.");
+                  res.status(500).send({"message":"Could not add item. Please try again."});
                 }
                 else
                 {
-                  res.status(200).send(product_data["name"] + " successfully added!");
+                  res.status(200).send({"message":product_data["name"] + " successfully added!"});
                 }
               });
             }
             else
             {
-              res.status(400).send("Item already exists!");
+              res.status(400).send({"message":"Item already exists!"});
             }
           }
         });
       }
       else if (operation == "update")
       {
-        product_collection.updateOne({"_id":product_data["_id"]}, product_data, (err3, result)=>
+        products_collection.replaceOne({"_id":product_data["_id"]}, product_data, (err3, result)=>
         {
           if (err3)
           {
-            res.status(500).send("Error occurred. Could not update " + product_data["name"] + " information.");
+            res.status(500).send({"message":"Error occurred. Could not update " + product_data["name"] + " information."});
           }
           else
           {
             // Success so don't interrupt the user.
-            res.status(200).send();
+            res.status(200).send({"message":"Item information updated!"});
+          }
+        });
+      }
+      else if (operation == "remove")
+      {
+        products_collection.deleteOne({"_id":product_data["_id"]}, (err4, result)=>
+        {
+          if (err4)
+          {
+            res.status(500).send({"message":"Failed to remove " + product_data["name"]});
+          }
+          else
+          {
+            res.status(200).send({"message":"Successfully removed " + product_data["name"]});
           }
         });
       }
       else
       {
-        res.status(501).send("The server does not support the " + operation + " operation!");
+        res.status(501).send({"message":"The server does not support the " + operation + " operation!"});
       }
     }
   });
 }
 
-/*function get_owned_shops(ownerid)
-{
-
-}*/
-
 /** Function to find out all the shops in the database
 * @param response is the response handler from the post request
 * @modifies response
-* @effect response sends back either an error message in plain text or
+* @effect response sends back either an error message in
 *         a json of {"data":[...]} that contains an array of {"_id", "name"}
 *         json objects                            store _id and store name
+*         includes {"message":""} as the message in the json object
 */
 function list_all_shops(response)
 {
+  response.setHeader("Content-Type", "application/json");
   userclient.db(dbname).collection("shops", (err, shop_collection)=>
   {
-    response.setHeader("Content-Type", "text/plain");
     if (err)
     {
-      response.status(500).send("Error accessing to shop collections.");
+      response.status(500).send({"message":"Error accessing to shop collections."});
       throw err;
     }
     else
@@ -533,13 +582,12 @@ function list_all_shops(response)
       {
         if (err1)
         {
-          response.status(500).send("Error reading from shpo collections.");
+          response.status(500).send({"message":"Error reading from shpo collections."});
           throw err1;
         }
         else
         {
-          response.setHeader("Content-Type", "application/json");
-          response.status(200).send("{\"data\":[" + list.toString() + "]}");
+          response.status(200).send({"data":list});
         }
       });
     }
@@ -552,15 +600,16 @@ function list_all_shops(response)
 * @effect response sends back either an error message or a json of 
 *         a json of {"data":[...]} that contains an array of {"_id", "name"}
 *         json objects                           product _id and product name
+*         message will be in "message":"" in the json object
 */
 function list_all_products(response)
 {
+  response.setHeader("Content-Type", "application/json");
   userclient.db(dbname).collection("products", (err, product_collection)=>
   {
-    response.setHeader("Content-Type", "text/plain");
     if (err)
     {
-      response.status(500).send("Error accessing to shop collections.");
+      response.status(500).send({"message":"Error accessing to shop collections."});
       throw err;
     }
     else
@@ -569,13 +618,12 @@ function list_all_products(response)
       {
         if (err1)
         {
-          response.status(500).send("Error reading from product collections.");
+          response.status(500).send({"message":"Error reading from product collections."});
           throw err1;
         }
         else
         {
-          response.setHeader("Content-Type", "application/json");
-          response.status(200).send("{\"data\":[" + list.toString() + "]}");
+          response.status(200).send({"data":list});
         }
       });
     }
@@ -587,16 +635,17 @@ function list_all_products(response)
 * @param response is the response object
 * @modifes response
 * @effect response sends back either an error message or a json of 
-*         {"found":bool, [shopinfo objects]} or a plain text error
+*         {"found":bool, [shopinfo objects]}
+*         messages will be in the json object as "message":""
 */
 function find_shop_by_name(shop_name, response)
 {
-  response.setHeader("Content-Type", "text/plain");
+  response.setHeader("Content-Type", "application/json");
   userclient.db(dbname).collection("shops", (err, shop_collection)=>
   {
     if (err)
     {
-      response.status(500).send("Error accessing shop collections.");
+      response.status(500).send({"message":"Error accessing shop collections."});
     }
     else
     {
@@ -604,11 +653,10 @@ function find_shop_by_name(shop_name, response)
       {
         if (err1)
         {
-          response.status(500).send("Error reading shop collections");
+          response.status(500).send({"message":"Error reading shop collections"});
         }
         else
         {
-          response.setHeader("Content-Type", "application/json");
           if (result.length == 0)
           {
             response.status(200).send({"found":false});
@@ -616,7 +664,6 @@ function find_shop_by_name(shop_name, response)
           else
           {
             response.status(200).send({"found":true, "data":result});
-            console.log(result);
           }
         }
       });
@@ -722,6 +769,106 @@ function list_shop_products(shop_id, response)
         else
         {
           response.status(200).send({"message":"Found " + results.length + " results.", "data":results});
+        }
+      });
+    }
+  });
+}
+
+// Purchase history side
+/** Returns a json object of an array of all the purchaes they have made. Each purchase is {"data":, "time":{"product_name":"", "price":double}}
+* @param userid is the ObjectId() for the specific user
+* @param response is the response handler object
+* @modifies response
+* @effects response sends back a json object of {"message":"", "data":purchase history items} for the specific user
+* Note that purchase history items is a json object with dates as the key and the message as the value
+*/
+function get_purchase_history(userid, response)
+{
+  response.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("users", (err, user_collection)=>
+  {
+    if (err)
+    {
+      response.status(500).send({"message":"Error occurred. Could not access users collection"});
+    }
+    else
+    {
+      user_collection.find({"_id":userid}, {"projection":{"purchases":1, "first_name":1}}).toArray((err1, specific_user)=>
+      {
+        if (err1)
+        {
+          response.status(500).send({"message":"Error occurred. Could not accsss users collection"});
+        }
+        else if (specific_user.length == 0)
+        {
+          response.status(400).send({"message":"Error. User does not exist."});
+        }
+        else
+        {
+          specific_user = specific_user[0];
+          response.status(200).send({"message":"User: " + specific_user["first_name"] + " found", "data":specific_user["purchases"]});
+          console.log(specific_user["purchases"]);
+        }
+      });
+    }
+  });
+}
+
+/**
+* @param userid is an ObjectId() for the specific user
+* @param time is the time, in milliseconds (through Date.getTime()) of the item to remove
+* @modifies res, user data
+* @effects res sends back a {"message":""} on what happened
+*          if time is a valid purchase item for userid that can be removed, it is removed.
+*          otherwise nothing happens
+*/
+function remove_from_history(userid, time, res)
+{
+  res.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("users", (err, user_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error occurred. Could not access user_collection"});
+    }
+    else
+    {
+      user_collection.find({"_id":userid}, {"projection":{"_id":0}}).toArray((err1, specific_user)=>
+      {
+        if (err1)
+        {
+          res.status(500).send({"message":"Error reading user_collection"});
+        }
+        else
+        {
+          let current_time = new Date();
+          let day_limit = 7;
+          specific_user = specific_user[0];
+          if (typeof(specific_user["purchases"][time.toString()]) == "undefined")
+          {
+            res.status(400).send({"message":"Purchase history item does not exist!"});
+          }
+          else if ((current_time.getTime() - parseInt(time)) >= (day_limit*86400000))
+          { // Over 7 days and save to use time
+            res.status(400).send({"message":"Cannot remove from purchase history. Item has been in history for at least a week."});
+          }
+          else
+          {
+            delete specific_user["purchases"][time.toString()];
+            user_collection.replaceOne({"_id":userid}, specific_user, (err2, result)=>
+            {
+              if (err2)
+              {
+                res.status(500).send({"message":"Could not remove purchase item. Please try again later!"});
+                console.log(err2);
+              }
+              else
+              {
+                res.status(200).send({"message":"Purchased item from " + (new Date(parseInt(time))).toDateString() + " successfully removed!"});
+              }
+            });
+          }
         }
       });
     }
