@@ -388,7 +388,7 @@ process.stdin.on("keypress", (str, key) =>
   }
 });
 
-NOTE: need to convert ObjectId strings to ObjectId before passing into functions
+//NOTE: need to convert ObjectId strings to ObjectId before passing into functions
 
 /**
 * @param shop_id is an Object_id of the shop
