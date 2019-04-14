@@ -345,9 +345,14 @@ app.use('/vendors', express.static(__dirname + '/vendors'));
 // Allows direct access to js files
 app.use('/fonts', express.static(__dirname + '/fonts'));
 
-app.post("/temp", (req, res)=>
+app.get("/temp", (req, res)=>
 {
-  all_shops(res);
+  //add_update_product(ObjectId("5cac14c3e52ab45423d33424"), {"name" : "orange", "price" : 0.5, "store" : ObjectId("5cac14c3e52ab45423d33424")}, "add", res);
+  //all_products(res);
+  //find_shop("hi", res);
+  //specific_vendor_shops(ObjectId("5cac099386d1af000008fe16"), res);
+  //product_search("orange", res);
+  shop_products(ObjectId("5cac14c3e52ab45423d33424"), res);
 });
 
 const server = app.listen(3000, ()=>
@@ -397,9 +402,9 @@ process.stdin.on("keypress", (str, key) =>
 * @modifies res
 * @effects returns a response message through res.
 */
-function update_shop(shop_id, shop_info, res)
+function update_shop_information(shop_id, shop_info, res)
 {
-  response.setHeader("Content-Type", "text/plain");
+  res.setHeader("Content-Type", "text/plain");
   vendorclient.db(dbname).collection("shops", (err, shops_collection)=>
   {
     if (err)
@@ -408,7 +413,7 @@ function update_shop(shop_id, shop_info, res)
     }
     else
     {
-      shops_collection.updateOne({"_id":ObjectId(shop_id)}, shop_info, (err1, result)=>
+      shops_collection.updateOne({"_id":shop_id}, shop_info, (err1, result)=>
       {
         if (err1)
         {
@@ -426,6 +431,8 @@ function update_shop(shop_id, shop_info, res)
 /**
 * @param shop_id is the ObjectId of the specific shop to add/update the product to
 * @param product_data is the product object that matches the document fields for all the products
+* @param operation is a string defining the operation to perform
+* @res is the response object
 * @modifies products
 * @effects either adds the product_data as a new document if operation == "add" and the shop associated
 *          with the product_data exists and the product is not a duplicate for the same store.
@@ -434,7 +441,7 @@ function update_shop(shop_id, shop_info, res)
 */
 function add_update_product(shop_id, product_data, operation, res)
 {
-  response.setHeader("Content-Type", "text/plain");
+  res.setHeader("Content-Type", "text/plain");
   vendorclient.db(dbname).collection("products", (err, products_collection)=>
   {
     if (err)
@@ -446,7 +453,7 @@ function add_update_product(shop_id, product_data, operation, res)
       if (operation == "add")
       {
         // Check if product already exists
-        products_collection.find({"name":product_data["name"], "shop":shop_id}).toArray((err1, doc)=>
+        products_collection.find({"name":product_data["name"], "store":shop_id}).toArray((err1, doc)=>
         {
           if (err1)
           {
@@ -455,32 +462,7 @@ function add_update_product(shop_id, product_data, operation, res)
           else
           {
             if (doc.length == 0)
-            {
-              /*// Check if the store object id exists!!!
-              userclient.db(dbname).collection("shops", (error, shops)=>
-              {
-                if (error)
-                {
-                  res.status(500).("Error validating shop existence.");
-                }
-                else
-                {
-                  shops.find({"_id":product_data["shop"]}).toArray((error1, list)=>
-                  {
-                    if (error1)
-                    {
-                      res.status(500).("Error validating shop existence.");
-                    }
-                    else
-                    {
-                      if (list.length == 0)
-                      {
-                        res.status(400).send("Shop does not exist!");
-                      }
-                    }
-                  });
-                }
-              });*/
+            { // If product doesn't exist, assume that the store id is valid and add it
               products_collection.insertOne(product_data, (err2, result)=>
               {
                 if (err2)
@@ -502,26 +484,16 @@ function add_update_product(shop_id, product_data, operation, res)
       }
       else if (operation == "update")
       {
-        vendorclient.db(dbname).collection("shops", (err2, shop)=>
+        product_collection.updateOne({"_id":product_data["_id"]}, product_data, (err3, result)=>
         {
-          if (err2)
+          if (err3)
           {
-            res.status(500).send("A server error occurred and we could not identify the shop.");
+            res.status(500).send("Error occurred. Could not update " + product_data["name"] + " information.");
           }
           else
           {
-            product_collection.updateOne({"_id":ObjectId(product_data["_id"])}, product_data, (err3, result)=>
-            {
-              if (err3)
-              {
-                res.status(500).send("Error occurred. Could not update " + product_data["name"] + " information.");
-              }
-              else
-              {
-                // Success so don't interrupt the user.
-                res.status(200).send();
-              }
-            })
+            // Success so don't interrupt the user.
+            res.status(200).send();
           }
         });
       }
@@ -538,22 +510,22 @@ function add_update_product(shop_id, product_data, operation, res)
 
 }*/
 
-/**
+/** Function to find out all the shops in the database
 * @param response is the response handler from the post request
 * @modifies response
 * @effect response sends back either an error message in plain text or
 *         a json of {"data":[...]} that contains an array of {"_id", "name"}
 *         json objects                            store _id and store name
 */
-function all_shops(response)
+function list_all_shops(response)
 {
   userclient.db(dbname).collection("shops", (err, shop_collection)=>
   {
     response.setHeader("Content-Type", "text/plain");
     if (err)
     {
-      throw err;
       response.status(500).send("Error accessing to shop collections.");
+      throw err;
     }
     else
     {
@@ -561,13 +533,195 @@ function all_shops(response)
       {
         if (err1)
         {
-          throw err1;
           response.status(500).send("Error reading from shpo collections.");
+          throw err1;
         }
         else
         {
-          response.setHeader("Content-Type", "appplication/json");
+          response.setHeader("Content-Type", "application/json");
           response.status(200).send("{\"data\":[" + list.toString() + "]}");
+        }
+      });
+    }
+  });
+}
+
+/**function to find out all the products in the database
+* @param response is the response object from a request
+* @modifies response
+* @effect response sends back either an error message or a json of 
+*         a json of {"data":[...]} that contains an array of {"_id", "name"}
+*         json objects                           product _id and product name
+*/
+function list_all_products(response)
+{
+  userclient.db(dbname).collection("products", (err, product_collection)=>
+  {
+    response.setHeader("Content-Type", "text/plain");
+    if (err)
+    {
+      response.status(500).send("Error accessing to shop collections.");
+      throw err;
+    }
+    else
+    {
+      product_collection.find({}, {"projection":{"name":1}}).toArray((err1, list)=>
+      {
+        if (err1)
+        {
+          response.status(500).send("Error reading from product collections.");
+          throw err1;
+        }
+        else
+        {
+          response.setHeader("Content-Type", "application/json");
+          response.status(200).send("{\"data\":[" + list.toString() + "]}");
+        }
+      });
+    }
+  });
+}
+
+/** function to find a specific shop in the database by shop name
+* @param shop_name is a string denoting the name of the shopt of ind
+* @param response is the response object
+* @modifes response
+* @effect response sends back either an error message or a json of 
+*         {"found":bool, [shopinfo objects]} or a plain text error
+*/
+function find_shop_by_name(shop_name, response)
+{
+  response.setHeader("Content-Type", "text/plain");
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+  {
+    if (err)
+    {
+      response.status(500).send("Error accessing shop collections.");
+    }
+    else
+    {
+      shop_collection.find({"name":shop_name}).toArray((err1, result)=>
+      {
+        if (err1)
+        {
+          response.status(500).send("Error reading shop collections");
+        }
+        else
+        {
+          response.setHeader("Content-Type", "application/json");
+          if (result.length == 0)
+          {
+            response.status(200).send({"found":false});
+          }
+          else
+          {
+            response.status(200).send({"found":true, "data":result});
+            console.log(result);
+          }
+        }
+      });
+    }
+  });
+}
+
+/** function to find a list of all the shops a specific vendor owns
+* @param vendor_id is an ObjectId relating to a valid vendor
+* @param response is the response object
+* @modifies response
+* @effect response sends json object of {"data":[{_id:, name:}]} pertaining to the
+*         shops that vendor_id owns
+*/
+function list_specific_vendor_shops(vendor_id, response)
+{
+  response.setHeader("Content-Type", "text/plain");
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+  {
+    if (err)
+    {
+      console.log("Error accessing shop collection so halt application");
+      throw err;
+    }
+    else
+    {
+      shop_collection.find({"owner":vendor_id}, {"projection":{"nameOnly":1}}).toArray((err1, shops)=>
+      {
+        if (err1)
+        {
+          console.log("Error reading shop collection so halt application");
+          throw err1;
+        }
+        else
+        {
+          response.setHeader("Content-Type", "application/json");
+          response.status(200).send({"data":shops});
+        }
+      });
+    }
+  });
+}
+
+/** function to find a product by product name
+* @param product_name is a string of the product name
+* @param response the response object
+* @modifies response
+* @effects response sends back a json of {"found":bool, [product data]} for all
+*          the products with the same name as product_name
+*          {"found":false, "message"} if something occurred
+*/
+function product_search_by_name(product_name, response)
+{
+  response.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("products", (err, prod_collection)=>
+  {
+    if (err)
+    {
+      response.status(500).send({"found":false, "message":"Error accessing product collections"});
+    }
+    else
+    {
+      prod_collection.find({"name":product_name}).toArray((err1, results)=>
+      {
+        if (err1)
+        {
+          response.status(500).send({"found":false, "message":"Error reading product collections"});
+        }
+        else
+        {
+          response.setHeader("Content-Type", "application/json");
+          response.status(200).send({"found":true, "data":results});
+        }
+      });
+    }
+  });
+}
+
+/** function to find all the products owned by a shop base don the shopid
+* @param shop_id is the ObjectId of a shop
+* @param response is the response object
+* @modifies response
+* @effects response sends a json object of {"data":[product info]}
+*          Notes that "message":"usefull message" will be sent back
+*/
+function list_shop_products(shop_id, response)
+{
+  response.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("products", (err, prod_collection)=>
+  {
+    if (err)
+    {
+      response.status(500).send({"message":"Error occurred. Could not access product collection."});
+    }
+    else
+    {
+      prod_collection.find({"store":shop_id}).toArray((err1, results)=>
+      {
+        if (err1)
+        {
+          response.status(500).send({"message":"Error occurred. Could not read product collection."});
+        }
+        else
+        {
+          response.status(200).send({"message":"Found " + results.length + " results.", "data":results});
         }
       });
     }
