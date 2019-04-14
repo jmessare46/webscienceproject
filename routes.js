@@ -245,22 +245,31 @@ router.post('/user/auth', (req, res)=>
         c4.connect(err => {
             // Stores the user in the DB
             collection.findOne({email: req.body.email}, function (err, docs) {
-                // Load hash from your password DB.
-                bcrypt.compare(req.body.password, docs.password, function(err, bres) {
-                    // res == true or false
-                    if(bres)
-                    {
-                        console.log(req.body.email + ' authenticated...');
-                        req.session.user = req.body;
-                        req.session.userid = docs._id;
-                        res.redirect('/');
-                    }
-                    else
-                    {
-                        console.log('Password did not match DB record...');
-                        res.redirect('/login');
-                    }
-                });
+                // Checks to make sure an account was found
+                if(docs !== null)
+                {
+                    // Load hash from your password DB.
+                    bcrypt.compare(req.body.password, docs.password, function(err, bres) {
+                        // res == true or false
+                        if(bres)
+                        {
+                            console.log(req.body.email + ' authenticated...');
+                            req.session.user = req.body;
+                            req.session.userid = docs._id;
+                            res.redirect('/');
+                        }
+                        else
+                        {
+                            console.log('Password is incorrect...');
+                            res.redirect('/login');
+                        }
+                    });
+                }
+                else
+                {
+                    console.log("Account does not exist...");
+                    res.redirect('/login');
+                }
             });
         });
     });
