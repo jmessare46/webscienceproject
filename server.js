@@ -465,7 +465,7 @@ function update_shop_information(shop_id, shop_info, res)
   });
 }
 
-/**
+/** adds, updates, or removes a product based on the given product_data that follows the products document schema
 * @param shop_id is the ObjectId of the specific shop to add/update the product to
 * @param product_data is the product object that matches the document fields for all the products
 * @param operation is a string defining the operation to perform
@@ -742,7 +742,7 @@ function product_search_by_name(product_name, response)
   });
 }
 
-/** function to find all the products owned by a shop base don the shopid
+/** function to find all the products owned by a shop based on the shopid
 * @param shop_id is the ObjectId of a shop
 * @param response is the response object
 * @modifies response
@@ -774,6 +774,10 @@ function list_shop_products(shop_id, response)
     }
   });
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// ignore this for now since it is purchase history stuff                     //
+////////////////////////////////////////////////////////////////////////////////
 
 // Purchase history side
 /** Returns a json object of an array of all the purchaes they have made. Each purchase is {"data":, "time":{"product_name":"", "price":double}}
