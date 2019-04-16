@@ -1,180 +1,235 @@
 <!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8">
-    <meta name="author" content="Arron">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>SHOOPING</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/inventory.css">
-    <link rel="shortcut icon" href="icon.ico" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
-    <script type="text/javascript" src="js/angular.js"></script>
-  </head>
-  <body ng-app="myApp">
-    <div class="container-scroller">
+<html lang="en-US" ng-app="myApp">
 
-      <div ng-include="'/navigation'"></div>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>SHOP RPI</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/inventory.css">
+  <link rel="shortcut icon" href="icon.ico" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
+  <script type="text/javascript" src="js/angular.js"></script>
+</head>
 
-        <div ng-include="'/sidebar'"></div>
+<body ng-controller="mainController">
+  <div class="container-scroller">
 
-        <!-- Content -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                  <i class="mdi mdi-home"></i>
-                </span>
-                Inventory
-              </h3>
-            </div>
+    <div ng-include="'/navigation'"></div>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
 
-            <div id="controls" class="mx-auto text-center" ng-controller="itemController">
-              <button type="button" onclick="$(search).removeClass('d-none'); $(items).removeClass('d-none'); $(add).addClass('d-none');">Item Search</button>
-              <button type="button" onclick="$(search).addClass('d-none'); $(items).addClass('d-none'); $(add).removeClass('d-none');">Add Item</button>
-            </div>
-            <div class="container" ng-controller="itemController">
-              <div class="row">
-                <div class="col-6 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title">Item Search</h4>
-                      <form class="form-sample">
-                        <div class="form-group">
-                          <select id="option" class="form-control col-sm-5 d-inline">
-                            <option>By Name:</option>
-                            <option>By Product Code:</option>
-                          </select>
-                          <input id="search" type="text" class="form-control col-sm-6 d-inline">
-                        </div>
-                        <button type="submit" class="btn btn-gradient-success mr-2">Search</button>
-                      </form>
-                      <div id="items" class="row mt-3">
-                        <ul ng-show="items" class="list-unstyled col">
-                          <li ng-repeat="item in items" class="border border-dark">
-                            <img ng-src="{{item.img}}" alt="{{item.name}}"" class="prod-img">
-                            {{item.name}} <p class="d-inline float-right pt-2 pr-1">Price: {{item.price | currency}}</p>
-                            <p>Description: {{item.desc}}
-                              <br/>
-                              Product Code: {{item.code}}
-                            </p>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      <div ng-include="'/sidebar'"></div>
 
-                <div class="col-6 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title">Add Item</h4>
-                      <form class="forms-sample">
-                        <div class="form-group row">
-                          <label for="iName" class="col-md-4 col-form-label">Item Name:</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control" id="iName">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label for="price" class="col-sm-4 col-form-label">Price:</label>
-                          <div clas="col-sm-4">
-                            <input type="number" class="form-control t-field" id="price">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label for="pcode" class="col-sm-4 col-form-label">Product Code:</label>
-                          <div clas="col-sm-4">
-                            <input type="number" class="form-control t-field" id="pcode">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <div class="input-group col-xs-9">
-                            <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
-                            <span class="input-group-append">
-                              <button class="file-upload-browse btn btn-gradient-info" type="button">Upload an Image</button>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="desc">Description</label>
-                          <textarea class="form-control" id="desc" rows="4" cols="4"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-gradient-info mr-2">Add</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-
-<!--                 
-                <form id="search" class="col border border-primary bg-light">
-                  <legend>Item Search</legend>
-                  <select>
-                    <option value="name">By Name</option>
-                    <option value="num">By Product Code</option> 
-                  </select>
-                  <input class="w-50" type="text"/>
-                  <input type="submit" value="Search"/>
-                </form>
-                <div class="col-1 gap"></div>
-                <form id="add" class="col border border-primary bg-light">
-                  <legend class="row">Add Item</legend>
-                  <div class="row">
-                    <label class="ml-2" for="name">Item Name:</label>
-                    <input id="name" class="ml-2" type="text" autocomplete="off"/>
-                  </div>
-                  <div class="row">
-                    <label class="ml-2" for="code">Product Code:</label>
-                    <input id="code" class="t-field ml-2" type="number" min=0 autocomplete="off"/>
-                  </div>
-                  <div class="row">
-                    <label class="ml-2">Description:</label>
-                    <textarea class="ml-2" maxlength="200" rows="4" cols="40"></textarea>
-                  </div>
-                  <div class="row">
-                    <label class="ml-2">Upload a Fabulous Image: </label>
-                    <input class="ml-2" type="file"/>
-                  </div>
-                </form>
-              </div>
-              <div id="items" class="row mt-3">
-                <ul ng-show="items" class="list-unstyled col">
-                  <li ng-repeat="item in items" class="border border-dark">
-                    <img ng-src="{{item.img}}" alt="{{item.name}}"" class="prod-img">
-                    {{item.name}}
-                    <p>Description: {{item.desc}}
-                      <br/>
-                      Product Code: {{item.code}}
-                    </p>
-                  </li>
-                </ul>
-                <div class="col-1 gap"></div>
-                <div class="col gap"></div>
-              </div>
-            </div>
- -->
-
+      <!-- Content -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title">
+              <span class="page-title-icon bg-gradient-primary text-white mr-2">
+                <i class="mdi mdi-home"></i>
+              </span>
+              Inventory
+            </h3>
           </div>
+
+          <div id="controls" class="mx-auto text-center" ng-controller="itemController">
+            <button type="button" onclick="$(search).removeClass('d-none'); $(items).removeClass('d-none'); $(add).addClass('d-none');">Item Search</button>
+            <button type="button" onclick="$(search).addClass('d-none'); $(items).addClass('d-none'); $(add).removeClass('d-none');">Add Item</button>
+          </div>
+          <div class="container" ng-controller="itemController">
+            <div class="row">
+              <div class="col-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Item Search</h4>
+                    <form class="form-sample">
+                      <div class="form-group">
+                        <select id="option" class="form-control col-sm-5 d-inline">
+                          <option>By Name:</option>
+                          <option>By Product Code:</option>
+                        </select>
+                        <input id="search" type="text" class="form-control col-sm-6 d-inline">
+                      </div>
+                      <button type="submit" class="btn btn-gradient-success mr-2">Search</button>
+                      <br><br>
+                    </form>
+                    <table class="table table-bordered" id="productTable">
+                      <thead>
+                        <tr>
+                          <th>
+                            Product Code
+                          </th>
+                          <th>
+                            Product Name
+                          </th>
+                          <th>
+                            Price ($)
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            1
+                          </td>
+                          <td>
+                            <input type="text" style="border:none" ></input>
+                          </td>
+                          <td>
+                            <input type="number" style="border:none" ></input>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            2
+                          </td>
+                          <td>
+                            <input type="text" style="border:none" ></input>
+                          </td>
+                          <td>
+                            <input type="number" style="border:none" ></input>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            3
+                          </td>
+                          <td>
+                            <input type="text" style="border:none" ></input>
+                          </td>
+                          <td>
+                            <input type="number" style="border:none" ></input>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            4
+                          </td>
+                          <td>
+                            <input type="text" style="border:none" ></input>
+                          </td>
+                          <td>
+                            <input type="number" style="border:none" ></input>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            5
+                          </td>
+                          <td>
+                            <input type="text" style="border:none" ></input>
+                          </td>
+                          <td>
+                            <input type="number" style="border:none" ></input>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            6
+                          </td>
+                          <td>
+                            <input type="text" style="border:none" ></input>
+                          </td>
+                          <td>
+                            <input type="number" style="border:none" ></input>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div id="items" class="row mt-3">
+                      <ul ng-show="items" class="list-unstyled col">
+                        <li ng-repeat="item in items" class="border border-dark">
+                          <img ng-src="{{item.img}}" alt="{{item.name}}"" class="prod-img">
+                          {{item.name}} <p class="d-inline float-right pt-2 pr-1">Price: {{item.price | currency}}</p>
+                          <p>Description: {{item.desc}}
+                            <br/>
+                            Product Code: {{item.code}}
+                          </p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Add Item</h4>
+                    <form class="forms-sample">
+                      <div class="form-group row">
+                        <label for="iName" class="col-md-4 col-form-label">Item Name:</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="iName">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="price" class="col-sm-4 col-form-label">Price:</label>
+                        <div clas="col-sm-4">
+                          <input type="number" class="form-control t-field" id="price">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="pcode" class="col-sm-4 col-form-label">Product Code:</label>
+                        <div clas="col-sm-4">
+                          <input type="number" class="form-control t-field" id="pcode">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="input-group col-xs-9">
+                          <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
+                          <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-gradient-info" type="button">Upload an Image</button>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="desc">Description</label>
+                        <textarea class="form-control" id="desc" rows="4" cols="4"></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-gradient-info mr-2">Add</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+            <div id="items" class="row mt-3">
+              <ul ng-show="items" class="list-unstyled col">
+                <li ng-repeat="item in items" class="border border-dark">
+                  <img ng-src="{{item.img}}" alt="{{item.name}}"" class="prod-img">
+                  {{item.name}}
+                  <p>Description: {{item.desc}}
+                    <br/>
+                    Product Code: {{item.code}}
+                  </p>
+                </li>
+              </ul>
+              <div class="col-1 gap"></div>
+              <div class="col gap"></div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+  </div>
 
-    <footer class="text-center mx-auto fixed-bottom">SHOOPING Product</footer>
+  <footer class="text-center mx-auto fixed-bottom">SHOOPING Product</footer>
 
-    <!-- Bootstrap and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <!-- Bootstrap and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-    <script src="angular.js"></script>
-    <script src="inventory.js"></script>
-  </body>
+  <script src="angular.js"></script>
+  <script src="inventory.js"></script>
+</body>
 </html>

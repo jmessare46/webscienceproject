@@ -18,6 +18,7 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="icon.ico" />
 </head>
+
 <body ng-controller="mainController">
   <div class="container-scroller">
 
@@ -90,8 +91,18 @@
                         </div>
                       </div>
                     </div>
+
                     <p class="card-description">
-                      Hours             <!--Will add time slot here, format issue now-->
+                      Description
+                    </p>
+                    <div class="form-group">
+                      <label for="exampleTextarea1">Add additional information for my store</label>
+                      <textarea class="form-control" id="storeinfotext" rows="4"></textarea>
+                    </div>
+
+                    <!--
+                    <p class="card-description">
+                      Hours
                     </p>
                     <div class="form-group cold-md-6">
                       <div class="form-check">
@@ -137,6 +148,7 @@
                         </label>
                       </div>
                     </div>
+                    --!>
                   </form>
                   <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
                   <button class="btn btn-light">Cancel</button>
