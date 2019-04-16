@@ -6,15 +6,11 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
 
     // Pulls user's settings in the DB on load
     $http({
-        url: '/user/info',
+        url: '/user/myinfo',
         method: "POST",
-        data: {
-            email: "fake"
-        }
     })
         .then(function(response) {
                 // success
-                console.log(response);
                 $('#username').val(response.data.userdata.username);
                 $('#email').val(response.data.userdata.email);
                 $('#firstname').val(response.data.userdata.first_name);
