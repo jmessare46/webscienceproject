@@ -306,13 +306,19 @@ router.post('/user/create', (req, res)=>
 
             // Stores the user in the DB
             collection.insertOne(user, function (err, docs) {
-                console.log("User created...");
-                console.log(err);
+                if(err === null)
+                {
+                    console.log("User created...");
+                    res.redirect('/login');
+                }
+                else
+                {
+                    console.log(err);
+                    // Sends user back to the registration page
+                    res.redirect('/user/register');
+                }
             });
         });
-
-        // Sends user back to the registration page
-        // res.redirect('/user/register');
     });
 
     c4.close();
