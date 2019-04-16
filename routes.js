@@ -152,6 +152,19 @@ router.get('/sidebar', (req, res)=>
     }
 });
 
+// Loads the change password page from user settings
+router.get('/user/password', (req, res)=>
+{
+    if(req.session.user)
+    {
+        res.sendFile(__dirname + '/password.html');
+    }
+    else
+    {
+        res.sendFile(__dirname + '/login.html');
+    }
+});
+
 /*
  * Gets the logged in user's information and returns it in json.
  */
@@ -286,7 +299,6 @@ router.post('/user/create', (req, res)=>
                 first_name: req.body.firstname,
                 last_name: req.body.lastname,
                 username: req.body.user,
-                country: req.body.country,
                 password: hash
             };
 
@@ -295,11 +307,12 @@ router.post('/user/create', (req, res)=>
             // Stores the user in the DB
             collection.insertOne(user, function (err, docs) {
                 console.log("User created...");
+                console.log(err);
             });
         });
 
         // Sends user back to the registration page
-        res.redirect('/user/register');
+        // res.redirect('/user/register');
     });
 
     c4.close();

@@ -96,7 +96,7 @@ c1.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["username", "email", "password", "account_type", "first_name", "last_name", "favorite_store", "vegan", "peanut", "gluten", "vegetarian"],
+              required:["username", "email", "password", "account_type", "first_name", "last_name"],
               properties:
               {
                 username:
@@ -109,55 +109,25 @@ c1.connect((err)=>
                   bsonType: "string",
                   description:"must be a string and is required"
                 },
+                first_name:
+                {
+                  bsonType: "string",
+                  description:"must be a string and is required"
+                },
+                last_name:
+                {
+                  bsonType: "string",
+                  description:"must be a string and is required"
+                },
                 password:
                 {
                   bsonType:"string",
                   description:"must be a hashed string and is required"
                 },
-                country:
-                {
-                  bsonType: "string",
-                  description:"must be a string and is required"
-                },
-                salt:
-                {
-                  bsonType:"string",
-                  description:"must be a string and is required"
-                },
-                favorites:
-                {
-                  bsonType:["objectId"],
-                  description:"must be an array of objectId referingt to stores and is required"
-                },
-                filter:
-                {
-                  bsonType:["string"],
-                  description:"must be an array of filter strings and is required"
-                },
-                store_owner:
+                account_type:
                 {
                   bsonType:"bool",
                   description:"must be a boolean telling whether a user is a store owner and is required"
-                },
-                history:
-                {
-                  bsonType:["object"],
-                  description:"must be an array of past purchasing history"
-                },
-                profile_image:
-                {
-                  bsonType:"string",
-                  description:"must be a string as a file path to an iamge, and is not required"
-                },
-                flex:
-                {
-                  bsonType:"double",
-                  description:"must be a double and is required"
-                },
-                swipe:
-                {
-                  bsonType:"int",
-                  description:"must be an integer and is required"
                 }
               }
             }
