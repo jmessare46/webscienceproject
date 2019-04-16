@@ -253,8 +253,9 @@ router.post('/user/auth', (req, res)=>
                         // res == true or false
                         if(bres)
                         {
+                            // TODO: Fix so the user's information isn't stored in plain text
                             console.log(req.body.email + ' authenticated...');
-                            req.session.user = req.body;
+                            req.session.user = docs;
                             req.session.userid = docs._id;
                             res.redirect('/');
                         }
