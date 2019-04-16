@@ -40,6 +40,12 @@ router.get('/login', (req, res)=>
     }
 });
 
+// Takes a user to the password reset page
+router.get('/user/passreset', (req, res)=>
+{
+    res.sendFile(__dirname + '/resetpassword.html');
+});
+
 // Shows the user registration page
 router.get('/user/register', (req, res)=>
 {
@@ -55,7 +61,35 @@ router.get('/store/register', (req, res)=>
 // Creates a user in the database when correct information is given
 router.post('/store/request', (req, res)=>
 {
-    console.log(req.body);
+    var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+    c4.connect(err => {
+        // Creates a password hash
+        bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+            const collection = c4.db("Project").collection("users");
+
+            var user = {
+                email: req.body.email,
+                first_name: req.body.firstname,
+                last_name: req.body.lastname,
+                username: req.body.user,
+                country: req.body.country,
+                password: hash
+            };
+
+            console.log(user);
+
+            // Stores the user in the DB
+            collection.insertOne(user, function (err, docs) {
+                console.log("User created...");
+            });
+        });
+
+        // Sends user back to the registration page
+        res.redirect('/user/register');
+    });
+
+    c4.close();
 });
 
 router.get('/settings', (req, res)=>
@@ -242,36 +276,34 @@ router.post('/user/auth', (req, res)=>
 
         const collection = c4.db("Project").collection("users");
 
-        c4.connect(err => {
-            // Stores the user in the DB
-            collection.findOne({email: req.body.email}, function (err, docs) {
-                // Checks to make sure an account was found
-                if(docs !== null)
-                {
-                    // Load hash from your password DB.
-                    bcrypt.compare(req.body.password, docs.password, function(err, bres) {
-                        // res == true or false
-                        if(bres)
-                        {
-                            // TODO: Fix so the user's information isn't stored in plain text
-                            console.log(req.body.email + ' authenticated...');
-                            req.session.user = docs;
-                            req.session.userid = docs._id;
-                            res.redirect('/');
-                        }
-                        else
-                        {
-                            console.log('Password is incorrect...');
-                            res.redirect('/login');
-                        }
-                    });
-                }
-                else
-                {
-                    console.log("Account does not exist...");
-                    res.redirect('/login');
-                }
-            });
+        // Stores the user in the DB
+        collection.findOne({email: req.body.email}, function (err, docs) {
+            // Checks to make sure an account was found
+            if(docs !== null)
+            {
+                // Load hash from your password DB.
+                bcrypt.compare(req.body.password, docs.password, function(err, bres) {
+                    // res == true or false
+                    if(bres)
+                    {
+                        // TODO: Fix so the user's information isn't stored in plain text
+                        console.log(req.body.email + ' authenticated...');
+                        req.session.user = docs;
+                        req.session.userid = docs._id;
+                        res.redirect('/');
+                    }
+                    else
+                    {
+                        console.log('Password is incorrect...');
+                        res.redirect('/login');
+                    }
+                });
+            }
+            else
+            {
+                console.log("Account does not exist...");
+                res.redirect('/login');
+            }
         });
     });
 
