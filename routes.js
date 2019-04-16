@@ -189,6 +189,8 @@ router.post('/user/myinfo', (req, res)=>
                         country: docs.country,
                         first_name: docs.first_name,
                         last_name: docs.last_name,
+                        favorite_store: docs.favorite_store,
+                        diet: docs.diet,
                     }
                 });
             }
@@ -266,15 +268,18 @@ router.post('/user/updateprofile', (req, res)=>
 
             //TODO: Make update work
             collection.updateOne(
-                { _id: req.session.userid },
-                {  $set: {
-                        first_name: "steve",
-                    }
-                },
-                {},
-                function (res, err) {
-                    console.log(err);
-                    console.log(res);
+                { email: req.body.email },
+                { $set: {
+                        first_name: req.body.firstname,
+                        last_name: req.body.lastname,
+                        email: req.body.email,
+                        favorite_store: req.body.favorite,
+                        account_type: req.body.account_type,
+                        diet: req.body.restrictions,
+                    } },
+                { upsert: true },
+                function (resp, err) {
+                    res.redirect('/settings');
                 }
             );
         });
@@ -302,8 +307,6 @@ router.post('/user/create', (req, res)=>
                 password: hash
             };
 
-            console.log(user);
-
             // Stores the user in the DB
             collection.insertOne(user, function (err, docs) {
                 console.log("User created...");
@@ -312,7 +315,7 @@ router.post('/user/create', (req, res)=>
         });
 
         // Sends user back to the registration page
-        // res.redirect('/user/register');
+        res.redirect('/user/register');
     });
 
     c4.close();

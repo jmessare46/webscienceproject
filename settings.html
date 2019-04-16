@@ -90,12 +90,13 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Favorite</label>
                             <div class="col-sm-9">
-                              <select name="favorite" class="form-control">
+                              <select name="favorite" class="form-control" id="favorite">
+<!--                                TODO: Fix this so it pulls these store names from the DB -->
                                 <option value="">Choose...</option>
-                                <option>Collar City Sliders</option>
-                                <option>Halal Shack</option>
-                                <option>Moe's</option>
-                                <option>Panera Bread</option>
+                                <option value="collar_city_sliders">Collar City Sliders</option>
+                                <option value="halal_shack">Halal Shack</option>
+                                <option value="moes">Moe's</option>
+                                <option value="panera_bread">Panera Bread</option>
                               </select>
                             </div>
                           </div>
@@ -105,12 +106,12 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Dietary Restrictions</label>
                             <div class="col-sm-9">
-                              <select name="restrictions" class="form-control">
-                                <option value="">Choose...</option>
-                                <option>Vegetarian</option>
-                                <option>Vegan</option>
-                                <option>Gluten Free</option>
-                                <option>Peanut Allergy</option>
+                              <select name="restrictions" class="form-control" id="restrictions" required>
+                                <option value="">None</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="gluten_free">Gluten Free</option>
+                                <option value="peanut_allergy">Peanut Allergy</option>
                               </select>
                             </div>
                           </div>

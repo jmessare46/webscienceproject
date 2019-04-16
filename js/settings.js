@@ -15,7 +15,8 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
                 $('#email').val(response.data.userdata.email);
                 $('#firstname').val(response.data.userdata.first_name);
                 $('#lastname').val(response.data.userdata.last_name);
-            //    TODO: Pull favorites and dietary restrictions here and populate them
+                $('#restrictions').val(response.data.userdata.diet);
+                $('#favorite').val(response.data.userdata.favorite_store);
             },
             function(response) {
                 // failed

@@ -128,6 +128,11 @@ c1.connect((err)=>
                 {
                   bsonType:"bool",
                   description:"must be a boolean telling whether a user is a store owner and is required"
+                },
+                diet:
+                {
+                  bsonType:"string",
+                  description:"must be a string telling what dietary restrictions a user has"
                 }
               }
             }
