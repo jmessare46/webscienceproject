@@ -33,7 +33,7 @@
         <div class="content-wrapper">
           <div class="page-header">
             <h3 class="page-title">
-              Store information settings
+              Store Page
             </h3>
             <nav aria-label="breadcrumb">
             </nav>
@@ -41,7 +41,7 @@
             <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">About us</h4>
+                  <h4 class="card-title" >Welcome to <input type="text" style ="border: none" name="name" id="name" placeholder="store name here"></h4>
                   <form class="form-sample">
                     <p class="card-description">
                       Store information
@@ -49,51 +49,47 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">About Us Photo</label>
+                          <label class="col-sm-3 col-form-label">Store picture</label>
                           <div class="col-sm-9">
-                            <button class="btn btn-light">Upload Photo!</button>
-                            <img src="" alt="Store photo" width="460" height="345">
+                            <img src="/images/apple.jpg" alt="Store photo" width="345" height="345">
                           </div>
                         </div>
                       </div>
-
+                      <div class="form-group">
+                        <label for="exampleTextarea1">About Us</label>
+                        <input type="text" class="form-control" rows="4" placeholder="store information" name="storeinfo" id="storeinfo"></input>
+                      </div>
                     </div>
 
-
-                    <div class="form-group">
-                      <label for="exampleTextarea1">About Us Text</label>
-                      <input type="text" class="form-control"  rows="2"></input>
-                    </div>
-
-                    <label for="exampleTextarea1">Contact Details</label>
+                    <p class="card-description">
+                      Contact
+                    </p>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Phone</label>
                           <div class="col-sm-9">
-                            <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your phone..." name="email">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Email</label>
-                          <div class="col-sm-9">
-                            <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your email..." name="email">
-
+                            <input type="text" class="form-control" rows="4" placeholder="store information" name="phone" id="phone"></input>
                           </div>
                         </div>
                       </div>
                     </div>
-
-                    <br><br>
-                    <p class="card-description">
-                      Address
-                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Email</label>
+                          <div class="col-sm-9">
+                            <input type="email" class="form-control" rows="4" placeholder="store information" name="email" id="email"></input>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Address 1</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" />
+                            <input type="text" class="form-control" rows="4" placeholder="store information" name="address1" id="address1"></input>
                           </div>
                         </div>
                       </div>
@@ -103,7 +99,7 @@
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Address 2</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" />
+                            <input type="text" class="form-control" rows="4" placeholder="store information" name="address2" id="address2"></input>
                           </div>
                         </div>
                       </div>
@@ -113,8 +109,8 @@
                       Description
                     </p>
                     <div class="form-group">
-                      <label for="exampleTextarea1">Add additional information for my store</label>
-                      <textarea class="form-control" id="storeinfotext" rows="4"></textarea>
+                      <label for="exampleTextarea1">Add additional information for the store</label>
+                      <textarea class="form-control" name="storeinfotext" id="storeinfotext" rows="4"></textarea>
                     </div>
 
                     <!--
@@ -165,10 +161,8 @@
                         </label>
                       </div>
                     </div>
-                    --!>
+                    -->
                   </form>
-                  <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
-                  <button class="btn btn-light">Cancel</button>
                 </div>
               </div>
             </div>
