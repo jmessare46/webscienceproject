@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="en-US" ng-app="myApp">
+<html lang="en" ng-app="myApp">
 
 <head>
+  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>SHOP RPI</title>
+  <title>SHOOPING!</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/inventory.css">
-  <link rel="shortcut icon" href="icon.ico" />
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+  <script type="text/javascript" src="/js/angular.js"></script>
+
+  <!-- inject:css -->
+  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
-  <script type="text/javascript" src="js/angular.js"></script>
+
+  <!-- endinject -->
+  <link rel="shortcut icon" href="/images/icon.ico" />
+  <link rel="stylesheet" href="/css/landing.css"/>
 </head>
+
 
 <body ng-controller="mainController">
   <div class="container-scroller">
@@ -38,10 +44,6 @@
             </h3>
           </div>
 
-          <div id="controls" class="mx-auto text-center" ng-controller="itemController">
-            <button type="button" onclick="$(search).removeClass('d-none'); $(items).removeClass('d-none'); $(add).addClass('d-none');">Item Search</button>
-            <button type="button" onclick="$(search).addClass('d-none'); $(items).addClass('d-none'); $(add).removeClass('d-none');">Add Item</button>
-          </div>
           <div class="container" ng-controller="itemController">
             <div class="row">
               <div class="col-6 grid-margin stretch-card">
