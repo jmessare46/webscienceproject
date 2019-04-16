@@ -1,0 +1,12 @@
+.modalimg
+{
+  max-width: 359px;
+}
+
+@media (min-width:481px)
+{
+  .modalimg
+  {
+    max-width: 468px;
+  }
+}

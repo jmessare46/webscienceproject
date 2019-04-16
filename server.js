@@ -1,6 +1,7 @@
 const express = require('express');
 const Mclient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
+const http = require("http");
 var bodyParser = require("body-parser");
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -51,7 +52,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    expires: 600000
+    expires: (3600000)
   }
 }));
 
@@ -389,7 +390,7 @@ app.get("/temp", (req, res)=>
   //get_purchase_history(ObjectId("5cac02c8a74b7e40e008a154"), res);
   //list_all_products(res);
   //add_update_remove_product(ObjectId("5cac14c3e52ab45423d33424"), {"name":"a", "_id":ObjectId("5cac096a1c9d44000072d6d1")}, "remove", res);
-  remove_from_history(ObjectId("5cab9e45ad7fb115d8c0f502"), 1555278283914, res);
+  //remove_from_history(ObjectId("5cab9e45ad7fb115d8c0f502"), 1555278283914, res);
 });
 
 const server = app.listen(3000, ()=>
@@ -562,9 +563,8 @@ function add_update_remove_product(shop_id, product_data, operation, res)
 * @param response is the response handler from the post request
 * @modifies response
 * @effect response sends back either an error message in
-*         a json of {"data":[...]} that contains an array of {"_id", "name"}
-*         json objects                            store _id and store name
-*         includes {"message":""} as the message in the json object
+*         {"message":""} as the message in the json object
+*         or the {"message":"", "data":array of store json objects store if no errors occur}
 */
 function list_all_shops(response)
 {
@@ -578,7 +578,7 @@ function list_all_shops(response)
     }
     else
     {
-      shop_collection.find({}, {"projection":{"name":1}}).toArray((err1, list)=>
+      shop_collection.find().toArray((err1, list)=>
       {
         if (err1)
         {
@@ -587,7 +587,7 @@ function list_all_shops(response)
         }
         else
         {
-          response.status(200).send({"data":list});
+          response.status(200).send({"data":list, "message":"Success"});
         }
       });
     }
@@ -774,6 +774,44 @@ function list_shop_products(shop_id, response)
     }
   });
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Use Dashboard Routing and Request Handling                                 //
+////////////////////////////////////////////////////////////////////////////////
+// Returns json object of all shops in database
+app.get("/shops", (req, res)=>
+{
+  list_all_shops(res);
+});
+
+
+// Grabs a user's favorite stores first
+app.post("/user/favorites", (req, res)=>
+{
+  res.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("users", (err, user_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error Occurred. Please try again later."});
+    }
+    else
+    {
+      user_collection.find({"_id":ObjectId(req.session.userid)}, {"projection":{"favorite_store":1}}).toArray((err1, favorites)=>
+      {
+        if (err1)
+        {
+          res.status(500).send({"message":"Error trying to find userdata"});
+        }
+        else
+        {
+          res.send({"data":favorites[0]});
+        }
+      });
+    }
+  });
+});
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // ignore this for now since it is purchase history stuff                     //

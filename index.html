@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/images/icon.ico" />
+  <link rel="stylesheet" href="/css/landing.css"/>
 </head>
 <body ng-controller="mainController">
   <div class="container-scroller">
@@ -29,7 +30,7 @@
 
       <!-- partial -->
       <div class="main-panel">
-        <div class="content-wrapper">
+        <div class="content-wrapper" ng-controller="listShops">
           <div class="page-header">
             <h3 class="page-title">
               <span class="page-title-icon bg-gradient-primary text-white mr-2">
@@ -38,7 +39,7 @@
               Dashboard
             </h3>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-md-4 stretch-card grid-margin">
               <div class="card bg-gradient-danger card-img-holder text-white">
                 <div class="card-body" style="background-color: red">
@@ -72,6 +73,43 @@
                   </h4>
                   <h2 class="mb-5"><a href="#">Store 3</a></h2>
                   <h6 class="card-text">Announcement or promotions here</h6>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="row" ng-repeat="row in stores">
+            <div class="col-md-4 stretch-card grid-margin btn" data-toggle="modal" data-target="#store_info" ng-repeat="item in row" ng-show="{{item}}" ng-click="updateView(item['_id'])">
+              <div class="card bg-gradient-danger card-img-holder text-white">
+                <div class="card-body" style="background-color: grey">
+                  <img src="/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
+                  <h2 class="mb-5 text-success">{{item.name}}</h2>
+                  <h6 class="card-text">{{item.address}}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="store_info" tabindex="-1" role="dialog" aria-labelledby="{{focus.name}}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="modalTitle">{{focus.name}}</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img ng-src="{{focus.picture ? focus.picture:'/images/na.jpg'}}" class="card-img-absolute modalimg d-block mx-auto mb-3" alt="store-image"/>
+                  <p><strong>Address:</strong>{{focus.address}}</p>
+                  <div>
+                    {{focus.description}}
+                  </div>
+                  <form method="post" action="/shops/page">
+                    <input type="text" name="store_id" ng-value="{{focus._id}}" hidden>
+                    <input type="submit" class="btn btn-info text-center w-100 mt-2" value="Go to store page">
+                  </form>
                 </div>
               </div>
             </div>
@@ -251,7 +289,7 @@
           <!--</div>-->
 
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
@@ -366,7 +404,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
