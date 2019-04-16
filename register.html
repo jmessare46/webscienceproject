@@ -23,7 +23,7 @@
   <script>
     $(document).ready(function(){
 
-
+      // Validate input fields
       function validateInput() {
         if ($("#firstname").val()=="") {
 
@@ -63,9 +63,7 @@
       }
 
 
-      $("#test").click(function(){
-          validateInput();
-      });
+      
 
 
 
@@ -88,34 +86,32 @@
               <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
               <form class="pt-3" method="POST" action="/user/create">
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name..." name="firstname">
+                  <input type="text" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name..." name="firstname" required>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name..." name="lastname">
+                  <input type="text" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name..." name="lastname" required>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="user" placeholder="Enter your username..." name="user">
+                  <input type="text" class="form-control form-control-lg" id="user" placeholder="Enter your username..." name="user" required>
                 </div>
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your email..." name="email">
+                  <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your email..." name="email" required>
                 </div>
                 
                 <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" name="password">
+                  <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" name="password" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="confirm_password" placeholder="Retype Password" name="confirm_password">
+                  <input type="password" class="form-control form-control-lg" id="confirm_password" placeholder="Retype Password" name="confirm_password" required>
                 </div>
                 <div class="mb-4">
                   <div class="form-check">
                     <label class="form-check-label text-muted">
-                      <input type="checkbox" class="form-check-input" name="terms" id="terms">
-                      I agree to all Terms & Conditions
+                      
                     </label>
                   </div>
                 </div>
                 <div class="mt-3">
-                  <p id="test">Test form validation since clicking the button doesn't work =/</p>
                   <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" id="signup" type="submit">SIGN UP</button>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
