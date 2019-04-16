@@ -152,49 +152,87 @@ router.get('/sidebar', (req, res)=>
     }
 });
 
-// Creates a user in the database when correct information is given
+/*
+ * Gets the logged in user's information and returns it in json.
+ */
+router.post('/user/myinfo', (req, res)=>
+{
+    var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+    c4.connect(err => {
+
+        const collection = c4.db("Project").collection("users");
+
+        // Stores the user in the DB
+        collection.findOne({email: req.session.user.email}, function (err, docs) {
+            if(!err)
+            {
+                // Load hash from your password DB.
+                res.send({
+                    // TODO: Get all user information to populate settings information
+                    userdata: {
+                        email: docs.email,
+                        username: docs.username,
+                        country: docs.country,
+                        first_name: docs.first_name,
+                        last_name: docs.last_name,
+                    }
+                });
+            }
+            else
+            {
+                res.send({
+                    userdata: {
+                        error: err,
+                    }
+                })
+            }
+        });
+    });
+    c4.close();
+});
+
+/*
+ * Get's information about a given user from the DB.
+ *
+ * @param email - the email of the user you are trying to find information about
+ */
 router.post('/user/info', (req, res)=>
 {
-    if(!req.session.user)
-    {
-        res.send({
-            userdata: {
-                    error: "You must be logged in to view this information!"
-                }
-        });
-    }
-    else
-    {
-        var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+    var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 
-        c4.connect(err => {
+    c4.connect(err => {
 
-            const collection = c4.db("Project").collection("users");
+        const collection = c4.db("Project").collection("users");
 
-            c4.connect(err => {
-                // Stores the user in the DB
-                collection.findOne({email: req.session.user.email}, function (err, docs) {
-                    // Load hash from your password DB.
-                    res.send({
-                        // TODO: Get all user information to populate settings information
-                        userdata: {
-                            email: docs.email,
-                            username: docs.username,
-                            country: docs.country,
-                            first_name: docs.first_name,
-                            last_name: docs.last_name,
-                        }
-                    });
-
-                    console.log(docs);
-                    console.log(err);
+        // Searches for the user based off of email in the DB.
+        collection.findOne({email: req.body.email}, function (err, docs) {
+            if(docs !== null)
+            {
+                // Load hash from your password DB.
+                res.send({
+                    // TODO: Get all user information to populate settings information
+                    userdata: {
+                        email: docs.email,
+                        username: docs.username,
+                        country: docs.country,
+                        first_name: docs.first_name,
+                        last_name: docs.last_name,
+                    }
                 });
-            });
+            }
+            else
+            {
+                res.send({
+                    userdata: {
+                        message: "User with the email '" + req.body.email + "' does not exist",
+                        error: err,
+                    }
+                })
+            }
         });
-
-
-        c4.close();
-    }
+    });
+    c4.close();
 });
 
 // Creates a user in the database when correct information is given
