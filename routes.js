@@ -70,6 +70,22 @@ router.get('/store/register', (req, res)=>
     res.sendFile(__dirname + '/request.html');
 });
 
+
+// Creates a user in the database when correct information is given
+router.post('/store/info', (req, res)=>
+{
+    //TODO: Handle errors here
+    var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+    c4.connect(err => {
+        // Creates a password hash
+
+    });
+
+    c4.close();
+});
+
+
 // Creates a user in the database when correct information is given
 router.post('/store/request', (req, res)=>
 {
@@ -98,7 +114,7 @@ router.post('/store/request', (req, res)=>
                     "name": req.body.storename,
                     "category": req.body.category,
                     "location": req.body.location,
-                    "owner": req.body.user,
+                    "owner": req.body.email,
                     "description": req.body.description,
                 };
 
@@ -296,7 +312,6 @@ router.post('/user/updateprofile', (req, res)=>
                 { $set: {
                         first_name: req.body.firstname,
                         last_name: req.body.lastname,
-                        email: req.body.email,
                         favorite_store: req.body.favorite,
                         account_type: req.body.account_type,
                         diet: req.body.restrictions,

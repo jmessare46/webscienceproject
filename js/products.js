@@ -40,6 +40,7 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
         var table = new Tabulator("#search", {
           data:tabledata,
           layout:"fitColumns",      //fit columns to width of table
+          placeholder:"No Data Available", //display message to user on empty table
           responsiveLayout:"hide",  //hide columns that dont fit on the table
           tooltips:true,            //show tool tips on cells
           history:true,             //allow undo and redo actions on the table
