@@ -11,12 +11,12 @@
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-  <script type="text/javascript" src="js/angular.js"></script>
+  <script type="text/javascript" src="/js/storeinfo.js"></script>
 
   <!-- inject:css -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="icon.ico" />
+  <link rel="shortcut icon" href="images/icon.ico" />
 </head>
 
 <body ng-controller="mainController">
@@ -49,61 +49,58 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">About Us Photo</label>
+                          <label class="col-sm-3 col-form-label">Store Name</label>
                           <div class="col-sm-9">
-                            <button class="btn btn-light">Upload Photo!</button>
-                            <img src="" alt="Store photo" width="460" height="345">
+                            <input type="text" class="form-control form-control-lg" id="storename" placeholder="Enter store name..." name="store_name" required>
                           </div>
                         </div>
                       </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-                      <label for="exampleTextarea1">About Us Text</label>
-                      <input type="text" class="form-control"  rows="2"></input>
-                    </div>
-
-                    <label for="exampleTextarea1">Contact Details</label>
-                    <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Phone</label>
+                          <label class="col-sm-3 col-form-label">Category</label>
                           <div class="col-sm-9">
-                            <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your phone..." name="email">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Email</label>
-                          <div class="col-sm-9">
-                            <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your email..." name="email">
-
+                            <select class="form-control" name="category" required>
+                              <option value="">Choose...</option>
+                              <option value="fast_food">Fast Food</option>
+                              <option value="fast_casual">Fast Casual</option>
+                              <option value="fine_dining">Fine Dining</option>
+                              <option value="casual_dining">Casual Dining</option>
+                            </select>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <br><br>
                     <p class="card-description">
-                      Address
+                      Location
                     </p>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Address 1</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" />
+                            <input type="text" class="form-control" name="address" required/>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Address 2</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" />
+                          <label class="col-sm-3 col-form-label">Store location</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="location" id="oncampus" value="on_campus" checked>
+                                On campus
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="location" id="offcampus" value="off_campus">
+                                Off campus
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -113,62 +110,13 @@
                       Description
                     </p>
                     <div class="form-group">
-                      <label for="exampleTextarea1">Add additional information for my store</label>
-                      <textarea class="form-control" id="storeinfotext" rows="4"></textarea>
+                      <label for="description">Add additional information for my store</label>
+                      <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
                     </div>
 
-                    <!--
-                    <p class="card-description">
-                      Hours
-                    </p>
-                    <div class="form-group cold-md-6">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input" checked>
-                          Sunday
-                        </label>
-                      </div>
-                      <div class="form-check form-check-success">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input" checked>
-                          Monday
-                        </label>
-                      </div>
-                      <div class="form-check form-check-info">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input" checked>
-                          Tuesday
-                        </label>
-                      </div>
-                      <div class="form-check form-check-danger">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input" checked>
-                          Wednesday
-                        </label>
-                      </div>
-                      <div class="form-check form-check-warning">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input" checked>
-                          Thursday
-                        </label>
-                      </div>
-                      <div class="form-check form-check-success">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input" checked>
-                          Friday
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input type="checkbox" class="form-check-input" checked>
-                          Saturday
-                        </label>
-                      </div>
-                    </div>
-                    --!>
+                    <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
+                    <button class="btn btn-light" type="reset">Cancel</button>
                   </form>
-                  <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
-                  <button class="btn btn-light">Cancel</button>
                 </div>
               </div>
             </div>
