@@ -194,7 +194,7 @@ c2.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["owner", "location", "description", "name"],
+              required:["owner", "location", "name", "category"],
               properties:
               {
                 name:
@@ -213,7 +213,7 @@ c2.connect((err)=>
                   items:
                   {
                     "type":"number",
-                    "minItems":2,
+                    "minItems":1,
                     "maxItems":2
                   },
                   description:"must be an array of [lat, lon] coordinates and is required"
@@ -223,7 +223,7 @@ c2.connect((err)=>
                   bsonType:"string",
                   description:"must be a string and is required"
                 },
-                picture:
+                category:
                 {
                   bsonType:"string",
                   description:"must be a string to store the picture url and is not requred"

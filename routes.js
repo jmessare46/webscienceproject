@@ -73,32 +73,44 @@ router.get('/store/register', (req, res)=>
 // Creates a user in the database when correct information is given
 router.post('/store/request', (req, res)=>
 {
+    //TODO: Handle errors here
     var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
 
     c4.connect(err => {
         // Creates a password hash
-        bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-            const collection = c4.db("Project").collection("users");
+        bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
+            const users = c4.db("Project").collection("users");
+            const shops = c4.db("Project").collection("shops");
 
             var user = {
                 "email": req.body.email,
                 "first_name": req.body.firstname,
                 "last_name": req.body.lastname,
                 "username": req.body.user,
-                "country": req.body.country,
                 "password": hash
             };
 
-            console.log(user);
-
             // Stores the user in the DB
-            collection.insertOne(user, function (err, docs) {
+            users.insertOne(user, function (err, docs) {
                 console.log("User created...");
+
+                var store = {
+                    "name": req.body.storename,
+                    "category": req.body.category,
+                    "location": req.body.location,
+                    "owner": req.body.user,
+                    "description": req.body.description,
+                };
+
+                shops.insertOne(store, function (err, docs) {
+                    console.log("Store created...");
+
+                    // Sends user back to the login page
+                    res.redirect('/login');
+                });
+
             });
         });
-
-        // Sends user back to the registration page
-        res.redirect('/user/register');
     });
 
     c4.close();
@@ -317,7 +329,8 @@ router.post('/user/create', (req, res)=>
                 last_name: req.body.lastname,
                 username: req.body.user,
                 password: hash,
-                "favorite_store":""
+                account_type: "user",
+                favorite_store: ""
             };
 
             // Stores the user in the DB

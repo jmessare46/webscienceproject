@@ -49,33 +49,6 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3 col-form-label">RPI student card?</label>
-                      <div class="col-sm-4">
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="studentCard" id="studentCard1" value="supported" checked>
-                            Supported
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-sm-5">
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="studentCard" id="studentCard2" value="not_supported">
-                            Not supported
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Category</label>
                       <div class="col-sm-9">
                         <select class="form-control" name="category" required>
@@ -85,6 +58,16 @@
                           <option value="fine_dining">Fine Dining</option>
                           <option value="casual_dining">Casual Dining</option>
                         </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Description</label>
+                      <div class="col-sm-9">
+                        <textarea class="form-control" rows="10" name="description" id="description"></textarea>
                       </div>
                     </div>
                   </div>
@@ -139,6 +122,24 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Owner First Name</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" name="firstname" required/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Owner Last Name</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" name="lastname" required/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Username</label>
                       <div class="col-sm-9">
                         <input type="text" class="form-control" name="user" required/>
@@ -178,24 +179,6 @@
                       <label class="col-sm-3 col-form-label">Confirm Email</label>
                       <div class="col-sm-9">
                         <input type="email" class="form-control" name="conf_email"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group row">
-                      <label class="col-sm-3 col-form-label">Owner First Name</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" name="firstname" required/>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group row">
-                      <label class="col-sm-3 col-form-label">Owner Last Name</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" name="lastname" required/>
                       </div>
                     </div>
                   </div>
