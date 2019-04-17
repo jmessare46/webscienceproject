@@ -11,13 +11,17 @@
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-  <script type="text/javascript" src="/js/angular.js"></script>
+  <script type="text/javascript" src="/js/products.js"></script>
 
   <!-- inject:css -->
   <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/images/icon.ico" />
-  <link rel="stylesheet" href="/css/landing.css"/>
+
+  <!-- Tabulator files -->
+  <link href="https://unpkg.com/tabulator-tables@4.2.4/dist/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.4/dist/js/tabulator.min.js"></script>
+  
 </head>
 <body ng-controller="mainController">
   <div class="container-scroller">
@@ -30,68 +34,29 @@
 
       <!-- partial -->
       <div class="main-panel">
-        <div class="content-wrapper" ng-controller="listShops">
+        <div class="content-wrapper">
           <div class="page-header">
             <h3 class="page-title">
               <span class="page-title-icon bg-gradient-primary text-white mr-2">
                 <i class="mdi mdi-home"></i>
               </span>
-              Dashboard
+              Products
             </h3>
           </div>
-          <!-- <div class="row">
-            <div class="col-md-4 stretch-card grid-margin">
-              <div class="card bg-gradient-danger card-img-holder text-white">
-                <div class="card-body" style="background-color: red">
-                  <img src="images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
-                  <h4 class="font-weight-normal mb-3">Bar Food
-                    <i class="mdi mdi-food mdi-24px float-right"></i>
-                  </h4>
-                  <h2 class="mb-5"><a href="#">Store 1</a></h2>
-                  <h6 class="card-text">Announcement or promotions here</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 stretch-card grid-margin">
-              <div class="card bg-gradient-danger card-img-holder text-white">
-                <div class="card-body" style="background-color: blue">
-                  <img src="images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
-                  <h4 class="font-weight-normal mb-3">Chinese Food
-                    <i class="mdi mdi-food-variant mdi-24px float-right"></i>
-                  </h4>
-                  <h2 class="mb-5"><a href="#">Store 2</a></h2>
-                  <h6 class="card-text">Announcement or promotions here</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 stretch-card grid-margin">
-              <div class="card bg-gradient-danger card-img-holder text-white">
-                <div class="card-body" style="background-color: green">
-                  <img src="images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
-                  <h4 class="font-weight-normal mb-3">Soups & Salads
-                    <i class="mdi mdi-food-apple mdi-24px float-right"></i>
-                  </h4>
-                  <h2 class="mb-5"><a href="#">Store 3</a></h2>
-                  <h6 class="card-text">Announcement or promotions here</h6>
-                </div>
-              </div>
-            </div>
-          </div> -->
-
-          <div class="row" ng-repeat="row in stores">
-            <div class="col-md-4 stretch-card grid-margin btn" data-toggle="modal" data-target="#store_info" ng-repeat="item in row" ng-show="{{item}}" ng-click="updateView(item['_id'])">
-              <div class="card bg-gradient-danger card-img-holder text-white">
-                <div class="card-body" style="background-color: grey">
-                  <img src="/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
-                  <h2 class="mb-5 text-success">{{item.name}}</h2>
-                  <h6 class="card-text">{{item.address}}</h6>
-                </div>
-              </div>
-            </div>
+          
+          <div class="row">
+            <select id="by">
+              <option value="name">By Name</option>
+              <option value="price">By Price</option>
+              <option value="store">By Store</option>
+            </select>
+            <input id="search_bar" placeholder="Search" type="text">
           </div>
+          <div class="row" id="search"></div>
+
 
           <!-- Modal -->
-          <div class="modal fade" id="store_info" tabindex="-1" role="dialog" aria-labelledby="{{focus.name}}" aria-hidden="true">
+         <!--  <div class="modal fade" id="store_info" tabindex="-1" role="dialog" aria-labelledby="{{focus.name}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -115,7 +80,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!--<div class="row">-->
             <!--<div class="col-md-7 grid-margin stretch-card">-->

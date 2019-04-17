@@ -589,7 +589,7 @@ function list_all_products(response)
     }
     else
     {
-      product_collection.find({}, {"projection":{"name":1}}).toArray((err1, list)=>
+      product_collection.find().toArray((err1, list)=>
       {
         if (err1)
         {
@@ -759,6 +759,10 @@ app.get("/shops", (req, res)=>
   list_all_shops(res);
 });
 
+app.get("/products", (req, res)=>
+{
+  list_all_products(res);
+});
 
 // Grabs a user's favorite stores first
 app.post("/user/favorites", (req, res)=>
@@ -781,6 +785,34 @@ app.post("/user/favorites", (req, res)=>
         else
         {
           res.send({"data":favorites[0]});
+        }
+      });
+    }
+  });
+});
+
+// Updates a user's favorite store
+app.post("/user/favorite", (req, res)=>
+{
+  res.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("users", (err, user_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error occurred. Please try again later."});
+    }
+    else
+    {
+      console.log(req.body);
+      user_collection.updateOne({"_id":ObjectId(req.session.userid)}, {$set:{"favorite_store":req.body.favorite_id}}, (err1, result)=>
+      {
+        if (err1)
+        {
+          res.status(500).send({"message":"Error occurred. Could not update favorite store."});
+        }
+        else
+        {
+          res.status(200).send({"message":"Successfully updated favorite store."});
         }
       });
     }

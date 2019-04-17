@@ -13,52 +13,74 @@ app.controller("listShops", ["$scope", "$http", function($scope, $http)
 {
   $scope.stores = [];
   $scope.full_list;
-  $http.post("/user/favorites").then(
-  function(response)
+  $scope.refresh = function()
   {
-    $http.get("/shops").then(
-    function(res)
+    $scope.stores = [];
+    $scope.full_list = [];
+    $http.post("/user/favorites").then(
+    function(response)
     {
-      let favorite_store_id = response.data["data"]["favorite_store"];
-      let list = res.data["data"];
-      let holder;
-      list.forEach((e)=>
+      $http.get("/shops").then(
+      function(res)
       {
-        if (e["_id"] === favorite_store_id)
+        let favorite_store_id = response.data["data"]["favorite_store"];
+        let list = res.data["data"];
+        let holder;
+        if ((favorite_store_id != null) && (typeof(favorite_store_id) != "undefined") && (favorite_store_id != ""))
         {
-          holder = e;
+          list.forEach((e)=>
+          {
+            if (e["_id"] === favorite_store_id)
+            {
+              holder = e;
+            }
+          });
+          list = list.filter((element)=>{ return element["_id"] !== favorite_store_id}); // remove favorite_store_id
+          list.sort((a, b)=>{ return a["name"].localeCompare(b["name"]); });             // sort
+          list.unshift(holder);                                                          // add it back to the front
         }
-      });
-      list = list.filter((element)=>{ return element["_id"] !== favorite_store_id}); // remove favorite_store_id
-      list.sort((a, b)=>{ return a["name"].localeCompare(b["name"]); });             // sort
-      list.unshift(holder);                                                          // add it back to the front
-      $scope.full_list = list;
-      let i, j;
-      // Split to 3 cards each
-      for (i = j = 0; j <= list.length; j++)
-      {
-        if (j-i == 3)
+        $scope.full_list = list;
+        let i, j;
+        // Split to 3 cards each
+        for (i = j = 0; j <= list.length; j++)
+        {
+          if (j-i == 3)
+          {
+            $scope.stores.push(list.slice(i, j));
+            i = j;
+          }
+        }
+        if (i != j)
         {
           $scope.stores.push(list.slice(i, j));
-          i = j;
         }
-      }
-      if (i != j)
+      },
+      function(error)
       {
-        $scope.stores.push(list.slice(i, j));
-      }
+        alert(error.message);
+      });
     },
-    function(error)
+    function(err)
     {
-      console.log("error 2");
+      alert(error.message);
     });
-  },
-  function(err)
-  {
-    console.log("Error 1")
-  });
+  };
   $scope.updateView = function( id )
   {
     $scope.focus = $scope.full_list.filter((ele)=>{ return ele["_id"] == id})[0];
   };
+  $scope.updateFavorite = function( id )
+  {
+    $http.post("/user/favorite", {"favorite_id":id}).then(
+    function(res)
+    {
+      $scope.refresh();
+      alert(res.data.message);
+    },
+    function(err)
+    {
+      alert("Could not update favorite store!");
+    });
+  };
+  $scope.refresh();
 }]);

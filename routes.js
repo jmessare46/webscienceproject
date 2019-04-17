@@ -28,6 +28,18 @@ router.get('/inventory', (req, res)=>
     }
 });
 
+router.get("/search", (req, res)=>
+{
+    if (req.session.user)
+    {
+        res.sendFile(__dirname + "/products.html");
+    }
+    else
+    {
+        res.sendFile(__dirname + '/login.html');
+    }
+});
+
 router.get('/login', (req, res)=>
 {
     if(req.session.user)
@@ -69,12 +81,12 @@ router.post('/store/request', (req, res)=>
             const collection = c4.db("Project").collection("users");
 
             var user = {
-                email: req.body.email,
-                first_name: req.body.firstname,
-                last_name: req.body.lastname,
-                username: req.body.user,
-                country: req.body.country,
-                password: hash
+                "email": req.body.email,
+                "first_name": req.body.firstname,
+                "last_name": req.body.lastname,
+                "username": req.body.user,
+                "country": req.body.country,
+                "password": hash
             };
 
             console.log(user);
@@ -304,7 +316,8 @@ router.post('/user/create', (req, res)=>
                 first_name: req.body.firstname,
                 last_name: req.body.lastname,
                 username: req.body.user,
-                password: hash
+                password: hash,
+                "favorite_store":""
             };
 
             // Stores the user in the DB
