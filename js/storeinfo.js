@@ -24,4 +24,8 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
             });
 
 
+    $scope.validate = function () {
+        // TODO: Add form validation here
+        return true;
+    }
 }]);

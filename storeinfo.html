@@ -9,7 +9,6 @@
   <!-- plugins:css -->
   <link rel="stylesheet" href="/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
-  <script type="text/javascript" src="/vendors/js/tinymce/jquery.tinymce.min.js"></script>
   <script type="text/javascript" src="/vendors/js/tinymce/tinymce.min.js"></script>
   <!-- endinject -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
@@ -44,7 +43,8 @@
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">About us</h4>
-                  <form class="form-sample">
+<!--                  TODO: Add validate function in js here -->
+                  <form class="form-sample" method="post" action="/store/update">
                     <p class="card-description">
                       Store information
                     </p>
@@ -113,7 +113,7 @@
                     </p>
                     <div class="form-group">
                       <label for="description">Add additional information for my store</label>
-                      <textarea class="form-control tinymce" id="description" name="description" rows="4" required></textarea>
+                      <textarea class="form-control tinymce" id="description" name="description"></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>

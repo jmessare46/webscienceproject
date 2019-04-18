@@ -72,7 +72,7 @@ router.get('/store/register', (req, res)=>
 });
 
 
-// Creates a user in the database when correct information is given
+// Returns the logged in user's store information
 router.post('/store/myinfo', (req, res)=>
 {
     //TODO: Handle errors here
@@ -105,6 +105,43 @@ router.post('/store/myinfo', (req, res)=>
     });
 
     c4.close();
+});
+
+// Creates a user in the database when correct information is given
+router.post('/store/update', (req, res)=>
+{
+    if(!req.session.user)
+    {
+        res.redirect('/login');
+    }
+    else
+    {
+        var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
+
+        c4.connect(err => {
+            const collection = c4.db("Project").collection("shops");
+
+            console.log(req.body);
+
+            //TODO: Make this work
+            // collection.updateOne(
+            //     { owner: req.body.email },
+            //     { $set: {
+            //             first_name: req.body.firstname,
+            //             last_name: req.body.lastname,
+            //             favorite_store: req.body.favorite,
+            //             account_type: req.body.account_type,
+            //             diet: req.body.restrictions,
+            //         } },
+            //     { upsert: true },
+            //     function (resp, err) {
+            //         res.redirect('/settings');
+            //     }
+            // );
+        });
+
+        c4.close();
+    }
 });
 
 
@@ -329,7 +366,6 @@ router.post('/user/updateprofile', (req, res)=>
 
             console.log(req.body);
 
-            //TODO: Make update work
             collection.updateOne(
                 { email: req.body.email },
                 { $set: {
