@@ -3,6 +3,7 @@ var router = express.Router();
 const Mclient = require("mongodb").MongoClient;
 const saltRounds = 10;
 const bcrypt = require('bcrypt');
+const ObjectId = require('mongodb').ObjectId;
 
 router.get('/', (req, res)=>
 {
@@ -72,7 +73,7 @@ router.get('/store/register', (req, res)=>
 
 
 // Creates a user in the database when correct information is given
-router.post('/store/info', (req, res)=>
+router.post('/store/myinfo', (req, res)=>
 {
     //TODO: Handle errors here
     var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
@@ -80,6 +81,27 @@ router.post('/store/info', (req, res)=>
     c4.connect(err => {
         // Creates a password hash
 
+        const collection = c4.db("Project").collection("shops");
+
+        // Searches for the user based off of email in the DB.
+        collection.findOne({owner: new ObjectId(req.session.userid)}, function (err, docs) {
+            if(docs !== null)
+            {
+                // Load hash from your password DB.
+                res.send({
+                    userdata: docs,
+                });
+            }
+            else
+            {
+                res.send({
+                    userdata: {
+                        message: "Logged in user does not owner a store",
+                        error: err,
+                    }
+                })
+            }
+        });
     });
 
     c4.close();
@@ -114,8 +136,9 @@ router.post('/store/request', (req, res)=>
                     "name": req.body.storename,
                     "category": req.body.category,
                     "location": req.body.location,
-                    "owner": req.body.email,
+                    "owner": docs.ops[0]._id,
                     "description": req.body.description,
+                    "address": req.body.address,
                 };
 
                 shops.insertOne(store, function (err, docs) {
