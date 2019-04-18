@@ -4,6 +4,10 @@ var app = angular.module("myApp", []);
 // Here is the Javascript for our controller which we linked (scoped) to the body tag
 app.controller("mainController", ['$scope','$http',function($scope, $http) {
 
+    tinymce.init({
+        selector: '.tinymce'
+    });
+
     // Pulls user's settings in the DB on load
     $http({
         url: '/store/myinfo',
@@ -18,5 +22,6 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
                 alert("Something went wrong getting your store information");
                 console.log(response);
             });
+
 
 }]);

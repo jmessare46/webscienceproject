@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 
 <head>
   <!-- Required meta tags -->
@@ -11,14 +11,16 @@
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <!-- plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+  <script type="text/javascript" src="/vendors/js/tinymce/tinymce.min.js"></script>
+  <!-- endinject -->
+  <script type="text/javascript" src="/js/request.js"></script>
   <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/images/favicon.png" />
 </head>
 
-<body>
+<body ng-controller="mainController">
 <div class="container-scroller">
   <div class="container-fluid page-body-wrapper full-page-wrapper">
     <div class="content-wrapper d-flex align-items-center auth">
@@ -67,7 +69,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Description</label>
                       <div class="col-sm-9">
-                        <textarea class="form-control" rows="10" name="description" id="description"></textarea>
+                        <textarea class="form-control tinymce" rows="10" name="description" id="description"></textarea>
                       </div>
                     </div>
                   </div>

@@ -7,8 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>SHOP RPI</title>
   <!-- plugins:css -->
-  <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
-  <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+  <script type="text/javascript" src="/vendors/js/tinymce/jquery.tinymce.min.js"></script>
+  <script type="text/javascript" src="/vendors/js/tinymce/tinymce.min.js"></script>
   <!-- endinject -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
   <script type="text/javascript" src="/js/storeinfo.js"></script>
@@ -16,7 +18,7 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="images/icon.ico" />
+  <link rel="shortcut icon" href="/images/icon.ico" />
 </head>
 
 <body ng-controller="mainController">
@@ -111,7 +113,7 @@
                     </p>
                     <div class="form-group">
                       <label for="description">Add additional information for my store</label>
-                      <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                      <textarea class="form-control tinymce" id="description" name="description" rows="4" required></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
