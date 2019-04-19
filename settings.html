@@ -92,11 +92,12 @@
                             <div class="col-sm-9">
                               <select name="favorite" class="form-control" id="favorite">
 <!--                                TODO: Fix this so it pulls these store names from the DB -->
-                                <option value="">Choose...</option>
+                                <option ng-repeat="shop in shops" ng-value="shop._id">{{shop.name}}</option>
+                                <!-- <option value="">Choose...</option>
                                 <option value="collar_city_sliders">Collar City Sliders</option>
                                 <option value="halal_shack">Halal Shack</option>
                                 <option value="moes">Moe's</option>
-                                <option value="panera_bread">Panera Bread</option>
+                                <option value="panera_bread">Panera Bread</option> -->
                               </select>
                             </div>
                           </div>

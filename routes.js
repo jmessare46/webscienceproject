@@ -96,7 +96,7 @@ router.post('/store/myinfo', (req, res)=>
             {
                 res.send({
                     userdata: {
-                        message: "Logged in user does not owner a store",
+                        message: "Logged in user does not own a store",
                         error: err,
                     }
                 })
@@ -428,7 +428,7 @@ router.post('/user/updateprofile', (req, res)=>
                 { $set: {
                         first_name: req.body.firstname,
                         last_name: req.body.lastname,
-                        favorite_store: req.body.favorite,
+                        favorite_store: ObjectId(req.body.favorite),
                         account_type: req.body.account_type,
                         diet: req.body.restrictions,
                     } },
