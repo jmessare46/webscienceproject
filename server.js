@@ -286,22 +286,17 @@ c3.connect((err)=>
                 price:
                 {
                   bsonType:"double",
-                  description:"must be a double  and is required"
+                  description:"must be a double and is required"
                 },
                 store:
                 {
                   bsonType:"objectId",
-                  description:"must be a store's objectId that exist in the entire database(checked on insertion) and is required"
+                  description:"must be a store's objectId that exist in the entire database (checked on insertion) and is required"
                 },
                 description:
                 {
                   bsonType:"string",
                   description:"must be a string and is required"
-                },
-                picture:
-                {
-                  bsonType:"string",
-                  description:"must be a string to store the path to the picture and is not requred"
                 }
               }
             }
