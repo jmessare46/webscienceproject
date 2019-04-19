@@ -332,7 +332,7 @@ c3.connect((err)=>
 // Links the routes to the main js page
 var routes = require('./routes.js');
 
-app.use('/', routes);
+app.use('/', routes.router);
 
 // Allows direct access to stylesheet files
 app.use('/css', express.static(__dirname + '/css'));
@@ -391,11 +391,19 @@ process.stdin.on("keypress", (str, key) =>
           throw err;
         }
         console.log("Closed vendorclient");
-        server.close(()=>
+        routes.c4.close((err2, result2)=>
         {
-          console.log("Terminating Server!");
-          process.exit(0);
-        });
+          if (err2)
+          {
+            throw err2;
+          }
+          console.log("Closed c4!");
+          server.close(()=>
+          {
+            console.log("Terminating Server!");
+            process.exit(0);
+          });
+        }); // Closes the DB connection
       });
     });
   }
