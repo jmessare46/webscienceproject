@@ -759,6 +759,44 @@ app.get("/products", (req, res)=>
   list_all_products(res);
 });
 
+
+// Creates a product in the database when correct information is given
+app.post('/product/add', (req, res)=>
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
+      }
+      else
+      {
+        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}).toArray((err1, obj)=>
+        {
+          if (err1)
+          {
+            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
+          }
+          else if (obj.length == 0)
+          {
+            res.status(400).send({"message":"User error occurred. User does not own a shop."});
+          }
+          else
+          {
+            add_update_remove_product(ObjectId(obj._id), {
+                    name: req.body.name,
+                    price: req.body.price,
+                    description: req.body.description,
+                    store: obj._id,
+                }, "add", res);
+            res.redirect('/inventory');
+          }
+          // else if (ObjectId(obj._id) !== ObjectId())
+        });
+      }
+    });
+});
+
 // Grabs a user's favorite stores first
 app.post("/user/favorites", (req, res)=>
 {

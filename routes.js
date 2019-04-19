@@ -252,63 +252,6 @@ router.get('/sidebar', (req, res)=>
     }
 });
 
-// Creates a product in the database when correct information is given
-router.post('/product/add', (req, res)=>
-{
-    var c4 = new Mclient("mongodb+srv://admin:thisisanadmin@cluster0-yknsv.mongodb.net", {useNewUrlParser:true});
-
-    // TODO: May want to validate some of the data before we store the product here
-    c4.connect(err => {
-        const products = c4.db("Project").collection("products");
-        const shops = c4.db("Project").collection("shops");
-
-        // Searches for the user based off of email in the DB.
-        shops.findOne({owner: new ObjectId(req.session.userid)}, function (err, docs) {
-            if(docs !== null)
-            {
-                var item = {
-                    name: req.body.name,
-                    price: req.body.price,
-                    description: req.body.description,
-                    store: docs._id,
-                };
-
-                // Stores the user in the DB
-                products.insertOne(item, function (err, docs) {
-                    if(err === null)
-                    {
-                        console.log("Product added to inventory...");
-                        console.log(err);
-
-                        // Sends user back to the registration page
-                        res.redirect('/inventory');
-                    }
-                    else
-                    {
-                        res.send({
-                            userdata: {
-                                message: "There was an error adding the product to inventory",
-                                error: err,
-                            }
-                        });
-                    }
-                });
-            }
-            else
-            {
-                res.send({
-                    userdata: {
-                        message: "Logged in user does not own a store",
-                        error: err,
-                    }
-                });
-            }
-        });
-    });
-
-    c4.close();
-});
-
 // Loads the change password page from user settings
 router.get('/user/password', (req, res)=>
 {
