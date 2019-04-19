@@ -459,7 +459,7 @@ router.post('/signout', (req, res)=>
     console.log("Logging out " + req.session.user.email);
     req.session.user = null;
     res.redirect('/login');
-    c4.close(); // Closes the DB connection
 });
 
-module.exports = router;
+module.exports.router = router;
+module.exports.c4 = c4;
