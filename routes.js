@@ -324,7 +324,7 @@ router.post('/user/info', (req, res)=>
                     message: "User with the email '" + req.body.email + "' does not exist",
                     error: err,
                 }
-            })
+            });
         }
     });
 });
@@ -355,6 +355,38 @@ router.post('/user/updateprofile', (req, res)=>
             }
         );
      }
+});
+
+/*
+ * Returns whether or not the logged in user is a store owner.
+ */
+router.get('/user/isowner', (req, res) =>
+{
+    if(req.session.user)
+    {
+        shops.findOne({owner: new ObjectId(req.session.userid)}, function (err, docs) {
+            if(docs !== null)
+            {
+                // Is a store owner
+                res.send({
+                    is_owner: true,
+                });
+            }
+            else
+            {
+                // Is not a store owner
+                res.send({
+                    is_owner: false,
+                });
+            }
+        });
+    }
+    else
+    {
+        res.send({
+            error: "You must be logged in to use this function",
+        });
+    }
 });
 
 // Creates a user in the database when correct information is given
