@@ -369,6 +369,8 @@ router.post('/user/create', (req, res)=>
             first_name: req.body.firstname,
             last_name: req.body.lastname,
             username: req.body.user,
+            question: req.body.question,
+            answer: req.body.answer,
             password: hash,
             account_type: "user",
             favorite_store: ""
