@@ -31,7 +31,7 @@
         <div class="content-wrapper">
           <div class="page-header">
             <h3 class="page-title">
-              Settings
+              Set your security question
             </h3>
 
           </div>
@@ -42,87 +42,70 @@
               <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Account Info</h4>
+                    <h4 class="card-title">Security Question</h4>
                     <form class="form-sample">
                       <p class="card-description">
-                        View or modify important information about your account
+                        Set security question to protect your account
                       </p>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">First Name</label>
-                            <div class="col-sm-9">
-                              <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter first name..." required>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Last Name</label>
-                            <div class="col-sm-9">
-                              <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter last name..." required>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Username</label>
-                            <div class="col-sm-9">
-                              <input type="text" class="form-control" id="username" name="username" placeholder="Enter user name..." required>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Email</label>
-                            <div class="col-sm-9">
-                              <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email..." disabled>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
 
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Favorite</label>
-                            <div class="col-sm-9">
-                              <select name="favorite" class="form-control" id="favorite">
-<!--                                TODO: Fix this so it pulls these store names from the DB -->
-                                <option ng-repeat="shop in shops" ng-value="shop._id">{{shop.name}}</option>
-                                <!-- <option value="">Choose...</option>
-                                <option value="collar_city_sliders">Collar City Sliders</option>
-                                <option value="halal_shack">Halal Shack</option>
-                                <option value="moes">Moe's</option>
-                                <option value="panera_bread">Panera Bread</option> -->
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Dietary Restrictions</label>
+                            <label class="col-sm-3 col-form-label">Quesiton 1</label>
                             <div class="col-sm-9">
                               <select name="restrictions" class="form-control" id="restrictions" required>
-                                <option value="">None</option>
-                                <option value="vegetarian">Vegetarian</option>
-                                <option value="vegan">Vegan</option>
-                                <option value="gluten_free">Gluten Free</option>
-                                <option value="peanut_allergy">Peanut Allergy</option>
+                                <option value="">Click to choose question 1</option>
+                                <option value="q1">What is the name of your favorite childhood friend?</option>
+                                <option value="q1">What is your favorite movie?</option>
+                                <option value="q1">What was your favorite sport in high school?</option>
+                                <option value="q1">What was your favorite food as a child?</option>
+                                <option value="q1">What school did you attend for sixth grade?</option>
                               </select>
                             </div>
                           </div>
                         </div>
 
-                        <input style="display: none;" name="account_type" value="user" type="text"/>
-                        <button type="submit" class="btn btn-gradient-primary mr-2">Update</button>
-                        <input type="button" class="btn btn-gradient-info mr-2" onclick="location.href='/user/password';" value="Change Password">
-                        <input type="button" class="btn btn-gradient-info mr-2" onclick="location.href='/user/question';" value="Change Security Question">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Answer 1</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="answer1" id="answer1" placeholder="Enter your answer..." required>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Quesiton 2</label>
+                            <div class="col-sm-9">
+                              <select name="restrictions" class="form-control" id="restrictions" required>
+                                <option value="">Click to choose question 2</option>
+                                <option value="q2">What primary school did you attend?</option>
+                                <option value="q2">What is your favorite movie?</option>
+                                <option value="q2">What were the last four digits of your childhood telephone number?</option>
+                                <option value="q2">In what town or city did your mother and father meet?</option>
+                                <option value="q2">What was your dream job as a child?</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Answer 2</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" name="answer2" id="answer2" placeholder="Enter your answer..." required>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                        <input style="display: none;" name="account_type" value="user" type="text"/>
+                        <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
 
                       </div>
 
