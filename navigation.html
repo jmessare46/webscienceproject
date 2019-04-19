@@ -6,33 +6,27 @@
         <a class="navbar-brand brand-logo-mini" href="/"><img src="images/logo-mini.svg" alt="logo"/></a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        <div class="search-field d-none d-md-block">
+        <!-- <div class="search-field d-none d-md-block">
             <form class="d-flex align-items-center h-100" action="#">
                 <div class="input-group">
                     <div class="input-group-prepend bg-transparent">
                         <i class="input-group-text border-0 mdi mdi-magnify"></i>
                     </div>
-                    <input type="text" class="form-control bg-transparent border-0" placeholder="Search for food">
                 </div>
             </form>
-        </div>
+        </div> -->
         <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item nav-profile dropdown">
+            <!-- <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                     <div class="nav-profile-img">
                         <img src="images/faces/face1.jpg" alt="image">
                         <span class="availability-status online"></span>
                     </div>
                     <div class="nav-profile-text">
-                        <p class="mb-1 text-black">Fake User</p>
+                        <p class="mb-1 text-black">User name</p>
                     </div>
                 </a>
                 <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item" href="#">
-                        <i class="mdi mdi-cached mr-2 text-success"></i>
-                        Activity Log
-                    </a>
-                    <div class="dropdown-divider"></div>
                     <form method="post" action="/signout">
                         <button class="dropdown-item" type="submit">
                             <i class="mdi mdi-logout mr-2 text-primary"></i>
@@ -40,13 +34,13 @@
                         </button>
                     </form>
                 </div>
-            </li>
-            <li class="nav-item dropdown">
+            </li> -->
+            <!-- <li class="nav-item dropdown">
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
                     <i class="mdi mdi-bell-outline" title="Notifications"></i>
                     <span class="count-symbol bg-danger"></span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                <!-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                     <h6 class="p-3 mb-0">Notifications</h6>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item preview-item">
@@ -93,12 +87,19 @@
                     <div class="dropdown-divider"></div>
                     <h6 class="p-3 mb-0 text-center">See all notifications</h6>
                 </div>
-            </li>
-            <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="#" title="Logout">
-                    <i class="mdi mdi-power"></i>
+            </li> -->
+            <!-- styling issue -->
+            <form method="post" action="/signout">
+                <button class="dropdown-item" type="submit">
+                    <i class="mdi mdi-logout mr-2 text-primary"></i>
+                    Signout
+                </button>
+            </form>
+            <!-- <li class="nav-item nav-logout d-none d-lg-block">
+                <a class="nav-link" href="#" title="Logout" action="signout">
+                    <i class="mdi mdi-logout mr-2 text-primary"></i>
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item nav-settings d-none d-lg-block">
                 <a class="nav-link" href="/settings" title="Account Settings">
                     <i class="mdi mdi-account-settings-variant"></i>
