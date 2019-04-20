@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Create an Account</title>
+  <title>Shop RPI</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
@@ -57,7 +57,19 @@
           alert("Passwords do not match.");
           return false;
 
-        } else {
+        } else if ($("#question").val()!="").val() {
+
+          alert("Please enter a security question.");
+          return false;
+
+        } else if ($("#answer").val()!=($("#answer2")).val()) {
+
+          alert("Question answers are different.");
+          return false;
+
+        }
+
+        else {
           return true;
         }
       }
