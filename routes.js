@@ -535,3 +535,136 @@ router.post('/signout', (req, res)=>
 
 module.exports.router = router;
 module.exports.c4 = c4;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// API routes                                                                 //
+////////////////////////////////////////////////////////////////////////////////
+
+// Route to search product by name (optional store name parameter)
+// On success, returns the detail(s) of the product(s) with the given product name
+// correct api call is localhost:3000/api/v1/productSearch?product=SINGLE_PRODUCT_NAME&store=OPTOINAL_STORE_NAME
+router.get("/api/v1/productSearch", (req, res)=>
+{
+  res.setHeader("Content-Type", "application/json");
+  let querydata = req.query;
+  if ((typeof(querydata.product) === "undefined") || (typeof(querydata.product) !== "string"))
+  {
+    res.status(400).send({"message":"User error. Correct usage is a " + req.get('host') + "/api/v1/productSearch/?product=SINGLE_PRODUCT_NAME&store=OPTIONAL_STORE_NAME", "error":true});
+  }
+  else if (typeof(querydata.store) === "undefined")
+  { // No store name
+    products.find({"name":querydata.product}).toArray((err, items)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Server error occurred. Check errormessage", "error":true, "errormessage":err});
+      }
+      else
+      {
+        res.status(200).send({"message":"Successfully executed query.", "data":items, "error":false});
+      }
+    });
+  }
+  else
+  { // Store name provided
+    shops.find({"name":querydata.store}, {"projection":{"_id":1}}).toArray((err, stores)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Server error occurred. Check errormessage", "error":true, "errormessage":err});
+      }
+      else
+      {
+        if (stores.length == 0)
+        { // No shop by that name so return
+          res.status(400).send({"message":"Optional store name: " + querydata.store + " does not exist.", "store_exists":false});
+        }
+        else
+        {
+          // Convert to ObjectId for $in operator
+          stores.forEach((shop, ind)=>
+          {
+            stores[ind] = ObjectId(shop._id);
+          });
+          products.find({"name":querydata.product, "store":{$in : stores}}).toArray((err1, items)=>
+          {
+            if (err1)
+            {
+              res.status(500).send({"message":"Server error occurred. Check errormessage", "error":true, "errormessage":err1, "store_exists":true});
+            }
+            else
+            {
+              res.status(200).send({"message":"Successfully executed query.", "data":items, "error":false, "store_exists":true});
+            }
+          });
+        }
+      }
+    })
+  }
+});
+
+// Route to search get store information, searching by store name
+// On success, returns the detail(s) of the store(s) with the given store name
+// correct api call is localhost:3000/api/v1/store/?store=STORE_NAME
+router.get("/api/v1/store", (req, res)=>
+{
+  res.setHeader("Content-Type", "application/json");
+  if (typeof(req.query.store) === "undefined")
+  {
+    res.status(400).send({"message":"User error. Correct usage is a " + req.get('host') + "/api/v1/store/?store=STORE_NAME", "error":true});
+  }
+  else
+  {
+    shops.find({"name":req.query.store}).toArray((err, stores)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Server error occurred. Check errormessage", "error":true, "errormessage":err});
+      }
+      else
+      {
+        res.status(200).send({"message":"Successfully executed query.", "data":stores, "error":false})
+      }
+    });
+  }
+});
+
+// Route to get the counts of favorite stores
+// On success, returns an array of { store name, store id, frequency } where frequency is the count
+// of the number of users that favorite that store.
+// correct api call is localhost:3000/api/v1/favoriteStatistic
+router.get("/api/v1/favoriteStatistic", (req, res)=>
+{
+  res.setHeader("Content-Type", "application/json");
+  shops.find({}, {"projection":{"_id":1, "name":1}}).toArray((err, stores)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Server error occurred. Check errormessage", "error":true, "errormessage":err});
+    }
+    else
+    {
+      stores.forEach((store, ind)=>
+      {
+        users.countDocuments({"favorite_store":store._id}, (err1, result)=>
+        {
+          if (err1)
+          {
+            res.status(500).send({"message":"Server error occurred. Check errormessage", "error":true, "errormessage":err1});
+          }
+          else
+          {
+            store["frequency"] = result;
+          }
+
+          if (ind == stores.length-1)
+          {
+            res.status(200).send({"message":"Successfully executed commands.", "data":stores, "error":false})
+          }
+        });
+      });
+    }
+  });
+});
+
