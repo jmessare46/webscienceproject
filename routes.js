@@ -340,6 +340,7 @@ router.post('/user/myinfo', (req, res)=>
                     last_name: docs.last_name,
                     favorite_store: docs.favorite_store,
                     diet: docs.diet,
+                    question: docs.question,
                 }
             });
         }
@@ -372,6 +373,7 @@ router.post('/user/info', (req, res)=>
                     country: docs.country,
                     first_name: docs.first_name,
                     last_name: docs.last_name,
+                    question: docs.question,
                 }
             });
         }
