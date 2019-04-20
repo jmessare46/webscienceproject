@@ -412,8 +412,6 @@ router.post('/user/updateprofile', (req, res)=>
     }
     else
     {
-        console.log(req.body);
-
         users.updateOne(
             { email: req.body.email },
             { $set: {
@@ -429,6 +427,31 @@ router.post('/user/updateprofile', (req, res)=>
             }
         );
      }
+});
+
+// Updates logged in user's security question and password
+router.post('/user/setquestion', (req, res)=>
+{
+    if(!req.session.user)
+    {
+        res.redirect('/login');
+    }
+    else
+    {
+        console.log(req.body);
+
+        users.updateOne(
+            { email: req.session.user.email },
+            { $set: {
+                    question: req.body.question,
+                    answer: req.body.answer,
+                } },
+            { upsert: true },
+            function (resp, err) {
+                res.redirect('/settings');
+            }
+        );
+    }
 });
 
 /*
