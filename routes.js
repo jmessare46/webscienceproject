@@ -260,6 +260,19 @@ router.get('/user/password', (req, res)=>
     }
 });
 
+// Loads the change password page from user settings
+router.get('/user/question', (req, res)=>
+{
+    if(req.session.user)
+    {
+        res.sendFile(__dirname + '/question.html');
+    }
+    else
+    {
+        res.sendFile(__dirname + '/login.html');
+    }
+});
+
 /*
  * Gets the logged in user's information and returns it in json.
  */
