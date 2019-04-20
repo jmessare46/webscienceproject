@@ -45,7 +45,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Store Name</label>
                       <div class="col-sm-9">
-                        <input type="text" name="storename" class="form-control" required>
+                        <input type="text" name="storename" class="form-control" placeholder="Enter your store name..."required>
                       </div>
                     </div>
                   </div>
@@ -80,9 +80,9 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3 col-form-label">Address 1</label>
+                      <label class="col-sm-3 col-form-label">Address</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" name="address" required/>
+                        <input type="text" class="form-control" name="address" placeholder="Enter your address..."required/>
                       </div>
                     </div>
                   </div>
@@ -116,7 +116,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Owner First Name</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" name="firstname" required/>
+                        <input type="text" class="form-control" name="firstname" placeholder="Enter your first name..." required/>
                       </div>
                     </div>
                   </div>
@@ -124,7 +124,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Owner Last Name</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" name="lastname" required/>
+                        <input type="text" class="form-control" name="lastname" placeholder="Enter your last name..." required/>
                       </div>
                     </div>
                   </div>
@@ -134,7 +134,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Username</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" name="user" required/>
+                        <input type="text" class="form-control" name="user" placeholder="Enter your username..." required/>
                       </div>
                     </div>
                   </div>
@@ -142,7 +142,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Password</label>
                       <div class="col-sm-9">
-                        <input type="password" class="form-control" name="pass" required/>
+                        <input type="password" class="form-control" name="pass" placeholder="Enter your password..." required/>
                       </div>
                     </div>
                   </div>
@@ -152,7 +152,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Email</label>
                       <div class="col-sm-9">
-                        <input type="email" class="form-control" name="email"/>
+                        <input type="email" class="form-control" name="email" placeholder="Enter your email..."/>
                       </div>
                     </div>
                   </div>
@@ -160,7 +160,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Confirm Password</label>
                       <div class="col-sm-9">
-                        <input type="password" class="form-control" name="conf_pass" required/>
+                        <input type="password" class="form-control" name="conf_pass" placeholder="Retype password..." required/>
                       </div>
                     </div>
                   </div>
@@ -170,7 +170,37 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Confirm Email</label>
                       <div class="col-sm-9">
-                        <input type="email" class="form-control" name="conf_email"/>
+                        <input type="email" class="form-control" name="conf_email" placeholder="Retype email..."/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Security Question</label>
+                      <div class="col-sm-9">
+                        <select name="restrictions" class="form-control" id="restrictions" required>
+                          <option value="q1">Click to choose security question</option>
+                          <option value="q2">What is the name of your favorite childhood friend?</option>
+                          <option value="q3">What is your favorite movie?</option>
+                          <option value="q4">What was your favorite sport in high school?</option>
+                          <option value="q5">What was your favorite food as a child?</option>
+                          <option value="q6">What school did you attend for sixth grade?</option>
+                          <option value="q7">What primary school did you attend?</option>
+                          <option value="q8">What is your favorite movie?</option>
+                          <option value="q9">What were the last four digits of your childhood telephone number?</option>
+                          <option value="q10">In what town or city did your mother and father meet?</option>
+                          <option value="q11">What was your dream job as a child?</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Answer</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="question_answer" placeholder="Answer your security question" name="answer" required>
                       </div>
                     </div>
                   </div>
