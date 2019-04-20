@@ -329,6 +329,22 @@ router.post('/user/info', (req, res)=>
     });
 });
 
+// Returns boolean of whether a user is a shop owner or not based on the posted id under name="id"
+router.post("/user/isowner", (req, res)=>
+{
+  users.findOne({"_id":ObjectId(req.body.id)}, {"projection":{"isowner":1}}, (err, result)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error occurred. Could not execute command."});
+    }
+    else
+    {
+      res.status(200).send({"message":"Successfully executed command.", "isowner":result.isowner});
+    }
+  });
+});
+
 // Creates a user in the database when correct information is given
 router.post('/user/updateprofile', (req, res)=>
 {

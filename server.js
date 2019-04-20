@@ -762,11 +762,37 @@ app.get("/shops", (req, res)=>
   list_all_shops(res);
 });
 
+// Route that returns a list of all products in the Database
 app.get("/products", (req, res)=>
 {
   list_all_products(res);
 });
 
+// Route that returns a list of owned products for the inventory page
+app.get("/products/owned", (req, res)=>
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error occurred. Could not verify owned shop."});
+    }
+    else
+    {
+      shop_collection.findOne({"owner":ObjectId(req.session.userid)}, (err1, result)=>
+      {
+        if (err1)
+        {
+          res.status(500).send({"message":"Error occurred. Could not verify owned shop."});
+        }
+        else
+        {
+          list_shop_products(ObjectId(result._id), res);
+        }
+      });
+    }
+  });
+});
 
 // Creates a product in the database when correct information is given
 app.post('/product/add', (req, res)=>
@@ -779,7 +805,7 @@ app.post('/product/add', (req, res)=>
       }
       else
       {
-        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}).toArray((err1, obj)=>
+        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
         {
           if (err1)
           {
