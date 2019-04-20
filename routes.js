@@ -274,6 +274,53 @@ router.get('/user/question', (req, res)=>
 });
 
 /*
+ * Changes the logged in user's password
+ */
+router.post('/user/changepassword', (req, res)=>
+{
+    // Stores the user in the DB
+    users.findOne({email: req.session.user.email}, function (err, docs) {
+        if(!err)
+        {
+            // Load hash from your password DB.
+            bcrypt.compare(req.body.old_password, docs.password, function(err, bres) {
+                // bres == true or false
+                if(bres)
+                {
+                    // Creates a password hash
+                    bcrypt.hash(req.body.new_password, saltRounds, function(err, hash) {
+                        users.updateOne(
+                            { email: req.session.user.email },
+                            { $set: {
+                                    password: hash,
+                                } },
+                            { upsert: true },
+                            function (resp, err) {
+                                res.redirect('/settings');
+                            }
+                        );
+                    });
+
+                    console.log("User's password updated...");
+                }
+                else
+                {
+                    res.send({
+                        error: "Password provided does not match the one in the database",
+                    });
+                }
+            });
+        }
+        else
+        {
+            res.send({
+                error: err,
+            });
+        }
+    });
+});
+
+/*
  * Gets the logged in user's information and returns it in json.
  */
 router.post('/user/myinfo', (req, res)=>
@@ -299,9 +346,7 @@ router.post('/user/myinfo', (req, res)=>
         else
         {
             res.send({
-                userdata: {
-                    error: err,
-                }
+                error: err,
             })
         }
     });
@@ -333,10 +378,8 @@ router.post('/user/info', (req, res)=>
         else
         {
             res.send({
-                userdata: {
-                    message: "User with the email '" + req.body.email + "' does not exist",
-                    error: err,
-                }
+                message: "User with the email '" + req.body.email + "' does not exist",
+                error: err,
             });
         }
     });
