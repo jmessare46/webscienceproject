@@ -14,10 +14,12 @@
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
   <script type="text/javascript" src="/vendors/js/tinymce/tinymce.min.js"></script>
   <!-- endinject -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript" src="/js/request.js"></script>
   <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/images/favicon.png" />
+
 </head>
 
 <body ng-controller="mainController">
@@ -36,7 +38,7 @@
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Store Information</h4>
-              <form class="form-sample" method="post" action="/store/request">
+              <form id="form" class="form-sample" method="post" action="/store/request">
                 <p class="card-description">
                   General info
                 </p>
@@ -45,7 +47,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Store Name</label>
                       <div class="col-sm-9">
-                        <input type="text" name="storename" class="form-control" placeholder="Enter your store name..."required>
+                        <input type="text" id="name" name="storename" class="form-control" placeholder="Enter your store name..." required>
                       </div>
                     </div>
                   </div>
@@ -69,7 +71,7 @@
                     <div class="form-group row">
                       <label class="col-sm-2 col-form-label" style="max-width:12.5%">Description</label>
                       <div class="col-sm-10" >
-                        <textarea class="form-control tinymce" rows="10" name="description" id="description"></textarea>
+                        <textarea class="form-control tinymce" id="desc" rows="10" name="description" id="description"></textarea>
                       </div>
                     </div>
                   </div>
@@ -82,7 +84,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Address</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" name="address" placeholder="Enter your address..."required/>
+                        <input type="text" class="form-control" name="address" placeholder="Enter your address..." required/>
                       </div>
                     </div>
                   </div>
@@ -142,7 +144,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Password</label>
                       <div class="col-sm-9">
-                        <input type="password" class="form-control" name="pass" placeholder="Enter your password..." required/>
+                        <input type="password" class="form-control" id="pass" name="pass" placeholder="Enter your password..." required/>
                       </div>
                     </div>
                   </div>
@@ -152,7 +154,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Email</label>
                       <div class="col-sm-9">
-                        <input type="email" class="form-control" name="email" placeholder="Enter your email..."/>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email..." required/>
                       </div>
                     </div>
                   </div>
@@ -160,7 +162,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Confirm Password</label>
                       <div class="col-sm-9">
-                        <input type="password" class="form-control" name="conf_pass" placeholder="Retype password..." required/>
+                        <input type="password" class="form-control" id="pass2" name="conf_pass" placeholder="Retype password..." required/>
                       </div>
                     </div>
                   </div>
@@ -170,7 +172,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 col-form-label">Confirm Email</label>
                       <div class="col-sm-9">
-                        <input type="email" class="form-control" name="conf_email" placeholder="Retype email..."/>
+                        <input type="email" class="form-control" id="email2" name="conf_email" placeholder="Retype email..." required/>
                       </div>
                     </div>
                   </div>
@@ -205,7 +207,7 @@
                     </div>
                   </div>
                 </div>
-              <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
+              <button type="submit" class="btn btn-gradient-primary mr-2" id="submit">Submit</button>
               <button class="btn btn-light">Cancel</button>
               </form>
             </div>

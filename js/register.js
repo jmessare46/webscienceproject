@@ -81,6 +81,10 @@ $(document).ready(function(){
 
           alert("Passwords do not match.");
           return false;
+        } else if ($("#email").val()!=($("#email2")).val()) {
+
+          alert("Emails do not match.");
+          return false;
 
         } else if ($("#question:selected").val()=="Choose...") {
 
