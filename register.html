@@ -21,7 +21,20 @@
   <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
+
+    
+
     $(document).ready(function(){
+
+      $( "#question" ).change(function() {
+        $("#question").css('color', '#495057');
+      });
+
+      $('#form').on('submit', function(e) {
+       if (validateInput()==false) {
+          e.preventDefault();
+       }
+      });
 
       // Validate input fields
       function validateInput() {
@@ -57,7 +70,7 @@
           alert("Passwords do not match.");
           return false;
 
-        } else if ($("#question").val()!="").val() {
+        } else if ($("#question:selected").val()=="Choose...") {
 
           alert("Please enter a security question.");
           return false;
@@ -82,6 +95,13 @@
     });
 </script>
 
+<style>
+  #question option {
+    color: #495057;
+  }
+
+</style>
+
 </head>
 
 <body>
@@ -94,29 +114,36 @@
               <div class="brand-logo">
                 <img src="/images/logoh1.png" alt="logo"/>
               </div>
-              <h4>New here?</h4>
+              <h4 id="test">New here?</h4>
               <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
-              <form class="pt-3" method="POST" action="/user/create">
+              <form class="pt-3" id="form" method="POST" action="/user/create">
                 <div class="form-group">
+                  <label for="firstname">First name:</label>
                   <input type="text" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name..." name="firstname" required>
                 </div>
                 <div class="form-group">
+                  <label for="lastname">Last name:</label>
                   <input type="text" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name..." name="lastname" required>
                 </div>
                 <div class="form-group">
+                  <label for="user">Username:</label>
                   <input type="text" class="form-control form-control-lg" id="user" placeholder="Enter your username..." name="user" required>
                 </div>
                 <div class="form-group">
+                  <label for="email">Email:</label>
                   <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your email..." name="email" required>
                 </div>
 
                 <div class="form-group">
+                  <label for="password">Password:</label>
                   <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" name="password" required>
                 </div>
                 <div class="form-group">
+                  <label for="confirm_password">Confirm Password:</label>
                   <input type="password" class="form-control form-control-lg" id="confirm_password" placeholder="Retype Password" name="confirm_password" required>
                 </div>
                 <div class="form-group">
+                  <label for="question">Security Question:</label>
                   <select name="question" class="form-control" id="question" required>
                     <option value="">Choose...</option>
                     <option value="q1">What is the name of your favorite childhood friend?</option>
@@ -132,10 +159,12 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="question_answer" placeholder="Answer your security question" name="answer" required>
+                  <label for="answer">Security Question Answer:</label>
+                  <input type="text" class="form-control form-control-lg" id="answer" placeholder="Answer your security question" name="answer" required>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="question_answer2" placeholder="Confirm your answer" name="conf_answer" required>
+                  <label for="answer2">Confirm Security Question Answer:</label>
+                  <input type="text" class="form-control form-control-lg" id="answer2" placeholder="Confirm your answer" name="conf_answer" required>
                 </div>
                 <div class="mb-4">
                   <div class="form-check">
