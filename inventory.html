@@ -37,6 +37,9 @@
         <div class="content-wrapper">
           <div class="page-header">
             <h3 class="page-title">
+              <span class="page-title-icon bg-gradient-primary text-white mr-2">
+                <i class="mdi mdi-table"></i>
+              </span>
               Inventory
             </h3>
           </div>
@@ -140,7 +143,7 @@
                     <div id="items" class="row mt-3">
                       <ul ng-show="items" class="list-unstyled col">
                         <li ng-repeat="item in items" class="border border-dark">
-                          <img ng-src="{{item.img}}" alt="{{item.name}}"" class="prod-img">
+                          <img ng-src="{{item.img}}" alt="{{item.name}}" class="prod-img">
                           {{item.name}} <p class="d-inline float-right pt-2 pr-1">Price: {{item.price | currency}}</p>
                           <p>Description: {{item.desc}}
                             <br/>
@@ -149,6 +152,7 @@
                         </li>
                       </ul>
                     </div>
+                    <button type="submit" class="btn btn-gradient-success mr-2">Remove item</button>
                   </div>
                 </div>
               </div>
@@ -195,12 +199,16 @@
           </div>
 
         </div>
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2017 <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap Dash</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+          </div>
+        </footer>
       </div>
     </div>
   </div>
-
-  <footer class="text-center mx-auto fixed-bottom">SHOOPING Product</footer>
-
+  
   <!-- Bootstrap and jQuery -->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
