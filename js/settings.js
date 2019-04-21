@@ -16,7 +16,7 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
                 $('#firstname').val(response.data.userdata.first_name);
                 $('#lastname').val(response.data.userdata.last_name);
                 $('#restrictions').val(response.data.userdata.diet);
-                var fav = response.data.userdata.favorite_store;
+                $scope.fav = response.data.userdata.favorite_store;
             },
             function(response) {
                 // failed
@@ -33,7 +33,6 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
         {
           $scope.shops.push({"name":element.name, "_id":element._id});
         });
-        $("#favorite").val(fav);
       },
       function(err)
       {

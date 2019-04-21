@@ -102,18 +102,16 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p><strong>Store Name: </strong></p>
-                  <p><strong>Store Owner: </strong></p>
-                  <p><strong>Address:</strong>{{focus.address}}</p>
-                  <div>
-                    {{focus.description}}
-                  </div>
+                  <!-- <p><strong>Store Owner: </strong></p> -->
+                  <p><strong class="mr-1">Address:</strong>{{focus.address}}</p>
+                  <p class="text-center"><strong>Description:</strong></p>
+                  <div id="description-body" class="ml-2 mr-2" ng-show="focus.description"></div>
                     <button type="button" class="btn btn-gradient-warning text-dark mt-3 btn-sm" ng-click="updateFavorite(focus._id)">Make this your favorite</button>
                   </form>
-                  <form method="post" action="/shops/page">
+                  <!-- <form method="post" action="/shops/page">
                     <input type="text" name="store_id" ng-value="{{focus._id}}" hidden>
                     <input type="submit" class="btn btn-info text-center w-100 mt-2" value="Go to store page">
-                  </form>
+                  </form> -->
                 </div>
               </div>
             </div>

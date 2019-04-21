@@ -68,6 +68,7 @@ app.controller("listShops", ["$scope", "$http", function($scope, $http)
   $scope.updateView = function( id )
   {
     $scope.focus = $scope.full_list.filter((ele)=>{ return ele["_id"] == id})[0];
+    $("#description-body").html($scope.focus.description); // Display TinyMCE content normally.
   };
   $scope.updateFavorite = function( id )
   {
