@@ -354,6 +354,80 @@ router.post('/user/myinfo', (req, res)=>
 });
 
 /*
+ * Verify's the users's security question answer
+ */
+router.post('/user/verifyanswer', (req, res)=>
+{
+    // Stores the user in the DB
+    users.findOne({email: req.body.email}, function (err, docs) {
+        if(!err)
+        {
+            if(docs.answer === req.body.answer)
+            {
+                res.send({
+                    correct_answer: true,
+                });
+            }
+            else
+            {
+                res.send({
+                    correct_answer: false,
+                });
+            }
+        }
+        else
+        {
+            res.send({
+                error: err,
+            })
+        }
+    });
+});
+
+/*
+ * Change the user's password.
+ */
+router.post('/user/forgotpass', (req, res)=>
+{
+    // Stores the user in the DB
+    users.findOne({email: req.body.email}, function (err, docs) {
+        if(!err)
+        {
+            // Makes sure the correct answer to the security question is provided
+            if(docs.answer === req.body.answer)
+            {
+                // Creates a password hash
+                bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+                    users.updateOne(
+                        { email: req.body.email },
+                        { $set: {
+                                password: hash,
+                            } },
+                        { upsert: true },
+                        function (resp, err) {
+                            console.log(req.body.email + "'s password was successfully changed");
+                            res.redirect('/login');
+                        }
+                    );
+                });
+            }
+            else
+            {
+                res.send({
+                    error: "This is not the correct answer to the security question",
+                });
+            }
+        }
+        else
+        {
+            res.send({
+                error: err,
+            })
+        }
+    });
+});
+
+/*
  * Get's information about a given user from the DB.
  *
  * @param email - the email of the user you are trying to find information about
