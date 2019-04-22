@@ -546,12 +546,11 @@ router.post('/user/updateprofile', (req, res)=>
                     first_name: req.body.firstname,
                     last_name: req.body.lastname,
                     favorite_store: req.body.favorite,
-                    diet: req.body.restrictions
+                    diet: req.body.restrictions,
+                    username: req.body.username,
                 } },
             { upsert: true },
             function (err, resp) {
-                console.log(err)
-                console.log(resp);
                 res.redirect('/settings');
             });
      }

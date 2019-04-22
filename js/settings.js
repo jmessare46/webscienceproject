@@ -11,9 +11,8 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
     })
         .then(function(response) {
                 // success
-                $('#username').val(response.data.userdata.username);
+                $('#user').val(response.data.userdata.username);
                 $('#email').val(response.data.userdata.email);
-                $('#otheremail').val(response.data.userdata.email);
                 $('#firstname').val(response.data.userdata.first_name);
                 $('#lastname').val(response.data.userdata.last_name);
                 $('#restrictions').val(response.data.userdata.diet);
@@ -29,7 +28,7 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
     .then(
       function(response)
       {
-        $scope.shops = [];
+        $scope.shops = [{"name":"Choose...", "_id":""}];
         response.data["data"].forEach((element)=>
         {
           $scope.shops.push({"name":element.name, "_id":element._id});
