@@ -492,7 +492,6 @@ router.post('/user/updateprofile', (req, res)=>
                     first_name: req.body.firstname,
                     last_name: req.body.lastname,
                     favorite_store: ObjectId(req.body.favorite),
-                    account_type: req.body.account_type,
                     diet: req.body.restrictions,
                 } },
             { upsert: true },
@@ -575,7 +574,6 @@ router.post('/user/create', (req, res)=>
             question: req.body.question,
             answer: req.body.answer,
             password: hash,
-            account_type: "user",
             favorite_store: ""
         };
 
