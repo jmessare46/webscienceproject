@@ -51,28 +51,29 @@
               <div class="col-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <button type="button" class="btn btn-gradient-danger mr-2" style="float: right;">Remove item</button>
+                    <form method="post" action="/product/remove">
+                      <input name="name" id="name" type="text" style="display: none;"/>
+                      <input name="_id" id="id" type="text" style="display: none;"/>
+                      <button type="submit" class="btn btn-gradient-danger mr-2" style="float: right;">Remove item</button>
+                    </form>
 
                     <h4 class="card-title">Item Search</h4>
-                    <form class="form-sample" method="post" action="/product/search">
                       <div class="form-group">
                         <label for="item">Item</label>
-                        <select name="item" id="item" class="form-control">
+                        <select name="item" id="item" class="form-control" onchange="selectitem(this.value)">
                           <option value="">Choose...</option>
                         </select>
                       </div>
-                      <div class="form-group">
-                        <label for="itemprice">Item Price</label>
-                        <input name="price" id="itemprice" class="form-control" readonly>
+                      <div id="results" style="display: none;">
+                        <div class="form-group">
+                          <label for="itemprice">Item Price</label>
+                          <div id="itemprice"></div>
+                        </div>
+                        <div class="form-group">
+                          <label for="itemdescription">Item Description</label>
+                          <div id="itemdescription"></div>
+                        </div>
                       </div>
-                      <div class="form-group">
-                        <label for="itemdescription">Item Description</label>
-                        <textarea name="description" id="itemdescription" rows="4" class="form-control" readonly></textarea>
-                      </div>
-                      <button type="submit" class="btn btn-gradient-success mr-2">Search</button>
-                      <br><br>
-                    </form>
-
                   </div>
                 </div>
               </div>
