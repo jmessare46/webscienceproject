@@ -304,11 +304,6 @@ c3.connect((err)=>
                   bsonType: "string",
                   description:"must be a string and is required"
                 },
-                price:
-                {
-                  bsonType:"double",
-                  description:"must be a double and is required"
-                },
                 store:
                 {
                   bsonType:"objectId",
@@ -506,6 +501,7 @@ function add_update_remove_product(shop_id, product_data, operation, res)
               {
                 if (err2)
                 {
+                  console.log(err2);
                   res.status(500).send({"message":"Could not add item. Please try again."});
                 }
                 else
@@ -840,11 +836,11 @@ app.post('/product/add', (req, res)=>
           { // Only add if the user owns a store using the add function
             add_update_remove_product(ObjectId(obj._id), {
                     name: req.body.name,
-                    price: req.body.price,
+                    price: parseFloat(req.body.price),
                     description: req.body.description,
-                    store: obj._id,
+                    store: ObjectId(obj._id),
                 }, "add", res);
-            res.redirect('/inventory');
+            //res.redirect('/inventory');
           }
           // else if (ObjectId(obj._id) !== ObjectId())
         });
@@ -876,12 +872,45 @@ app.post('/product/remove', (req, res)=>
           else
           {
             add_update_remove_product(ObjectId(obj._id), {
-                    name: req.body.name,
-                    price: req.body.price,
-                    description: req.body.description,
-                    store: obj._id,
+                    _id:ObjectId(req.body._id),
+                    name: req.body.name
                 }, "remove", res);
-            res.redirect('/inventory');
+          }
+          // else if (ObjectId(obj._id) !== ObjectId())
+        });
+      }
+    });
+});
+
+app.post('/product/update', (req, res)=>
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
+      }
+      else
+      { // Check if the user owns a store first
+        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
+        {
+          if (err1)
+          {
+            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
+          }
+          else if (obj.length == 0)
+          {
+            res.status(400).send({"message":"User error occurred. User does not own a shop."});
+          }
+          else
+          {
+            add_update_remove_product(ObjectId(obj._id), {
+                    _id: ObjectId(req.body._id),
+                    name: req.body.name,
+                    price: parseFloat(req.body.price),
+                    description: req.body.description,
+                    store: ObjectId(obj._id),
+                }, "update", res);
           }
           // else if (ObjectId(obj._id) !== ObjectId())
         });

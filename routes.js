@@ -514,11 +514,13 @@ router.post('/user/updateprofile', (req, res)=>
             { $set: {
                     first_name: req.body.firstname,
                     last_name: req.body.lastname,
-                    favorite_store: ObjectId(req.body.favorite),
-                    diet: req.body.restrictions,
+                    favorite_store: req.body.favorite,
+                    diet: req.body.restrictions
                 } },
             { upsert: true },
-            function (resp, err) {
+            function (err, resp) {
+                console.log(err)
+                console.log(resp);
                 res.redirect('/settings');
             });
      }

@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
   <script type="text/javascript" src="/js/settings.js"></script>
 
@@ -82,7 +84,8 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Email</label>
                             <div class="col-sm-9">
-                              <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email..." disabled>
+                              <input type="email" class="form-control" name="email" id="email" hidden>
+                              <input type="email" class="form-control" name="other" id="otheremail" placeholder="Enter your email..." disabled>
                             </div>
                           </div>
                         </div>
@@ -96,7 +99,7 @@
                             <div class="col-sm-9">
                               <select name="favorite" class="form-control" id="favorite">
 <!--                                TODO: Fix this so it pulls these store names from the DB -->
-                                <option ng-repeat="shop in shops" ng-value="shop._id" ng-selected="shop._id==fav">{{shop.name}}</option>
+                                <option ng-repeat="shop in shops" ng-value="'{{shop._id}}'" ng-selected="shop._id==fav">{{shop.name}}</option>
                                 <!-- <option value="">Choose...</option>
                                 <option value="collar_city_sliders">Collar City Sliders</option>
                                 <option value="halal_shack">Halal Shack</option>
