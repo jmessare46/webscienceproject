@@ -335,7 +335,6 @@ router.post('/user/myinfo', (req, res)=>
                 userdata: {
                     email: docs.email,
                     username: docs.username,
-                    country: docs.country,
                     first_name: docs.first_name,
                     last_name: docs.last_name,
                     favorite_store: docs.favorite_store,
