@@ -122,13 +122,33 @@ router.post('/store/myinfo', (req, res)=>
 // Creates a user in the database when correct information is given
 router.post('/store/update', (req, res)=>
 {
+    res.setHeader("Content-Type", "application/json");
     if(!req.session.user)
     {
         res.redirect('/login');
     }
     else
     {
-        console.log(req.body);
+        shops.updateOne({"owner":ObjectId(req.session.userid)},
+                        {$set:
+                            {
+                                "name":req.body.store_name,
+                                "category":req.body.category,
+                                "address":req.body.address,
+                                "location":req.body.location,
+                                "description":req.body.description
+                            }
+                        }, (err, result)=>
+                        {
+                            if (err)
+                            {
+                                res.status(500).send({"message":"Error occurred. Could not update store information."});
+                            }
+                            else
+                            {
+                                res.status(200).send({"message":"Successfully updated store information"});
+                            }
+                        });
 
         //TODO: Make this work
         // collection.updateOne(
@@ -160,22 +180,22 @@ router.post('/store/request', (req, res)=>
             "first_name": req.body.firstname,
             "last_name": req.body.lastname,
             "username": req.body.user,
-            "password": hash
+            "password": hash,
+            "account_type":"vendor"
         };
 
         // Stores the user in the DB
         users.insertOne(user, function (err, docs) {
             console.log("User created...");
-
             var store = {
                 "name": req.body.storename,
                 "category": req.body.category,
                 "location": req.body.location,
-                "owner": docs.ops[0]._id,
+                "owner": ObjectId(docs.ops[0]._id),
                 "description": req.body.description,
-                "address": req.body.address,
+                "address": req.body.address
             };
-
+            console.log(store);
             shops.insertOne(store, function (err, docs) {
                 console.log("Store created...");
 
@@ -464,15 +484,19 @@ router.post('/user/info', (req, res)=>
 // Returns boolean of whether a user is a shop owner or not based on the posted id under name="id"
 router.post("/user/isowner", (req, res)=>
 {
-  users.findOne({"_id":ObjectId(req.body.id)}, {"projection":{"isowner":1}}, (err, result)=>
+  users.findOne({"email":req.body.email}, {"projection":{"account_type":1}}, (err, result)=>
   {
     if (err)
     {
       res.status(500).send({"message":"Error occurred. Could not execute command."});
     }
+    else if (result == null)
+    {
+      res.status(404).send({"message":"There is no user with the email " + req.body.email});
+    }
     else
     {
-      res.status(200).send({"message":"Successfully executed command.", "isowner":result.isowner});
+      res.status(200).send({"message":"Successfully executed command.", "isowner":(result.account_type != "user" ? true: false)});
     }
   });
 });
@@ -486,20 +510,24 @@ router.post('/user/updateprofile', (req, res)=>
     }
     else
     {
-        users.updateOne(
-            { email: req.body.email },
-            { $set: {
-                    first_name: req.body.firstname,
-                    last_name: req.body.lastname,
-                    favorite_store: ObjectId(req.body.favorite),
-                    account_type: req.body.account_type,
-                    diet: req.body.restrictions,
-                } },
-            { upsert: true },
-            function (resp, err) {
+        users.updateOne({email:req.body.email},
+            {
+              $set:
+                {
+                  "first_name": req.body.firstname,
+                  "last_name": req.body.lastname,
+                  "favorite_store": req.body.favorite,
+                  "account_type": req.body.account_type,
+                  "diet": req.body.restrictions
+                }
+            },
+            (err, result)=>{
+                if (!err)
+                {
+                    console.log(result);
+                }
                 res.redirect('/settings');
-            }
-        );
+            });
      }
 });
 
@@ -627,8 +655,8 @@ router.post('/user/auth', (req, res)=>
 // Logs a user out and removes their session data
 router.post('/signout', (req, res)=>
 {
-    console.log("Logging out " + req.session.user.email);
-    req.session.user = null;
+    //console.log("Logging out " + req.session.user.email);
+    req.session.destroy();
     res.redirect('/login');
 });
 

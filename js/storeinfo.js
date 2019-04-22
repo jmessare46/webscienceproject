@@ -15,7 +15,10 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
     })
         .then(function(response) {
                 // success
-                console.log(response);
+                $scope.storedata = response.data.userdata;
+                $("#storename").val($scope.storedata.name);
+                $("#address").val($scope.storedata.address);
+                $("#description").val($scope.storedata.description);
             },
             function(response) {
                 // failed
@@ -27,5 +30,25 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
     $scope.validate = function () {
         // TODO: Add form validation here
         return true;
+    }
+
+    $scope.update = function()
+    {
+        $http.post("/store/update",
+        {
+          "store_name":$("#storename").val(),
+          "category":$("#category").val(),
+          "address":$("#address").val(),
+          "location":($("#oncampus").is(":checked") ? "on_campus":"off_campus"),
+          "description":tinyMCE.activeEditor.getContent()
+        }).then(
+        function(res)
+        {
+          alert(res.data.message);
+        },
+        function(err)
+        {
+          alert("Error occurred when trying to update Shop information.");
+        });
     }
 }]);

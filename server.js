@@ -76,6 +76,15 @@ Required Document Schema to follow
       "price":Double
     }
   }
+
+
+
+  username
+  password
+  email
+  account_type:""
+  first_name:""
+  last_name:""
 }
 */
 c1.connect((err)=>
@@ -126,8 +135,8 @@ c1.connect((err)=>
                 },
                 account_type:
                 {
-                  bsonType:"bool",
-                  description:"must be a boolean telling whether a user is a store owner and is required"
+                  bsonType:"string",
+                  description:"must be a string telling whether a user is a store owner and is required"
                 },
                 diet:
                 {
@@ -169,9 +178,12 @@ Required Document Schema to follow
 {
   _id:ObjectId
   owner:ObjectId
-  location: [ (Double)lat, (Double)lon]
+  category:""
   name:"SHOP NAME"
   description:"SHOP DESCRIPTION"
+  address:"address"
+
+  location: [ (Double)lat, (Double)lon]
   picture:"OPTIONAL SHOP PICTURE URL)
 }
 */
@@ -194,7 +206,7 @@ c2.connect((err)=>
           {
             $jsonSchema:{
               bsonType: "object",
-              required:["owner", "location", "name", "category"],
+              required:["owner", "address", "name", "category"],
               properties:
               {
                 name:
@@ -207,17 +219,6 @@ c2.connect((err)=>
                   bsonType: "objectId",
                   description:"must be an array of objectId refering to its owners and is required"
                 },
-                location:
-                {
-                  bsonType:"array",
-                  items:
-                  {
-                    "type":"number",
-                    "minItems":1,
-                    "maxItems":2
-                  },
-                  description:"must be an array of [lat, lon] coordinates and is required"
-                },
                 description:
                 {
                   bsonType:"string",
@@ -227,6 +228,11 @@ c2.connect((err)=>
                 {
                   bsonType:"string",
                   description:"must be a string to store the picture url and is not requred"
+                },
+                address:
+                {
+                  bsonType:"string",
+                  description:"must be a string to store the store address"
                 }
               }
             }
@@ -246,6 +252,21 @@ c2.connect((err)=>
     });
   }
 });
+
+/*
+,
+                location:
+                {
+                  bsonType:"array",
+                  items:
+                  {
+                    "type":"number",
+                    "minItems":1,
+                    "maxItems":2
+                  },
+                  description:"must be an array of [lat, lon] coordinates and is required"
+                },
+*/
 
 /*
 Required Document Schema

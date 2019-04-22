@@ -47,7 +47,7 @@
                 <div class="card-body">
                   <h4 class="card-title">About us</h4>
 <!--                  TODO: Add validate function in js here -->
-                  <form class="form-sample" method="post" action="/store/update">
+                  <form class="form-sample" method="post" ng-submit="update()">
                     <p class="card-description">
                       Store information
                     </p>
@@ -64,12 +64,11 @@
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Category</label>
                           <div class="col-sm-9">
-                            <select class="form-control" name="category" required>
-                              <option value="">Choose...</option>
-                              <option value="fast_food">Fast Food</option>
-                              <option value="fast_casual">Fast Casual</option>
-                              <option value="fine_dining">Fine Dining</option>
-                              <option value="casual_dining">Casual Dining</option>
+                            <select class="form-control" name="category" id="category" required>
+                              <option value="fast_food" ng-select="storedata.category=='fast_food'">Fast Food</option>
+                              <option value="fast_casual" ng-select="storedata.category=='fast_casual'">Fast Casual</option>
+                              <option value="fine_dining" ng-select="storedata.category=='fine_dining'">Fine Dining</option>
+                              <option value="casual_dining" ng-select="storedata.category=='casual_dining'">Casual Dining</option>
                             </select>
                           </div>
                         </div>
@@ -84,7 +83,7 @@
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Address 1</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="address" required/>
+                            <input type="text" class="form-control" name="address" id="address" required/>
                           </div>
                         </div>
                       </div>
