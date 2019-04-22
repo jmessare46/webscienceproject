@@ -25,8 +25,6 @@ c4.connect((err)=>
 });
 
 
-
-
 router.get('/', (req, res)=>
 {
     if(req.session.user)
@@ -35,7 +33,7 @@ router.get('/', (req, res)=>
     }
     else
     {
-        res.sendFile(__dirname + '/login.html');
+        res.redirect('/login');
     }
 });
 
@@ -47,7 +45,7 @@ router.get('/inventory', (req, res)=>
     }
     else
     {
-        res.sendFile(__dirname + '/login.html');
+        res.redirect('/login');
     }
 });
 
@@ -59,7 +57,7 @@ router.get("/search", (req, res)=>
     }
     else
     {
-        res.sendFile(__dirname + '/login.html');
+        res.redirect('/login');
     }
 });
 
@@ -67,7 +65,7 @@ router.get('/login', (req, res)=>
 {
     if(req.session.user)
     {
-        res.sendFile(__dirname + '/index.html');
+        res.redirect('/');
     }
     else
     {
@@ -93,6 +91,39 @@ router.get('/store/register', (req, res)=>
     res.sendFile(__dirname + '/request.html');
 });
 
+/*
+ * Returns all of the logged in store owner's products
+ */
+router.get('/store/products', (req, res)=>
+{
+    if(req.session.user)
+    {
+        shops.findOne({owner: new ObjectId(req.session.userid)}, function (err, shop) {
+            if(shop !== null)
+            {
+                // Finds all of the store's products
+                products.find({store: new ObjectId(shop._id)}).toArray(function (err, products) {
+                    res.send({
+                        products: products
+                    });
+                });
+            }
+            else
+            {
+                res.send({
+                    userdata: {
+                        message: "Logged in user does not own a store",
+                        error: err,
+                    }
+                });
+            }
+        });
+    }
+    else
+    {
+        res.redirect('/login');
+    }
+});
 
 // Returns the logged in user's store information
 router.post('/store/myinfo', (req, res)=>

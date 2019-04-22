@@ -13,7 +13,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-  <script type="text/javascript" src="/js/angular.js"></script>
+  <script type="text/javascript" src="/js/inventory.js"></script>
 
   <!-- inject:css -->
   <link rel="stylesheet" href="/css/style.css">
@@ -46,115 +46,33 @@
             </h3>
           </div>
 
-          <div class="container" ng-controller="itemController">
+          <div class="container">
             <div class="row">
               <div class="col-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
+                    <button type="button" class="btn btn-gradient-danger mr-2" style="float: right;">Remove item</button>
+
                     <h4 class="card-title">Item Search</h4>
-                    <form class="form-sample">
+                    <form class="form-sample" method="post" action="/product/search">
                       <div class="form-group">
-                        <input id="search" type="text" class="form-control d-inline" placeholder="Search for...">
+                        <label for="item">Item</label>
+                        <select name="item" id="item" class="form-control">
+                          <option value="">Choose...</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="itemprice">Item Price</label>
+                        <input name="price" id="itemprice" class="form-control" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="itemdescription">Item Description</label>
+                        <textarea name="description" id="itemdescription" rows="4" class="form-control" readonly></textarea>
                       </div>
                       <button type="submit" class="btn btn-gradient-success mr-2">Search</button>
                       <br><br>
                     </form>
-                    <!-- <table class="table table-bordered" id="productTable">
-                      <thead>
-                        <tr>
-                          <th>
-                            Product Code
-                          </th>
-                          <th>
-                            Product Name
-                          </th>
-                          <th>
-                            Price ($)
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            1
-                          </td>
-                          <td>
-                            <input type="text" style="border:none" ></input>
-                          </td>
-                          <td>
-                            <input type="number" style="border:none" ></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            2
-                          </td>
-                          <td>
-                            <input type="text" style="border:none" ></input>
-                          </td>
-                          <td>
-                            <input type="number" style="border:none" ></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            3
-                          </td>
-                          <td>
-                            <input type="text" style="border:none" ></input>
-                          </td>
-                          <td>
-                            <input type="number" style="border:none" ></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            4
-                          </td>
-                          <td>
-                            <input type="text" style="border:none" ></input>
-                          </td>
-                          <td>
-                            <input type="number" style="border:none" ></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            5
-                          </td>
-                          <td>
-                            <input type="text" style="border:none" ></input>
-                          </td>
-                          <td>
-                            <input type="number" style="border:none" ></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            6
-                          </td>
-                          <td>
-                            <input type="text" style="border:none" ></input>
-                          </td>
-                          <td>
-                            <input type="number" style="border:none" ></input>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table> -->
-                    <div id="items" class="row mt-3">
-                      <ul ng-show="items" class="list-unstyled col">
-                        <li ng-repeat="item in items" class="border border-dark">
-                          <img ng-src="{{item.img}}" alt="{{item.name}}" class="prod-img">
-                          {{item.name}} <p class="d-inline float-right pt-2 pr-1">Price: {{item.price | currency}}</p>
-                          <p>Description: {{item.desc}}
-                            <br/>
-                            Product Code: {{item.code}}
-                          </p>
-                        </li>
-                      </ul>
-                    </div>
-                    <button type="submit" class="btn btn-gradient-success mr-2">Remove item</button>
+
                   </div>
                 </div>
               </div>
