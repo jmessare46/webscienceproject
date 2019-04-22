@@ -37,6 +37,8 @@ app.controller('mainController', ['$scope','$http',($scope, $http)=>
 
             $('#item').empty();
             $('#item').append("<option value=''>Choose...</option>");
+            $("#results").addClass("d-none");
+            $("#rm").addClass("d-none");
 
             for(var x = 0; x < response.data.products.length; x++)
             {
@@ -75,6 +77,22 @@ app.controller('mainController', ['$scope','$http',($scope, $http)=>
       function(res)
       {
         alert(res.data.message);
+        $scope.refresh();
+      },
+      function(err)
+      {
+        alert(err.data.message);
+      });
+    };
+
+    $scope.add = function()
+    {
+      $http.post("/product/add", {"name":$("#iName").val(), "price":$("#price").val(), "description":$("#desc").val()})
+      .then(
+      function(res)
+      {
+        alert(res.data.message);
+        $scope.refresh();
       },
       function(err)
       {
