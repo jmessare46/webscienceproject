@@ -51,28 +51,30 @@
               <div class="col-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <form method="post" action="/product/remove">
+                    <form method="post" ng-submit="remove()">
                       <input name="name" id="name" type="text" style="display: none;"/>
                       <input name="_id" id="id" type="text" style="display: none;"/>
-                      <button type="submit" class="btn btn-gradient-danger mr-2" style="float: right;">Remove item</button>
+                      <button id="rm" type="submit" class="btn btn-gradient-danger mr-2 d-none" style="float: right;">Remove item</button>
                     </form>
 
                     <h4 class="card-title">Item Search</h4>
                       <div class="form-group">
                         <label for="item">Item</label>
-                        <select name="item" id="item" class="form-control" onchange="selectitem(this.value)">
+                        <select name="item" id="item" class="form-control" onchange="displayItem()">
                           <option value="">Choose...</option>
                         </select>
                       </div>
-                      <div id="results" style="display: none;">
+                      <div id="results" class="d-none">
                         <div class="form-group">
-                          <label for="itemprice">Item Price</label>
-                          <div id="itemprice"></div>
+                          <label for="itemprice">Item Price</label><br/>
+                          <input id="itemprice" type="text" name="itemprice"/>
                         </div>
                         <div class="form-group">
                           <label for="itemdescription">Item Description</label>
-                          <div id="itemdescription"></div>
+                          <br/>
+                          <textarea id="itemdescription" name="itemdescription"></textarea>
                         </div>
+                        <button type="button" class="btn btn-info" ng-click="update()">Update Product Information</button>
                       </div>
                   </div>
                 </div>
@@ -103,10 +105,10 @@
 
 
             </div>
-            <div id="items" class="row mt-3">
+            <!-- <div id="items" class="row mt-3">
               <ul ng-show="items" class="list-unstyled col">
                 <li ng-repeat="item in items" class="border border-dark">
-                  <img ng-src="{{item.img}}" alt="{{item.name}}"" class="prod-img">
+                  <img ng-src="{{item.img}}" alt="{{item.name}}" class="prod-img">
                   {{item.name}}
                   <p>Description: {{item.desc}}
                     <br/>
@@ -116,7 +118,7 @@
               </ul>
               <div class="col-1 gap"></div>
               <div class="col gap"></div>
-            </div>
+            </div> -->
           </div>
 
         </div>
