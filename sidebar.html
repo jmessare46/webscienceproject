@@ -6,28 +6,34 @@
         <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
                 <div class="nav-profile-text d-flex flex-column">
-                    <span class="font-weight-bold mb-2">Username</span>
-                    <span class="text-secondary text-small">Vendor/Customer</span>
+                    <span id="username" class="font-weight-bold mb-2">Username</span>
+                    <span id="type" class="text-secondary text-small">Vendor/Customer</span>
                 </div>
                 <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item customer_specific">
             <a class="nav-link" href="/">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item vendor_specific">
           <a class="nav-link" href="/storeinfo">
             <span class="menu-title">View store information</span>
             <i class="mdi mdi-information-outline menu-icon"></i>
           </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/inventory">
+            <a class="nav-link vendor_specific" href="/inventory">
                 <span class="menu-title">View Inventory</span>
                 <i class="mdi mdi-table-large menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link customer_specific" href="/search">
+                <span class="menu-title">Search</span>
+                <i class="mdi mdi-account-search menu-icon"></i>
             </a>
         </li>
         <li class="nav-item">
@@ -36,11 +42,6 @@
                 <i class="mdi mdi mdi-settings menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/search">
-                <span class="menu-title">Search</span>
-                <i class="mdi mdi-account-search menu-icon"></i>
-            </a>
-        </li>
+        
     </ul>
 </nav>
