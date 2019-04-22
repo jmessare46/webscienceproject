@@ -13,6 +13,7 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
                 // success
                 $('#username').val(response.data.userdata.username);
                 $('#email').val(response.data.userdata.email);
+                $('#otheremail').val(response.data.userdata.email);
                 $('#firstname').val(response.data.userdata.first_name);
                 $('#lastname').val(response.data.userdata.last_name);
                 $('#restrictions').val(response.data.userdata.diet);
