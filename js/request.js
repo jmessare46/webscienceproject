@@ -5,7 +5,7 @@ var app = angular.module("myApp", []);
 app.controller("mainController", ['$scope','$http',function($scope, $http) {
 
     tinymce.init({
-        selector: '#description'
+        selector: '.tinymce'
     });
 }]);
 
