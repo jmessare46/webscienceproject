@@ -355,7 +355,6 @@ router.post('/user/myinfo', (req, res)=>
                 userdata: {
                     email: docs.email,
                     username: docs.username,
-                    country: docs.country,
                     first_name: docs.first_name,
                     last_name: docs.last_name,
                     favorite_store: docs.favorite_store,
@@ -510,22 +509,16 @@ router.post('/user/updateprofile', (req, res)=>
     }
     else
     {
-        users.updateOne({email:req.body.email},
-            {
-              $set:
-                {
-                  "first_name": req.body.firstname,
-                  "last_name": req.body.lastname,
-                  "favorite_store": req.body.favorite,
-                  "account_type": req.body.account_type,
-                  "diet": req.body.restrictions
-                }
-            },
-            (err, result)=>{
-                if (!err)
-                {
-                    console.log(result);
-                }
+        users.updateOne(
+            { email: req.body.email },
+            { $set: {
+                    first_name: req.body.firstname,
+                    last_name: req.body.lastname,
+                    favorite_store: ObjectId(req.body.favorite),
+                    diet: req.body.restrictions,
+                } },
+            { upsert: true },
+            function (resp, err) {
                 res.redirect('/settings');
             });
      }
@@ -603,7 +596,6 @@ router.post('/user/create', (req, res)=>
             question: req.body.question,
             answer: req.body.answer,
             password: hash,
-            account_type: "user",
             favorite_store: ""
         };
 
