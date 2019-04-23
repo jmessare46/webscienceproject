@@ -1076,3 +1076,35 @@ function remove_from_history(userid, time, res)
     }
   });
 }
+
+
+
+// Extra Credit
+app.get("/coffee", (req, res)=>
+{
+  res.setHeader("Content-Type", "text/html");
+  let data = "<h1 style='text-align:center;color:darkgoldenrod'>Although we cannot brew you coffee, here is some coffee asci art for extra credit!</h1>"+
+             "<div style='margin:auto;width:535px'><pre>" +
+             "===========================================================================\n"+
+             "                        |                          |                          \n"+
+             "   ~-_ Steamin'         |  ((     ___              | Let us not forget our\n"+
+             "  _-~    Hot            |   ))  \___/_  Bottomless  | tea-drinking sisters\n"+
+             "c|_|    JAVA!           |  |~~| /~~~\ \ cup o'       | and brothers, of whom\n"+
+             "                        | C|__| \___/   coffee      | I was one, long ago...\n"+
+             " - - - - - - - - - - -  |       `'`'`              |\n"+
+             "                        | And, if anyone's up to   |          ((  Mmmm...\n"+
+             " _-~  I like coffee, I  | animating their brew...  |        .-.))\n"+
+             "~-_   like tea...A cup, |               __         |        :|:~~|_\n"+
+             "(| |  a cup, a cup, a   |         )) /\<_           |        ;|() |_)\n"+
+             " `-'  cup, a cup....    |         ((/ /  \          |     [].'|___|\n"+
+             "                        |          __/~~~/         |\n"+
+             " - - - - - - - - - - -  |        ,(  \__/           | The ASCII Cafe', by\n"+
+             "                        |        \"`                | Dan Strychalski (dski@\n"+
+             " (   Demitasse,         |      _|  |               | cameonet.cameo.com.tw)\n"+
+             "  )  s'il vous          |     (_|~~|               | Tools: WordPerfect 5.1\n"+
+             "c[]  plait...           |       `--'               | WordStar 3.3, Toshiba\n"+
+             "                        |             `'`'`        | T2000SXe. Unbeatable!\n"+
+             "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"+
+             "</pre></div><form method='get' action='/' style='margin:auto;width:50px'><input style='text-align:center' value='Back' type='submit'/></form>";
+  res.status(418).send(data);
+});
