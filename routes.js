@@ -161,41 +161,25 @@ router.post('/store/update', (req, res)=>
     else
     {
         shops.updateOne({"owner":ObjectId(req.session.userid)},
-                        {$set:
-                            {
-                                "name":req.body.store_name,
-                                "category":req.body.category,
-                                "address":req.body.address,
-                                "location":req.body.location,
-                                "description":req.body.description
-                            }
-                        }, (err, result)=>
-                        {
-                            if (err)
-                            {
-                                res.status(500).send({"message":"Error occurred. Could not update store information."});
-                            }
-                            else
-                            {
-                                res.status(200).send({"message":"Successfully updated store information"});
-                            }
-                        });
-
-        //TODO: Make this work
-        // collection.updateOne(
-        //     { owner: req.body.email },
-        //     { $set: {
-        //             first_name: req.body.firstname,
-        //             last_name: req.body.lastname,
-        //             favorite_store: req.body.favorite,
-        //             account_type: req.body.account_type,
-        //             diet: req.body.restrictions,
-        //         } },
-        //     { upsert: true },
-        //     function (resp, err) {
-        //         res.redirect('/settings');
-        //     }
-        // );
+        {$set:
+            {
+                "name":req.body.store_name,
+                "category":req.body.category,
+                "address":req.body.address,
+                "location":req.body.location,
+                "description":req.body.description
+            }
+        }, (err, result)=>
+        {
+            if (err)
+            {
+                res.status(500).send({"message":"Error occurred. Could not update store information."});
+            }
+            else
+            {
+                res.status(200).send({"message":"Successfully updated store information"});
+            }
+        });
     }
 });
 
@@ -203,13 +187,14 @@ router.post('/store/update', (req, res)=>
 // Creates a user in the database when correct information is given
 router.post('/store/request', (req, res)=>
 {
-    //TODO: Handle errors here
     // Creates a password hash
     bcrypt.hash(req.body.pass, saltRounds, function(err, hash) {
         var user = {
             "email": req.body.email,
             "first_name": req.body.firstname,
             "last_name": req.body.lastname,
+            "question": req.body.question,
+            "answer": req.body.answer,
             "username": req.body.user,
             "password": hash,
             "account_type":"vendor"
@@ -226,7 +211,7 @@ router.post('/store/request', (req, res)=>
                 "description": req.body.description,
                 "address": req.body.address
             };
-            console.log(store);
+
             shops.insertOne(store, function (err, docs) {
                 console.log("Store created...");
 
@@ -628,7 +613,8 @@ router.post('/user/create', (req, res)=>
             question: req.body.question,
             answer: req.body.answer,
             password: hash,
-            favorite_store: ""
+            favorite_store: "",
+            account_type:"user"
         };
 
         // Stores the user in the DB

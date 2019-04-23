@@ -957,7 +957,6 @@ app.post("/user/favorite", (req, res)=>
     }
     else
     {
-      console.log(req.body);
       user_collection.updateOne({"_id":ObjectId(req.session.userid)}, {$set:{"favorite_store":req.body.favorite_id}}, (err1, result)=>
       {
         if (err1)
