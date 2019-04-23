@@ -1,45 +1,13 @@
 $(document).ready(function(){
-    function validateInput() {
-        if ($("#firstname").val()=="") {
-
-            alert("Please enter a first name.");
-            return false;
-
-        } else if ($("#lastname").val()=="") {
-
-            alert("Please enter a last name.");
-            return false;
-
-
-        } else if ($("#user").val()=="") {
-
-            alert("Please enter a username.");
-            return false;
-
-        } else if ($("#email").val()=="") {
-
-            alert("Please enter an email address.");
-            return false;
-
-
-        } else if ($("#password").val()=="") {
-
-            alert("Please enter a password.");
-            return false;
-
-        } else if ($("#password").val()!=($("#confirm_password")).val()) {
-
-            alert("Passwords do not match.");
-            return false;
-
-        } else {
-            return true;
-        }
-    }
-
-    $("#test").click(function(){
-        validateInput();
-    });
+     $('#form').on('submit', function(e) {
+          if (($("#password").val())!=($("#confpassword").val())) {
+            e.preventDefault();
+            alert("Passwords don't match.");
+          } else {
+            alert("Password changed!");
+          }
+         
+      });
 });
 
 /*
