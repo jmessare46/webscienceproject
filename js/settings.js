@@ -41,7 +41,6 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
   $http.get("/user/isowner").then(
   function(res)
   {
-    console.log(res);
     if (res.data.is_owner)
     {
       $("#userspecific").addClass("d-none");
