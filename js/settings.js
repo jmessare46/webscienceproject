@@ -3,7 +3,6 @@ var app = angular.module("settingsApp", []);
 
 // Here is the Javascript for our controller which we linked (scoped) to the body tag
 app.controller("mainController", ['$scope','$http',function($scope, $http) {
-
     // Pulls user's settings in the DB on load
     $http({
         url: '/user/myinfo',
@@ -39,4 +38,14 @@ app.controller("mainController", ['$scope','$http',function($scope, $http) {
         alert("Something went wrong getting a list of all the shops");
       }
     );
+  $http.get("/user/isowner").then(
+  function(res)
+  {
+    console.log(res);
+    if (res.data.is_owner)
+    {
+      $("#userspecific").addClass("d-none");
+      $("#userspecific1").addClass("d-none");
+    }
+  });
 }]);
