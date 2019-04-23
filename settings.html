@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
   <script type="text/javascript" src="/js/settings.js"></script>
@@ -22,143 +22,147 @@
   <link rel="shortcut icon" href="/images/icon.ico" />
 </head>
 <body ng-controller="mainController">
-  <div class="container-scroller">
+<div class="container-scroller">
 
-    <div ng-include="'/navigation'"></div>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
+  <div ng-include="'/navigation'"></div>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
 
-      <div ng-include="'/sidebar'"></div>
+    <div ng-include="'/sidebar'"></div>
 
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title">
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h3 class="page-title">
               <span class="page-title-icon bg-gradient-primary text-white mr-2">
                 <i class="mdi mdi-settings"></i>
               </span>
-              Settings
-            </h3>
+            Settings
+          </h3>
 
-          </div>
-          <div class="row">
+        </div>
+        <div class="row">
 
 
-            <form method="post" action="/user/updateprofile">
-              <div class="col-12 grid-margin">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Account Info</h4>
-                    <form class="form-sample">
-                      <p class="card-description">
-                        View or modify important information about your account
-                      </p>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">First Name</label>
-                            <div class="col-sm-9">
-                              <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter first name..." required>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Last Name</label>
-                            <div class="col-sm-9">
-                              <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter last name..." required>
-                            </div>
+          <form method="post" action="/user/updateprofile">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Account Info</h4>
+                  <form class="form-sample">
+                    <p class="card-description">
+                      View or modify important information about your account
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">First Name</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter first name..." required>
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Username</label>
-                            <div class="col-sm-9">
-                              <input type="text" class="form-control" id="user" name="username" placeholder="Enter user name..." required>
-                            </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Last Name</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter last name..." required>
                           </div>
                         </div>
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Email</label>
-                            <div class="col-sm-9">
-                              <input type="email" class="form-control" name="email" id="email" readonly>
-                            </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Username</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" id="user" name="username" placeholder="Enter user name..." required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Email</label>
+                          <div class="col-sm-9">
+                            <input type="email" class="form-control" name="email" id="email" readonly>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Favorite</label>
+                          <div class="col-sm-9">
+                            <select name="favorite" class="form-control" id="favorite">
+                              <option ng-repeat="shop in shops" ng-value="'{{shop._id}}'" ng-selected="shop._id==fav">{{shop.name}}</option>
+                            </select>
                           </div>
                         </div>
                       </div>
 
-
-                      <div class="row">
-                        <div class="col-md-6" id="userspecific">
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Favorite</label>
-                            <div class="col-sm-9">
-                              <select name="favorite" class="form-control" id="favorite">
-                                <option ng-repeat="shop in shops" ng-value="'{{shop._id}}'" ng-selected="shop._id==fav">{{shop.name}}</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-6">
-                          <div class="form-group row" id="userspecific1">
-                            <label class="col-sm-3 col-form-label">Dietary Restrictions</label>
-                            <div class="col-sm-9">
-                              <select name="restrictions" class="form-control" id="restrictions">
-                                <option value="">None</option>
-                                <option value="vegetarian">Vegetarian</option>
-                                <option value="vegan">Vegan</option>
-                                <option value="gluten_free">Gluten Free</option>
-                                <option value="peanut_allergy">Peanut Allergy</option>
-                              </select>
-                            </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Dietary Restrictions</label>
+                          <div class="col-sm-9">
+                            <select name="restrictions" class="form-control" id="restrictions">
+                              <option value="">None</option>
+                              <option value="vegetarian">Vegetarian</option>
+                              <option value="vegan">Vegan</option>
+                              <option value="gluten_free">Gluten Free</option>
+                              <option value="peanut_allergy">Peanut Allergy</option>
+                            </select>
                           </div>
                         </div>
                       </div>
+
                       <input style="display: none;" name="account_type" value="user" type="text"/>
                       <button type="submit" class="btn btn-gradient-primary mr-2">Update</button>
                       <input type="button" class="btn btn-gradient-info mr-2" onclick="location.href='/user/password';" value="Change Password">
                       <input type="button" class="btn btn-gradient-info mr-2" onclick="location.href='/user/question';" value="Change Security Question">
 
-                    </form>
-                  </div>
+
+                    </div>
+
+
+                  </form>
                 </div>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2017 <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap Dash</a>. All rights reserved.</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted &amp; made with <i class="mdi mdi-heart text-danger"></i></span>
-          </div>
-        </footer>
-        <!-- partial -->
       </div>
-      <!-- main-panel ends -->
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2017 <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap Dash</a>. All rights reserved.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted &amp; made with <i class="mdi mdi-heart text-danger"></i></span>
+        </div>
+      </footer>
+      <!-- partial -->
     </div>
-    <!-- page-body-wrapper ends -->
+    <!-- main-panel ends -->
   </div>
-  <!-- container-scroller -->
+  <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
 
-  <!-- plugins:js -->
-  <script src="vendors/js/vendor.bundle.base.js"></script>
-  <script src="vendors/js/vendor.bundle.addons.js"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page-->
-  <!-- End plugin js for this page-->
-  <!-- inject:js -->
-  <script src="js/off-canvas.js"></script>
-  <script src="js/misc.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="js/dashboard.js"></script>
-  <!-- End custom js for this page-->
+<!-- plugins:js -->
+<script src="vendors/js/vendor.bundle.base.js"></script>
+<script src="vendors/js/vendor.bundle.addons.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page-->
+<!-- End plugin js for this page-->
+<!-- inject:js -->
+<script src="js/off-canvas.js"></script>
+<script src="js/misc.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="js/dashboard.js"></script>
+<!-- End custom js for this page-->
 </body>
 
 </html>
