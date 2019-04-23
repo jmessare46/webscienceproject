@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
   <script type="text/javascript" src="/js/password.js"></script>
 
@@ -19,6 +20,23 @@
   <link rel="stylesheet" href="/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/images/icon.ico" />
+
+  <script>
+    $(document).ready(function(){
+
+      $('#form').on('submit', function(e) {
+          if (($("#answer").val())!=($("#conf_answer").val())) {
+            e.preventDefault();
+            alert("Answers don't match.")
+          } else {
+            alert("Security question changed!");
+          }
+         
+      });
+    });
+
+  </script>
+
 </head>
 <body ng-controller="mainController">
   <div class="container-scroller">
@@ -40,7 +58,7 @@
           <div class="row">
 
 
-            <form method="post" action="/user/setquestion">
+            <form id="form" method="post" action="/user/setquestion">
               <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
