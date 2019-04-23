@@ -695,7 +695,7 @@ module.exports.c4 = c4;
 // Route to search product by name (optional store name parameter)
 // On success, returns the detail(s) of the product(s) with the given product name
 // correct api call is localhost:3000/api/v1/productSearch?product=SINGLE_PRODUCT_NAME&store=OPTOINAL_STORE_NAME
-router.get("/api/v1/productSearch", (req, res)=>
+router.get("/api/v1/product/search", (req, res)=>
 {
   res.setHeader("Content-Type", "application/json");
   let querydata = req.query;
@@ -785,7 +785,7 @@ router.get("/api/v1/store", (req, res)=>
 // On success, returns an array of { store name, store id, frequency } where frequency is the count
 // of the number of users that favorite that store.
 // correct api call is localhost:3000/api/v1/favoriteStatistic
-router.get("/api/v1/favoriteStatistic", (req, res)=>
+router.get("/api/v1/statistics/favorite", (req, res)=>
 {
   res.setHeader("Content-Type", "application/json");
   shops.find({}, {"projection":{"_id":1, "name":1}}).toArray((err, stores)=>
