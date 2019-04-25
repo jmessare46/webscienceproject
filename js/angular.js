@@ -13,6 +13,7 @@ app.controller("listShops", ["$scope", "$http", function($scope, $http)
 {
   $scope.stores = [];
   $scope.full_list;
+  // Function to refresh the list of shops shown on the page
   $scope.refresh = function()
   {
     $scope.stores = [];
@@ -70,6 +71,8 @@ app.controller("listShops", ["$scope", "$http", function($scope, $http)
     $scope.focus = $scope.full_list.filter((ele)=>{ return ele["_id"] == id})[0];
     $("#description-body").html($scope.focus.description); // Display TinyMCE content normally.
   };
+
+  // Function to update the favorite store for a user
   $scope.updateFavorite = function( id )
   {
     $http.post("/user/favorite", {"favorite_id":id}).then(

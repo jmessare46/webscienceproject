@@ -1,6 +1,7 @@
 const app = angular.module("myApp", []);
 var data = [];
 
+// Display a specific product based on the select ag
 function displayItem()
 {
   let id = $("#item").val();
@@ -50,6 +51,7 @@ app.controller('mainController', ['$scope','$http',($scope, $http)=>
 
     $scope.refresh();
 
+    // Remove a product
     $scope.remove = function()
     {
       if (($("option:checked")[0].innerHTML != "Choose...") && ($("#item").val() != ""))
@@ -70,6 +72,7 @@ app.controller('mainController', ['$scope','$http',($scope, $http)=>
       }
     };
 
+    // Update a product
     $scope.update = function()
     {
       $http.post("/product/update", {"_id":$("#item").val(), "name":$("option:selected")[0].innerHTML, "price":$("#itemprice").val(), "description":$("#itemdescription").val()})
@@ -85,6 +88,7 @@ app.controller('mainController', ['$scope','$http',($scope, $http)=>
       });
     };
 
+    // Add a product
     $scope.add = function()
     {
       $http.post("/product/add", {"name":$("#iName").val(), "price":$("#price").val(), "description":$("#desc").val()})
@@ -100,29 +104,3 @@ app.controller('mainController', ['$scope','$http',($scope, $http)=>
       });
     }
 }]);
-
-// Populates the price and description of an item
-/*function selectitem(item)
-{
-    $('#itemprice').empty();
-    $('#itemdescription').empty();
-
-    if(item === "")
-    {
-        $('#results').css('display', 'none');
-    }
-    else
-    {
-        for(var x = 0; x < data.length; x++)
-        {
-            if(item === data[x]._id)
-            {
-                $('#itemprice').append(data[x].price);
-                $('#itemdescription').append(data[x].description);
-                $('#name').val(data[x].name);
-                $('#id').val(data[x]._id);
-            }
-        }
-        $('#results').css('display', 'block');
-    }
-}*/

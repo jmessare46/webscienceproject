@@ -680,7 +680,7 @@ module.exports.c4 = c4;
 // On success, returns the detail(s) of the product(s) with the given product name
 // correct api call is localhost:3000/api/v1/product/search/?product=SINGLE_PRODUCT_NAME&store=OPTOINAL_STORE_NAME
 // Returns product data for all products with a product name matching SINGLE_PRODUCT_NAME (which have a store OPTIONAL_STORE_NAME)
-// Note that the SINGLE_PRODUCT_NAME is converted to a regex, so any products that slightly matches it is returned.
+// Note that the SINGLE_PRODUCT_NAME is converted to a regex, so any products that slightly matches it is returned. The OPTIONAL_STORE_NAME is case sensitive
 router.get("/api/v1/product/search", (req, res)=>
 {
   res.setHeader("Content-Type", "application/json");

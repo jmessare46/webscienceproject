@@ -21,22 +21,6 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="/images/icon.ico" />
 
-  <script>
-    $(document).ready(function(){
-
-      $('#form').on('submit', function(e) {
-          if (($("#answer").val())!=($("#conf_answer").val())) {
-            e.preventDefault();
-            alert("Answers don't match.");
-          } else {
-            alert("Security question changed!");
-          }
-         
-      });
-    });
-
-  </script>
-
 </head>
 <body ng-controller="mainController">
   <div class="container-scroller">

@@ -5,3 +5,16 @@ var app = angular.module("passwordApp", []);
 app.controller("mainController", ['$scope','$http',function($scope, $http) {
 
 }]);
+
+$(document).ready(function(){
+
+      $('#form').on('submit', function(e) {
+          if (($("#answer").val())!=($("#conf_answer").val())) {
+            e.preventDefault();
+            alert("Answers don't match.");
+          } else {
+            alert("Security question changed!");
+          }
+         
+      });
+    });
