@@ -331,7 +331,7 @@ router.post('/user/changepassword', (req, res)=>
                                     password: hash,
                                 } },
                             { upsert: true },
-                            function (resp, err) {
+                            function (err, resp) {
                                 res.redirect('/settings');
                             }
                         );
@@ -439,7 +439,7 @@ router.post('/user/forgotpass', (req, res)=>
                                 password: hash,
                             } },
                         { upsert: true },
-                        function (resp, err) {
+                        function (err, resp) {
                             console.log(req.body.email + "'s password was successfully changed");
                             res.redirect('/login');
                         }
@@ -550,7 +550,6 @@ router.post('/user/setquestion', (req, res)=>
     }
     else
     {
-        console.log(req.body);
 
         users.updateOne(
             { email: req.session.user.email },
@@ -559,7 +558,7 @@ router.post('/user/setquestion', (req, res)=>
                     answer: req.body.answer,
                 } },
             { upsert: true },
-            function (resp, err) {
+            function (err, resp) {
                 res.redirect('/settings');
             }
         );
@@ -620,7 +619,6 @@ router.post('/user/create', (req, res)=>
         // Stores the user in the DB
         users.insertOne(user, function (err, docs) {
             console.log("User created...");
-            console.log(err);
         });
     });
 
@@ -680,18 +678,21 @@ module.exports.c4 = c4;
 
 // Route to search product by name (optional store name parameter)
 // On success, returns the detail(s) of the product(s) with the given product name
-// correct api call is localhost:3000/api/v1/productSearch?product=SINGLE_PRODUCT_NAME&store=OPTOINAL_STORE_NAME
+// correct api call is localhost:3000/api/v1/product/search/?product=SINGLE_PRODUCT_NAME&store=OPTOINAL_STORE_NAME
+// Returns product data for all products with a product name matching SINGLE_PRODUCT_NAME (which have a store OPTIONAL_STORE_NAME)
+// Note that the SINGLE_PRODUCT_NAME is converted to a regex, so any products that slightly matches it is returned.
 router.get("/api/v1/product/search", (req, res)=>
 {
   res.setHeader("Content-Type", "application/json");
   let querydata = req.query;
+  let expr = new RegExp(querydata.product, "i");
   if ((typeof(querydata.product) === "undefined") || (typeof(querydata.product) !== "string"))
   {
     res.status(400).send({"message":"User error. Correct usage is a " + req.get('host') + "/api/v1/productSearch/?product=SINGLE_PRODUCT_NAME&store=OPTIONAL_STORE_NAME", "error":true});
   }
   else if (typeof(querydata.store) === "undefined")
   { // No store name
-    products.find({"name":querydata.product}).toArray((err, items)=>
+    products.find({"name":{$in:[expr]}}).toArray((err, items)=>
     {
       if (err)
       {
@@ -724,7 +725,7 @@ router.get("/api/v1/product/search", (req, res)=>
           {
             stores[ind] = ObjectId(shop._id);
           });
-          products.find({"name":querydata.product, "store":{$in : stores}}).toArray((err1, items)=>
+          products.find({"name":{$in:[expr]}, "store":{$in : stores}}).toArray((err1, items)=>
           {
             if (err1)
             {
@@ -744,6 +745,8 @@ router.get("/api/v1/product/search", (req, res)=>
 // Route to search get store information, searching by store name
 // On success, returns the detail(s) of the store(s) with the given store name
 // correct api call is localhost:3000/api/v1/store/?store=STORE_NAME
+// Returns store data for all stores with some name matching STORE_NAME
+// Note that the STORE_NAME is converted to a regex, so any store with a storename somewhat natching STORE_NAME is returned
 router.get("/api/v1/store", (req, res)=>
 {
   res.setHeader("Content-Type", "application/json");
@@ -753,7 +756,7 @@ router.get("/api/v1/store", (req, res)=>
   }
   else
   {
-    shops.find({"name":req.query.store}).toArray((err, stores)=>
+    shops.find({"name":new RegExp(req.query.store, "i")}).toArray((err, stores)=>
     {
       if (err)
       {
@@ -770,7 +773,7 @@ router.get("/api/v1/store", (req, res)=>
 // Route to get the counts of favorite stores
 // On success, returns an array of { store name, store id, frequency } where frequency is the count
 // of the number of users that favorite that store.
-// correct api call is localhost:3000/api/v1/favoriteStatistic
+// correct api call is localhost:3000/api/v1/statistics/favorite
 router.get("/api/v1/statistics/favorite", (req, res)=>
 {
   res.setHeader("Content-Type", "application/json");
@@ -784,7 +787,7 @@ router.get("/api/v1/statistics/favorite", (req, res)=>
     {
       stores.forEach((store, ind)=>
       {
-        users.countDocuments({"favorite_store":store._id}, (err1, result)=>
+        users.countDocuments({"favorite_store":store._id.toString()}, (err1, result)=>
         {
           if (err1)
           {
@@ -792,7 +795,8 @@ router.get("/api/v1/statistics/favorite", (req, res)=>
           }
           else
           {
-            store["frequency"] = result;
+            store["frequency"] = 0;
+            store["frequency"] += result;
           }
 
           if (ind == stores.length-1)

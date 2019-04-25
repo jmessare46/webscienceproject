@@ -10,6 +10,7 @@ readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true);
 
 const app = express();
+// Note the different role permisions for a user and a vendor client
 const user = "mongodb+srv://generalcustomer:customer@cluster0-yknsv.mongodb.net/"; 
 const vendor = "mongodb+srv://generalvendor:thegeneralamazingvendor@cluster0-yknsv.mongodb.net/"; 
 const dbname = "Project";
@@ -68,17 +69,6 @@ app.use((req, res, next) => {
 /*
 Required Document Schema to follow
 {
-  purchases:
-  {
-    "time in millseconds":
-    {
-      "product_name":String
-      "price":Double
-    }
-  }
-
-
-
   username
   password
   email
@@ -86,6 +76,16 @@ Required Document Schema to follow
   first_name:""
   last_name:""
 }
+
+If we can implement purchases, add this as a required field
+ purchases:
+  {
+    "time in millseconds":
+    {
+      "product_name":String
+      "price":Double
+    }
+  }
 */
 c1.connect((err)=>
 {
@@ -173,6 +173,22 @@ c1.connect((err)=>
   }
 });
 
+
+
+/*
+Validator lines to add location as required NOTE THIS IS NOT USED AT ALL
+                location:
+                {
+                  bsonType:"array",
+                  items:
+                  {
+                    "type":"number",
+                    "minItems":1,
+                    "maxItems":2
+                  },
+                  description:"must be an array of [lat, lon] coordinates and is required"
+                },
+*/
 /*
 Required Document Schema to follow
 {
@@ -180,12 +196,13 @@ Required Document Schema to follow
   owner:ObjectId
   category:""
   name:"SHOP NAME"
-  description:"SHOP DESCRIPTION"
   address:"address"
+}
+description:"SHOP DESCRIPTION" // Not required by the validator
 
+Future additions that are optional fields:
   location: [ (Double)lat, (Double)lon]
   picture:"OPTIONAL SHOP PICTURE URL)
-}
 */
 c2.connect((err)=>
 {
@@ -254,21 +271,6 @@ c2.connect((err)=>
 });
 
 /*
-,
-                location:
-                {
-                  bsonType:"array",
-                  items:
-                  {
-                    "type":"number",
-                    "minItems":1,
-                    "maxItems":2
-                  },
-                  description:"must be an array of [lat, lon] coordinates and is required"
-                },
-*/
-
-/*
 Required Document Schema
 {
   _id:ObjectId
@@ -320,19 +322,6 @@ c3.connect((err)=>
         }, (err1, collection)=>
         {
           console.log("'products' collection created!");
-          /*collection.createIndex({"name":1}, {unique:true}, (err2, result)=>
-          {
-            if (err2)
-            {
-              console.log("Could not make 'products' collection");
-              throw err2;
-            }
-            else
-            {
-              console.log("Successfully made product names unique");
-            }
-            c3.close();
-          });*/
           c3.close();
         });
       }
@@ -365,20 +354,6 @@ app.use('/vendors', express.static(__dirname + '/vendors'));
 // Allows direct access to js files
 app.use('/fonts', express.static(__dirname + '/fonts'));
 
-app.get("/temp", (req, res)=>
-{
-  //add_update_product(ObjectId("5cac14c3e52ab45423d33424"), {"name" : "orange", "price" : 0.5, "store" : ObjectId("5cac14c3e52ab45423d33424")}, "add", res);
-  //all_products(res);
-  //find_shop("hi", res);
-  //specific_vendor_shops(ObjectId("5cac099386d1af000008fe16"), res);
-  //product_search("orange", res);
-  //shop_products(ObjectId("5cac14c3e52ab45423d33424"), res);
-  //get_purchase_history(ObjectId("5cac02c8a74b7e40e008a154"), res);
-  //list_all_products(res);
-  //add_update_remove_product(ObjectId("5cac14c3e52ab45423d33424"), {"name":"a", "_id":ObjectId("5cac096a1c9d44000072d6d1")}, "remove", res);
-  //remove_from_history(ObjectId("5cab9e45ad7fb115d8c0f502"), 1555278283914, res);
-});
-
 const server = app.listen(3000, ()=>
 {
   console.log("Server is up");
@@ -386,6 +361,7 @@ const server = app.listen(3000, ()=>
 
 // Server shutdown code
 // Code to get the server to terminate in the console when pressing the Esc key
+// Note that this closes all connections on the server.js and router.js pages
 process.stdin.on("keypress", (str, key) => 
 {
   if (key.name == "c" && key.ctrl)
@@ -425,7 +401,217 @@ process.stdin.on("keypress", (str, key) =>
   }
 });
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Use Dashboard Routing and Request Handling                                 //
+////////////////////////////////////////////////////////////////////////////////
+// Returns json object of all shops in database
+app.get("/shops", (req, res)=>
+{
+  list_all_shops(res);
+});
+
+// Route that returns a list of all products in the Database
+app.get("/products", (req, res)=>
+{
+  list_all_products(res);
+});
+
+// Route that returns a list of owned products for the inventory page
+app.get("/products/owned", (req, res)=>
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error occurred. Could not verify owned shop."});
+    }
+    else
+    {
+      shop_collection.findOne({"owner":ObjectId(req.session.userid)}, (err1, result)=>
+      {
+        if (err1)
+        {
+          res.status(500).send({"message":"Error occurred. Could not verify owned shop."});
+        }
+        else
+        {
+          list_shop_products(ObjectId(result._id), res);
+        }
+      });
+    }
+  });
+});
+
+// Creates a product in the database when correct information is given
+app.post('/product/add', (req, res)=>
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
+      }
+      else
+      { // Check if user owns the store first
+        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
+        {
+          if (err1)
+          {
+            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
+          }
+          else if (obj.length == 0)
+          {
+            res.status(400).send({"message":"User error occurred. User does not own a shop."});
+          }
+          else
+          { // Only add if the user owns a store using the add function
+            add_update_remove_product(ObjectId(obj._id), {
+                    name: req.body.name,
+                    price: parseFloat(req.body.price),
+                    description: req.body.description,
+                    store: ObjectId(obj._id),
+                }, "add", res);
+          }
+        });
+      }
+    });
+});
+
+// Removes a product in the database when correct information is given
+app.post('/product/remove', (req, res)=>
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
+      }
+      else
+      { // Check if the user owns a store first
+        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
+        {
+          if (err1)
+          {
+            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
+          }
+          else if (obj.length == 0)
+          {
+            res.status(400).send({"message":"User error occurred. User does not own a shop."});
+          }
+          else
+          {
+            add_update_remove_product(ObjectId(obj._id), {
+                    _id:ObjectId(req.body._id),
+                    name: req.body.name
+                }, "remove", res);
+          }
+        });
+      }
+    });
+});
+
+// Route to update a product's information
+app.post('/product/update', (req, res)=>
+{
+  userclient.db(dbname).collection("shops", (err, shop_collection)=>
+    {
+      if (err)
+      {
+        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
+      }
+      else
+      { // Check if the user owns a store first
+        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
+        {
+          if (err1)
+          {
+            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
+          }
+          else if (obj.length == 0)
+          {
+            res.status(400).send({"message":"User error occurred. User does not own a shop."});
+          }
+          else
+          {
+            add_update_remove_product(ObjectId(obj._id), {
+                    _id: ObjectId(req.body._id),
+                    name: req.body.name,
+                    price: parseFloat(req.body.price),
+                    description: req.body.description,
+                    store: ObjectId(obj._id),
+                }, "update", res);
+          }
+        });
+      }
+    });
+});
+
+// Route to return a user's favorite store
+app.post("/user/favorites", (req, res)=>
+{
+  res.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("users", (err, user_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error Occurred. Please try again later."});
+    }
+    else
+    {
+      user_collection.find({"_id":ObjectId(req.session.userid)}, {"projection":{"favorite_store":1}}).toArray((err1, favorites)=>
+      {
+        if (err1)
+        {
+          res.status(500).send({"message":"Error trying to find userdata"});
+        }
+        else
+        {
+          res.send({"data":favorites[0]});
+        }
+      });
+    }
+  });
+});
+
+// Updates a user's favorite store
+app.post("/user/favorite", (req, res)=>
+{
+  res.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("users", (err, user_collection)=>
+  {
+    if (err)
+    {
+      res.status(500).send({"message":"Error occurred. Please try again later."});
+    }
+    else
+    {
+      user_collection.updateOne({"_id":ObjectId(req.session.userid)}, {$set:{"favorite_store":req.body.favorite_id}}, (err1, result)=>
+      {
+        if (err1)
+        {
+          res.status(500).send({"message":"Error occurred. Could not update favorite store."});
+        }
+        else
+        {
+          res.status(200).send({"message":"Successfully updated favorite store."});
+        }
+      });
+    }
+  });
+});
+
+
+
+
 //NOTE: need to convert ObjectId strings to ObjectId before passing into functions
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Helper functions for server.js routes                                      //
+////////////////////////////////////////////////////////////////////////////////
 
 /**
 * @param shop_id is an ObjectId() of the shop
@@ -625,6 +811,45 @@ function list_all_products(response)
   });
 }
 
+/** function to find all the products owned by a shop based on the shopid
+* @param shop_id is the ObjectId of a shop
+* @param response is the response object
+* @modifies response
+* @effects response sends a json object of {"data":[product info]}
+*          Notes that "message":"usefull message" will be sent back
+*/
+function list_shop_products(shop_id, response)
+{
+  response.setHeader("Content-Type", "application/json");
+  userclient.db(dbname).collection("products", (err, prod_collection)=>
+  {
+    if (err)
+    {
+      response.status(500).send({"message":"Error occurred. Could not access product collection."});
+    }
+    else
+    {
+      prod_collection.find({"store":shop_id}).toArray((err1, results)=>
+      {
+        if (err1)
+        {
+          response.status(500).send({"message":"Error occurred. Could not read product collection."});
+        }
+        else
+        {
+          response.status(200).send({"message":"Found " + results.length + " results.", "data":results});
+        }
+      });
+    }
+  });
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Extra functions that are not used at all                                   //
+////////////////////////////////////////////////////////////////////////////////
+
+
 /** function to find a specific shop in the database by shop name
 * @param shop_name is a string denoting the name of the shopt of ind
 * @param response is the response object
@@ -736,241 +961,6 @@ function product_search_by_name(product_name, response)
     }
   });
 }
-
-/** function to find all the products owned by a shop based on the shopid
-* @param shop_id is the ObjectId of a shop
-* @param response is the response object
-* @modifies response
-* @effects response sends a json object of {"data":[product info]}
-*          Notes that "message":"usefull message" will be sent back
-*/
-function list_shop_products(shop_id, response)
-{
-  response.setHeader("Content-Type", "application/json");
-  userclient.db(dbname).collection("products", (err, prod_collection)=>
-  {
-    if (err)
-    {
-      response.status(500).send({"message":"Error occurred. Could not access product collection."});
-    }
-    else
-    {
-      prod_collection.find({"store":shop_id}).toArray((err1, results)=>
-      {
-        if (err1)
-        {
-          response.status(500).send({"message":"Error occurred. Could not read product collection."});
-        }
-        else
-        {
-          response.status(200).send({"message":"Found " + results.length + " results.", "data":results});
-        }
-      });
-    }
-  });
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Use Dashboard Routing and Request Handling                                 //
-////////////////////////////////////////////////////////////////////////////////
-// Returns json object of all shops in database
-app.get("/shops", (req, res)=>
-{
-  list_all_shops(res);
-});
-
-// Route that returns a list of all products in the Database
-app.get("/products", (req, res)=>
-{
-  list_all_products(res);
-});
-
-// Route that returns a list of owned products for the inventory page
-app.get("/products/owned", (req, res)=>
-{
-  userclient.db(dbname).collection("shops", (err, shop_collection)=>
-  {
-    if (err)
-    {
-      res.status(500).send({"message":"Error occurred. Could not verify owned shop."});
-    }
-    else
-    {
-      shop_collection.findOne({"owner":ObjectId(req.session.userid)}, (err1, result)=>
-      {
-        if (err1)
-        {
-          res.status(500).send({"message":"Error occurred. Could not verify owned shop."});
-        }
-        else
-        {
-          list_shop_products(ObjectId(result._id), res);
-        }
-      });
-    }
-  });
-});
-
-// Creates a product in the database when correct information is given
-app.post('/product/add', (req, res)=>
-{
-  userclient.db(dbname).collection("shops", (err, shop_collection)=>
-    {
-      if (err)
-      {
-        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
-      }
-      else
-      { // Check if user owns the store first
-        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
-        {
-          if (err1)
-          {
-            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
-          }
-          else if (obj.length == 0)
-          {
-            res.status(400).send({"message":"User error occurred. User does not own a shop."});
-          }
-          else
-          { // Only add if the user owns a store using the add function
-            add_update_remove_product(ObjectId(obj._id), {
-                    name: req.body.name,
-                    price: parseFloat(req.body.price),
-                    description: req.body.description,
-                    store: ObjectId(obj._id),
-                }, "add", res);
-            //res.redirect('/inventory');
-          }
-          // else if (ObjectId(obj._id) !== ObjectId())
-        });
-      }
-    });
-});
-
-// Removes a product in the database when correct information is given
-app.post('/product/remove', (req, res)=>
-{
-  userclient.db(dbname).collection("shops", (err, shop_collection)=>
-    {
-      if (err)
-      {
-        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
-      }
-      else
-      { // Check if the user owns a store first
-        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
-        {
-          if (err1)
-          {
-            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
-          }
-          else if (obj.length == 0)
-          {
-            res.status(400).send({"message":"User error occurred. User does not own a shop."});
-          }
-          else
-          {
-            add_update_remove_product(ObjectId(obj._id), {
-                    _id:ObjectId(req.body._id),
-                    name: req.body.name
-                }, "remove", res);
-          }
-          // else if (ObjectId(obj._id) !== ObjectId())
-        });
-      }
-    });
-});
-
-app.post('/product/update', (req, res)=>
-{
-  userclient.db(dbname).collection("shops", (err, shop_collection)=>
-    {
-      if (err)
-      {
-        res.status(500).send({"message":"Error occurred. Could not validate that user owns the store!"});
-      }
-      else
-      { // Check if the user owns a store first
-        shop_collection.findOne({"owner":ObjectId(req.session.userid)}, {"projection":{"nameOnly":true}}, (err1, obj)=>
-        {
-          if (err1)
-          {
-            res.status(500).send({"message":"Error occurred. Could not validate shop ownership!"});
-          }
-          else if (obj.length == 0)
-          {
-            res.status(400).send({"message":"User error occurred. User does not own a shop."});
-          }
-          else
-          {
-            add_update_remove_product(ObjectId(obj._id), {
-                    _id: ObjectId(req.body._id),
-                    name: req.body.name,
-                    price: parseFloat(req.body.price),
-                    description: req.body.description,
-                    store: ObjectId(obj._id),
-                }, "update", res);
-          }
-          // else if (ObjectId(obj._id) !== ObjectId())
-        });
-      }
-    });
-});
-
-// Grabs a user's favorite stores first
-app.post("/user/favorites", (req, res)=>
-{
-  res.setHeader("Content-Type", "application/json");
-  userclient.db(dbname).collection("users", (err, user_collection)=>
-  {
-    if (err)
-    {
-      res.status(500).send({"message":"Error Occurred. Please try again later."});
-    }
-    else
-    {
-      user_collection.find({"_id":ObjectId(req.session.userid)}, {"projection":{"favorite_store":1}}).toArray((err1, favorites)=>
-      {
-        if (err1)
-        {
-          res.status(500).send({"message":"Error trying to find userdata"});
-        }
-        else
-        {
-          res.send({"data":favorites[0]});
-        }
-      });
-    }
-  });
-});
-
-// Updates a user's favorite store
-app.post("/user/favorite", (req, res)=>
-{
-  res.setHeader("Content-Type", "application/json");
-  userclient.db(dbname).collection("users", (err, user_collection)=>
-  {
-    if (err)
-    {
-      res.status(500).send({"message":"Error occurred. Please try again later."});
-    }
-    else
-    {
-      user_collection.updateOne({"_id":ObjectId(req.session.userid)}, {$set:{"favorite_store":req.body.favorite_id}}, (err1, result)=>
-      {
-        if (err1)
-        {
-          res.status(500).send({"message":"Error occurred. Could not update favorite store."});
-        }
-        else
-        {
-          res.status(200).send({"message":"Successfully updated favorite store."});
-        }
-      });
-    }
-  });
-});
 
 
 ////////////////////////////////////////////////////////////////////////////////
