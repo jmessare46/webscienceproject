@@ -25,7 +25,7 @@ SHOP RPI is designed to work flawlessly with all the latest and modern web brows
 
 5 - Now that your project has now kick-started, all you need to do now is to code, code, and code to your heart's content.
 
-6 - To use SHOP RPI, type `node server.js` in command line after direct to folder and connect to `localhost:3000` in your browser.
+6 - To use SHOP RPI, type `npm start` in command line after direct to folder and connect to `localhost:3000` in your browser.
 
 7 - Now you are able to create an account, Enjoy!
 
