@@ -16,7 +16,7 @@ SHOP RPI is designed to work flawlessly with all the latest and modern web brows
 
 ## How to use SHOP RPI?
 
-1 - Click the Clone or Download button in GitHub and download as a ZIP file or you can enter the command git clone https://github.com/BootstrapDash/PurpleAdmin-Free-Admin-Template.git in you terminal to get a copy of this template.
+https://github.com/jmessare46/webscienceproject.git in you terminal to get a copy of this template.
 
 2 - After the files have been downloaded you will get a folder with all the required files
 
